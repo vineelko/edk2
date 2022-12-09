@@ -36,14 +36,14 @@ static EFI_STATUS TimestampProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = ProtocolArray[EFI_TIMESTAMP_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_TIMESTAMP_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_TIMESTAMP_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     TimestampProtocol = ProtocolArray[EFI_TIMESTAMP_PROTOCOL_INDEX].Protocol;
     Status = TimestampProtocol->GetProperties(&Properties);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Timestamp protocol GetProperties() Api failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Timestamp protocol GetProperties() Api failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

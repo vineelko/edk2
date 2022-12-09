@@ -95,7 +95,7 @@ EFI_STATUS EFIAPI FileOpen(IN CHAR16* PartitionName,
 
     Status = FilePartitionOpen(PartitionName, &RootFs, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FilePartitionOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FilePartitionOpen() failed with status 0x%x", Status);
         return Status;
     }
 
@@ -154,7 +154,7 @@ EFI_STATUS EFIAPI FileClose(IN EFI_FILE_PROTOCOL* EfiFileProtocol)
     if (EfiFileProtocol != NULL) {
         Status = EfiFileProtocol->Close(EfiFileProtocol);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Close() failed with status 0x%zx", Status);
+            DBG_ERROR("Close() failed with status 0x%x", Status);
         }
     }
 
@@ -172,7 +172,7 @@ EFI_STATUS EFIAPI FileDelete(IN EFI_FILE_PROTOCOL* EfiFileProtocol)
 
     Status = EfiFileProtocol->Delete(EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Delete() failed with status 0x%zx", Status);
+        DBG_ERROR("Delete() failed with status 0x%x", Status);
     }
 
     return Status;
@@ -192,11 +192,11 @@ EFI_STATUS EFIAPI FileRead(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
         return EFI_INVALID_PARAMETER;
     }
 
-    DBG_VERBOSE("Read size: %zu", *ReadSize);
+    DBG_VERBOSE("Read size: %u", *ReadSize);
 
     Status = EfiFileProtocol->Read(EfiFileProtocol, ReadSize, OutBuf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Read() failed with status 0x%zx", Status);
+        DBG_ERROR("Read() failed with status 0x%x", Status);
     }
 
     return Status;
@@ -220,7 +220,7 @@ EFI_STATUS EFIAPI FileReadLine(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
     }
 
     *EndOfFile = FALSE;
-    DBG_VERBOSE("Read size: %zu", *ReadSize);
+    DBG_VERBOSE("Read size: %u", *ReadSize);
 
     while (!EFI_ERROR((Status = FileReadByte(EfiFileProtocol, &Char, EndOfFile)))) {
         if (*EndOfFile == TRUE)
@@ -264,14 +264,14 @@ EFI_STATUS EFIAPI FileWrite(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
         return EFI_INVALID_PARAMETER;
     }
 
-    DBG_VERBOSE("Buffer size: %zu", *BufferSize);
+    DBG_VERBOSE("Buffer size: %u", *BufferSize);
 
     Status = EfiFileProtocol->Write(EfiFileProtocol, BufferSize, Buffer);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Write() failed with status 0x%zx", Status);
+        DBG_ERROR("Write() failed with status 0x%x", Status);
     }
 
-    DBG_VERBOSE("Bytes written: %zu", *BufferSize);
+    DBG_VERBOSE("Bytes written: %u", *BufferSize);
 
     return Status;
 }
@@ -289,7 +289,7 @@ EFI_STATUS EFIAPI FileSetPosition(IN EFI_FILE_PROTOCOL* EfiFileProtocol, IN UINT
 
     Status = EfiFileProtocol->SetPosition(EfiFileProtocol, Position);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("SetPosition() failed with status 0x%zx", Status);
+        DBG_ERROR("SetPosition() failed with status 0x%x", Status);
     }
 
     return Status;
@@ -308,7 +308,7 @@ EFI_STATUS EFIAPI FileGetPosition(IN EFI_FILE_PROTOCOL* EfiFileProtocol, OUT UIN
 
     Status = EfiFileProtocol->GetPosition(EfiFileProtocol, Position);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetPosition() failed with status 0x%zx", Status);
+        DBG_ERROR("GetPosition() failed with status 0x%x", Status);
     }
 
     DBG_VERBOSE("Position: %llu", *Position);
@@ -327,7 +327,7 @@ EFI_STATUS EFIAPI FileGetInfo(IN EFI_FILE_PROTOCOL* EfiFileProtocol, OUT EFI_FIL
                                       &BufferSize,
                                       Buffer);
     if (Status != EFI_BUFFER_TOO_SMALL && EFI_ERROR(Status)) {
-        DBG_ERROR("GetInfo() failed 0x%zx", Status);
+        DBG_ERROR("GetInfo() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -343,7 +343,7 @@ EFI_STATUS EFIAPI FileGetInfo(IN EFI_FILE_PROTOCOL* EfiFileProtocol, OUT EFI_FIL
                                       &BufferSize,
                                       Buffer);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetInfo() failed 0x%zx", Status);
+        DBG_ERROR("GetInfo() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -366,7 +366,7 @@ EFI_STATUS EFIAPI FileGetFileSystemInfo(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
                                       &BufferSize,
                                       Buffer);
     if (Status != EFI_BUFFER_TOO_SMALL && EFI_ERROR(Status)) {
-        DBG_ERROR("GetInfo() failed 0x%zx", Status);
+        DBG_ERROR("GetInfo() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -382,7 +382,7 @@ EFI_STATUS EFIAPI FileGetFileSystemInfo(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
                                       &BufferSize,
                                       Buffer);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetInfo() failed 0x%zx", Status);
+        DBG_ERROR("GetInfo() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -402,7 +402,7 @@ EFI_STATUS EFIAPI FileSetInfo(IN EFI_FILE_PROTOCOL* EfiFileProtocol, IN EFI_FILE
                                       (UINTN)FileInfo->Size,
                                       FileInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("SetInfo() failed with status 0x%zx", Status);
+        DBG_ERROR("SetInfo() failed with status 0x%x", Status);
     }
 
     return Status;
@@ -419,7 +419,7 @@ EFI_STATUS EFIAPI FileFlush(IN EFI_FILE_PROTOCOL* EfiFileProtocol)
 
     Status = EfiFileProtocol->Flush(EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Flush() failed with status 0x%zx", Status);
+        DBG_ERROR("Flush() failed with status 0x%x", Status);
     }
 
     return Status;
@@ -439,7 +439,7 @@ EFI_STATUS EFIAPI FileGetSize(IN EFI_FILE_PROTOCOL* EfiFileProtocol, OUT UINT64*
 
     Status = FileGetInfo(EfiFileProtocol, (VOID*)&EfiFileInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetInfo() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetInfo() failed with status 0x%x", Status);
     } else {
         *FileSize = EfiFileInfo->FileSize;
     }
@@ -485,7 +485,7 @@ EFI_STATUS EFIAPI FileSetSize(IN EFI_FILE_PROTOCOL* EfiFileProtocol, IN UINT64 F
     }
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetSize() failed with status 0x%zx", Status);
+        DBG_ERROR("FileSetSize() failed with status 0x%x", Status);
     }
 
     FreePool(EfiFileInfo);
@@ -509,7 +509,7 @@ EFI_STATUS EFIAPI FileGetFreeSpace(IN EFI_FILE_PROTOCOL* EfiFileProtocol, OUT UI
 
     Status = FileGetFileSystemInfo(EfiFileProtocol, &EfiFileSystemInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetFileSystemInfo() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetFileSystemInfo() failed with status 0x%x", Status);
         return Status;
     }
 
@@ -537,7 +537,7 @@ EFI_STATUS EFIAPI FileGetVolumeSize(IN EFI_FILE_PROTOCOL* EfiFileProtocol, OUT U
 
     Status = FileGetFileSystemInfo(EfiFileProtocol, &EfiFileSystemInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetFileSystemInfo() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetFileSystemInfo() failed with status 0x%x", Status);
         return Status;
     }
 
@@ -574,14 +574,14 @@ EFI_STATUS EFIAPI FileGetDevicePath(IN CHAR16* PartitionName,
     // Verify partition existence
     Status = FilePartitionOpen(PartitionName, &RootFs, &EfiHandle);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FilePartitionOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FilePartitionOpen() failed with status 0x%x", Status);
         return Status;
     }
 
     // Verify file existence
     Status = FileOpen(PartitionName, FileName, EFI_FILE_MODE_READ, 0, &EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FileOpen() failed with status 0x%x", Status);
         return Status;
     }
 
@@ -605,13 +605,13 @@ EFI_STATUS EFIAPI FileGetDirEntriesSize(IN CHAR16* PartitionName,
 
     Status = FileOpen(PartitionName, DirectoryName, EFI_FILE_MODE_READ, 0, &EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FileOpen() failed with status 0x%x", Status);
         goto Exit;
     }
 
     Status = FileGetDirEntriesSizeEx(EfiFileProtocol, DirectorySize);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetDirEntriesSizeEx() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetDirEntriesSizeEx() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -642,7 +642,7 @@ EFI_STATUS EFIAPI FileGetDirEntriesSizeEx(IN EFI_FILE_PROTOCOL* Directory,
     // Make sure Directory is a directory
     Status = FileIsDirectory(Directory);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Directory is not a directory 0x%zx", Status);
+        DBG_ERROR("Directory is not a directory 0x%x", Status);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -650,7 +650,7 @@ EFI_STATUS EFIAPI FileGetDirEntriesSizeEx(IN EFI_FILE_PROTOCOL* Directory,
     // Reset to the beginning of the directory
     Status = FileSetPosition(Directory, 0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetPosition() failed with status 0x%zx", Status);
+        DBG_ERROR("FileSetPosition() failed with status 0x%x", Status);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -669,7 +669,7 @@ EFI_STATUS EFIAPI FileGetDirEntriesSizeEx(IN EFI_FILE_PROTOCOL* Directory,
         // Read in the info about the file
         Status = Directory->Read(Directory, &BufferSize, FileInfo);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileRead() failed with status 0x%zx", Status);
+            DBG_ERROR("FileRead() failed with status 0x%x", Status);
             break;
         }
 
@@ -714,13 +714,13 @@ EFI_STATUS EFIAPI FileGetDirEntries(IN CHAR16* PartitionName,
 
     Status = FileOpen(PartitionName, DirectoryName, EFI_FILE_MODE_READ, 0, &EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FileOpen() failed with status 0x%x", Status);
         goto Exit;
     }
 
     Status = FileGetDirEntriesEx(EfiFileProtocol, ReadSize, OutBuf, Position);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetDirEntriesSizeEx() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetDirEntriesSizeEx() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -755,14 +755,14 @@ EFI_STATUS EFIAPI FileGetDirEntriesEx(IN EFI_FILE_PROTOCOL* Directory,
     // Make sure Directory is a directory
     Status = FileIsDirectory(Directory);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Directory is not a directory 0x%zx", Status);
+        DBG_ERROR("Directory is not a directory 0x%x", Status);
         goto Exit;
     }
 
     // Reset to the beginning of the directory
     Status = FileSetPosition(Directory, 0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetPosition() failed with status 0x%zx", Status);
+        DBG_ERROR("FileSetPosition() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -780,7 +780,7 @@ EFI_STATUS EFIAPI FileGetDirEntriesEx(IN EFI_FILE_PROTOCOL* Directory,
         // Read in the info about the file
         Status = Directory->Read(Directory, &BufferSize, FileInfo);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileRead() failed with status 0x%zx", Status);
+            DBG_ERROR("FileRead() failed with status 0x%x", Status);
             break;
         }
 
@@ -817,7 +817,7 @@ EFI_STATUS EFIAPI FileGetDirEntriesEx(IN EFI_FILE_PROTOCOL* Directory,
         // Read in the info about the file
         Status = Directory->Read(Directory, &Read, OutBuf + Offset);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileRead() failed with status 0x%zx", Status);
+            DBG_ERROR("FileRead() failed with status 0x%x", Status);
             break;
         }
 
@@ -855,13 +855,13 @@ EFI_STATUS EFIAPI FileGetSizeEx(IN CHAR16* PartitionName, IN CHAR16* FileName, O
 
     Status = FileOpen(PartitionName, FileName, EFI_FILE_MODE_READ, 0, &EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileOpen() for servicing log failed with status 0x%zx", Status);
+        DBG_ERROR("FileOpen() for servicing log failed with status 0x%x", Status);
         goto Exit;
     }
 
     Status = FileGetSize(EfiFileProtocol, FileSize);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetSize() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetSize() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -871,7 +871,7 @@ Exit:
     if (EfiFileProtocol) {
         Status = FileClose(EfiFileProtocol);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileClose() failed with status 0x%zx", Status);
+            DBG_ERROR("FileClose() failed with status 0x%x", Status);
         }
     }
 
@@ -903,14 +903,14 @@ EFI_STATUS EFIAPI FileReadEx(IN CHAR16* PartitionName,
 
     Status = FileOpen(PartitionName, FileName, EFI_FILE_MODE_READ, 0, &EfiFileProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FileOpen() failed with status 0x%x", Status);
         goto Exit;
     }
 
     if (Position != 0) {
         Status = FileSetPosition(EfiFileProtocol, Position);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileSetPosition() failed with status 0x%zx", Status);
+            DBG_ERROR("FileSetPosition() failed with status 0x%x", Status);
             goto Exit;
         }
     }
@@ -919,7 +919,7 @@ EFI_STATUS EFIAPI FileReadEx(IN CHAR16* PartitionName,
 
     Status = EfiFileProtocol->Read(EfiFileProtocol, &Size, OutBuf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileRead() failed with status 0x%zx", Status);
+        DBG_ERROR("FileRead() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -930,7 +930,7 @@ Exit:
     if (EfiFileProtocol) {
         Status = FileClose(EfiFileProtocol);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileClose() failed with status 0x%zx", Status);
+            DBG_ERROR("FileClose() failed with status 0x%x", Status);
         }
     }
 
@@ -968,7 +968,7 @@ EFI_STATUS EFIAPI FileWriteEx(IN CHAR16* PartitionName,
                       &EfiFileProtocol);
     if (!EFI_ERROR(Status)) {
         if (!Overwrite) {
-            DBG_ERROR("File already exists and Overwrite is not specified 0x%zx", Status);
+            DBG_ERROR("File already exists and Overwrite is not specified 0x%x", Status);
             Status = EFI_INVALID_PARAMETER;
             goto Exit;
         }
@@ -976,7 +976,7 @@ EFI_STATUS EFIAPI FileWriteEx(IN CHAR16* PartitionName,
         // Create directory and file
         Status = FileCreateSubdirectoriesAndFile(PartitionName, FileName, &EfiFileProtocol);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileCreate() failed with status 0x%zx", Status);
+            DBG_ERROR("FileCreate() failed with status 0x%x", Status);
             goto Exit;
         }
     }
@@ -984,7 +984,7 @@ EFI_STATUS EFIAPI FileWriteEx(IN CHAR16* PartitionName,
     if (Position != 0) {
         Status = FileSetPosition(EfiFileProtocol, Position);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileSetPosition() failed with status 0x%zx", Status);
+            DBG_ERROR("FileSetPosition() failed with status 0x%x", Status);
             goto Exit;
         }
     }
@@ -993,7 +993,7 @@ EFI_STATUS EFIAPI FileWriteEx(IN CHAR16* PartitionName,
 
     Status = EfiFileProtocol->Write(EfiFileProtocol, &Size, InBuf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileWrite() failed with status 0x%zx", Status);
+        DBG_ERROR("FileWrite() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -1004,7 +1004,7 @@ Exit:
     if (EfiFileProtocol) {
         Status = FileClose(EfiFileProtocol);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileClose() failed with status 0x%zx", Status);
+            DBG_ERROR("FileClose() failed with status 0x%x", Status);
         }
     }
 
@@ -1052,7 +1052,7 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
 
     Status = BufferCreate(sizeof(EFI_FILE_PROTOCOL*), &SimpleFileSystemBuffer);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BufferCreate failed 0x%zx", Status);
+        DBG_ERROR("BufferCreate failed 0x%x", Status);
         return EFI_OUT_OF_RESOURCES;
     }
 
@@ -1060,7 +1060,7 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
                                  NULL,
                                  (PVOID*)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to locate DevicePathToTextIf protocol 0x%zx", Status);
+        DBG_ERROR("Unable to locate DevicePathToTextIf protocol 0x%x", Status);
         goto Exit;
     }
 
@@ -1070,10 +1070,10 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
                                      &HandleCount,
                                      &Handles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get handles to simple filesystems: 0x%zx", Status);
+        DBG_ERROR("Unable to get handles to simple filesystems: 0x%x", Status);
         goto Exit;
     } else {
-        DBG_VERBOSE("Handle count: %zd", HandleCount);
+        DBG_VERBOSE("Handle count: %d", HandleCount);
 
         //
         // Allow detecting file systems from VM VHDs for testing purposes.
@@ -1132,7 +1132,7 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
                                              &gEfiSimpleFileSystemProtocolGuid,
                                              (VOID**)&SimpleFs);
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("Unable to get handle for simple filesystem protocol (0x%zx): 0x%zx",
+                    DBG_ERROR("Unable to get handle for simple filesystem protocol (0x%x): 0x%x",
                               Index,
                               Status);
                     continue;
@@ -1140,13 +1140,13 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
 
                 Status = SimpleFs->OpenVolume(SimpleFs, &RootFs);
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("OpenVolume() failed with status 0x%zx", Status);
+                    DBG_ERROR("OpenVolume() failed with status 0x%x", Status);
                     continue;
                 }
 
                 Status = BufferAppendContent(SimpleFileSystemBuffer, &RootFs, sizeof(RootFs));
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("BufferAppendContent failed 0x%zx", Status);
+                    DBG_ERROR("BufferAppendContent failed 0x%x", Status);
                     FileClose(RootFs);
                     goto Exit;
                 }
@@ -1269,7 +1269,7 @@ EFI_STATUS EFIAPI FileLocateAndOpen(IN CHAR16* FileName,
 
     Status = FileGetDevicePathInternal(VolumeHandles[Index], FileName, &DevicePathProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetDevicePathInternal() Failed 0x%zx", Status);
+        DBG_ERROR("FileGetDevicePathInternal() Failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1277,27 +1277,27 @@ EFI_STATUS EFIAPI FileLocateAndOpen(IN CHAR16* FileName,
                                  NULL,
                                  (PVOID*)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%zx",
+        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x",
                   Status);
         goto Exit;
     }
 
     FilePath = DevicePathToTextIf->ConvertDevicePathToText(DevicePathProtocol, FALSE, FALSE);
 
-    Status = StringCchPrintfW((PWSTR)BufferWide,
-                              _countof(BufferWide),
-                              L"%s file is located on volume '%s' at %s",
-                              FileName,
-                              VolumeLabel ? VolumeLabel : L"<empty>",
-                              FilePath);
+    Status = UnicodeSPrint(BufferWide,
+                           sizeof(BufferWide),
+                           L"%s file is located on volume '%s' at %s",
+                           FileName,
+                           VolumeLabel ? VolumeLabel : L"<empty>",
+                           FilePath);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("StringCchPrintfW() failed");
+        DBG_ERROR("UnicodeSPrint() failed");
         goto Exit;
     }
 
     UnicodeStrToAsciiStrS(BufferWide, Buffer, _countof(BufferWide));
 
-    DBG_INFO("%s", Buffer);
+    DBG_INFO("%a", Buffer);
 
 Exit:
     FreePool(FilePath);
@@ -1328,7 +1328,7 @@ EFI_STATUS EFIAPI FileCreateSubdirectories(IN CHAR16* PartitionName,
 
     Status = FilePartitionOpen(PartitionName, &Directory, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FilePartitionOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FilePartitionOpen() failed with status 0x%x", Status);
         return Status;
     }
 
@@ -1350,7 +1350,7 @@ EFI_STATUS EFIAPI FileCreateSubdirectories(IN CHAR16* PartitionName,
                                  EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE,
                                  EFI_FILE_DIRECTORY);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Open() failed with status 0x%zx", Status);
+            DBG_ERROR("Open() failed with status 0x%x", Status);
             goto Exit;
         }
 
@@ -1394,7 +1394,7 @@ EFI_STATUS EFIAPI FileCreateSubdirectoriesAndFile(IN CHAR16* PartitionName,
 
     Status = FilePartitionOpen(PartitionName, &DirFs, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FilePartitionOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FilePartitionOpen() failed with status 0x%x", Status);
         return Status;
     }
 
@@ -1420,7 +1420,7 @@ EFI_STATUS EFIAPI FileCreateSubdirectoriesAndFile(IN CHAR16* PartitionName,
                                  EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE,
                                  EFI_FILE_DIRECTORY);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Open() failed with status 0x%zx", Status);
+                DBG_ERROR("Open() failed with status 0x%x", Status);
                 goto Exit;
             }
 
@@ -1440,7 +1440,7 @@ EFI_STATUS EFIAPI FileCreateSubdirectoriesAndFile(IN CHAR16* PartitionName,
                       0,
                       &FileFs);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FileOpen() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -1485,13 +1485,13 @@ EFI_STATUS EFIAPI FileDuplicate(IN EFI_FILE_PROTOCOL* SourceFile,
 
     Status = FileCreateSubdirectoriesAndFile(PartitionName, DestinationFilePath, &RetFile);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileCreateSubdirectoriesAndFile() failed with status 0x%zx", Status);
+        DBG_ERROR("FileCreateSubdirectoriesAndFile() failed with status 0x%x", Status);
         goto Exit;
     }
 
     Status = FileGetSize(SourceFile, &FileSize);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetSize() failed 0x%zx", Status);
+        DBG_ERROR("FileGetSize() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1510,7 +1510,7 @@ EFI_STATUS EFIAPI FileDuplicate(IN EFI_FILE_PROTOCOL* SourceFile,
     Offset = SourceOffset;
 
     if (Offset + BytesToCopy > FileSize) {
-        DBG_ERROR("Offset(%zu) + BytesToCopy(%llu) > FileSize (%llu)",
+        DBG_ERROR("Offset(%u) + BytesToCopy(%llu) > FileSize (%llu)",
                   Offset,
                   BytesToCopy,
                   FileSize);
@@ -1520,7 +1520,7 @@ EFI_STATUS EFIAPI FileDuplicate(IN EFI_FILE_PROTOCOL* SourceFile,
 
     Status = FileSetPosition(SourceFile, Offset);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetPosition() failed 0x%zx", Status);
+        DBG_ERROR("FileSetPosition() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1538,13 +1538,13 @@ EFI_STATUS EFIAPI FileDuplicate(IN EFI_FILE_PROTOCOL* SourceFile,
     while (RemainingBytes) {
         Status = FileRead(SourceFile, &ReadSize, ReadBuffer);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileRead() failed 0x%zx", Status);
+            DBG_ERROR("FileRead() failed 0x%x", Status);
             goto Exit;
         }
 
         Status = FileWrite(RetFile, &ReadSize, ReadBuffer);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileWrite() failed 0x%zx", Status);
+            DBG_ERROR("FileWrite() failed 0x%x", Status);
             goto Exit;
         }
 
@@ -1555,7 +1555,7 @@ EFI_STATUS EFIAPI FileDuplicate(IN EFI_FILE_PROTOCOL* SourceFile,
 
     Status = FileSetPosition(RetFile, 0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetPosition() failed 0x%zx", Status);
+        DBG_ERROR("FileSetPosition() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1588,27 +1588,27 @@ static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
                                      &HandleCount,
                                      &Handles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get handles for simple filesystem protocols: 0x%zx", Status);
+        DBG_ERROR("Unable to get handles for simple filesystem protocols: 0x%x", Status);
     } else {
         EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* SimpleFs;
         EFI_PARTITION_INFO_PROTOCOL* PartitionInfo = NULL;
         EFI_PARTITION_ENTRY* PartitionEntry = NULL;
 
-        DBG_VERBOSE("Handle count: %zd", HandleCount);
+        DBG_VERBOSE("Handle count: %d", HandleCount);
 
         for (UINTN Index = 0; Index < HandleCount; Index++) {
             Status = gBS->HandleProtocol(Handles[Index],
                                          &gEfiPartitionInfoProtocolGuid,
                                          (VOID**)&PartitionInfo);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("EfiPartitionInfoGuid not found for %zd: 0x%zx", Index, Status);
+                DBG_ERROR("EfiPartitionInfoGuid not found for %d: 0x%x", Index, Status);
 
                 // Check partition name
                 Status = gBS->HandleProtocol(Handles[Index],
                                              &gEfiPartitionRecordGuid,
                                              (VOID**)&PartitionEntry);
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("EfiPartitionRecordGuid not found for %zd: 0x%zx", Index, Status);
+                    DBG_ERROR("EfiPartitionRecordGuid not found for %d: 0x%x", Index, Status);
                     continue;
                 }
             } else {
@@ -1619,7 +1619,7 @@ static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
                 PartitionEntry = &PartitionInfo->Info.Gpt;
             }
 
-            DBG_VERBOSE_U(L"Partition[0x%zx]: %s", Index, PartitionEntry->PartitionName);
+            DBG_VERBOSE_U(L"Partition[0x%x]: %s", Index, PartitionEntry->PartitionName);
 
             if (StrnLenS(PartitionEntry->PartitionName, MAX_PARTITION_NAME_LENGTH) !=
                     StrnLenS(PartitionName, MAX_PARTITION_NAME_LENGTH) ||
@@ -1627,18 +1627,18 @@ static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
                            PartitionName,
                            (StrnLenS(PartitionName, MAX_PARTITION_NAME_LENGTH) + 1) *
                                sizeof(CHAR16))) {
-                DBG_VERBOSE("Partition name does not match, 0x%zx", Index);
+                DBG_VERBOSE("Partition name does not match, 0x%x", Index);
                 continue;
             }
 
-            DBG_VERBOSE("Partition name matches, 0x%zx", Index);
+            DBG_VERBOSE("Partition name matches, 0x%x", Index);
 
             // Correct partition was found, try to open file
             Status = gBS->HandleProtocol(Handles[Index],
                                          &gEfiSimpleFileSystemProtocolGuid,
                                          (VOID**)&SimpleFs);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Unable to get handle for simple filesystem protocol (0x%zx): 0x%zx",
+                DBG_ERROR("Unable to get handle for simple filesystem protocol (0x%x): 0x%x",
                           Index,
                           Status);
                 return Status;
@@ -1646,7 +1646,7 @@ static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
 
             Status = SimpleFs->OpenVolume(SimpleFs, EfiFileProtocol);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("OpenVolume() 0x%zx failed with status 0x%zx", Index, Status);
+                DBG_ERROR("OpenVolume() 0x%x failed with status 0x%x", Index, Status);
                 return Status;
             }
 
@@ -1665,7 +1665,7 @@ static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
     }
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FilePartitionOpen() failed with status 0x%zx", Status);
+        DBG_ERROR("FilePartitionOpen() failed with status 0x%x", Status);
     }
 
     return Status;
@@ -1678,7 +1678,7 @@ static EFI_STATUS EFIAPI FileIsDirectory(IN EFI_FILE_PROTOCOL* DirFs)
 
     Status = FileGetInfo(DirFs, (VOID*)&DirInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetInfo() failed with status 0x%zx", Status);
+        DBG_ERROR("FileGetInfo() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -1782,7 +1782,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
                                  NULL,
                                  (PVOID*)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%zx",
+        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x",
                   Status);
         return Status;
     }
@@ -1791,7 +1791,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
                                  NULL,
                                  (PVOID*)&DevicePathUtilitiesIf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() for DevicePathUtilities protocol failed with status 0x%zx",
+        DBG_ERROR("LocateProtocol() for DevicePathUtilities protocol failed with status 0x%x",
                   Status);
         return Status;
     }
@@ -1805,7 +1805,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
 
     Status = FileCreateDevicePathFromString(FileName, &FilePathDevicePath);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileCreateDevicePathFromString() failed 0x%zx", Status);
+        DBG_ERROR("FileCreateDevicePathFromString() failed 0x%x", Status);
         return Status;
     }
 
@@ -1831,7 +1831,7 @@ EFI_STATUS EFIAPI FileFindFirst(IN EFI_FILE_PROTOCOL* Directory)
 
     Status = FileSetPosition(Directory, 0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetPosition() failed with status 0x%zx", Status);
+        DBG_ERROR("FileSetPosition() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -1855,7 +1855,7 @@ EFI_STATUS EFIAPI FileFindNext(IN EFI_FILE_PROTOCOL* Directory, OUT EFI_FILE_INF
 
     Status = Directory->Read(Directory, &BufferSize, RetFileInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Read() failed with status 0x%zx", Status);
+        DBG_ERROR("Read() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -1886,7 +1886,7 @@ EFI_STATUS EFIAPI FileCreateDirectory(IN EFI_FILE_PROTOCOL* DestDirectory, IN CH
                                  EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE,
                                  EFI_FILE_DIRECTORY);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Open() failed 0x%zx", Status);
+        DBG_ERROR("Open() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1914,7 +1914,7 @@ static EFI_STATUS FileCopyToFile(IN EFI_FILE_PROTOCOL* SourceFile, IN EFI_FILE_P
 
     Status = FileSetSize(DestFile, 0); // Truncate the destination file first
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileSetSize() failed 0x%zx", Status);
+        DBG_ERROR("FileSetSize() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1929,7 +1929,7 @@ static EFI_STATUS FileCopyToFile(IN EFI_FILE_PROTOCOL* SourceFile, IN EFI_FILE_P
         BytesRead = READ_SIZE;
         Status = FileRead(SourceFile, &BytesRead, Buffer);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FileRead() failed 0x%zx", Status);
+            DBG_ERROR("FileRead() failed 0x%x", Status);
             goto Exit;
         }
 
@@ -1941,7 +1941,7 @@ static EFI_STATUS FileCopyToFile(IN EFI_FILE_PROTOCOL* SourceFile, IN EFI_FILE_P
             UINTN BytesWrote = BytesRead;
             Status = FileWrite(DestFile, &BytesWrote, Buffer);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("FileWrite() failed 0x%zx", Status);
+                DBG_ERROR("FileWrite() failed 0x%x", Status);
                 goto Exit;
             }
             BytesRead -= BytesWrote;
@@ -1966,7 +1966,7 @@ static EFI_STATUS FileCopyToDirectory(IN EFI_FILE_PROTOCOL* SourceFile,
 
     Status = FileGetInfo(SourceFile, &FileInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetInfo() failed 0x%zx", Status);
+        DBG_ERROR("FileGetInfo() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -1976,13 +1976,13 @@ static EFI_STATUS FileCopyToDirectory(IN EFI_FILE_PROTOCOL* SourceFile,
                                  EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE | EFI_FILE_MODE_CREATE,
                                  0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Open() failed 0x%zx", Status);
+        DBG_ERROR("Open() failed 0x%x", Status);
         goto Exit;
     }
 
     Status = FileCopyToFile(SourceFile, DestFile);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileCopyToFile() failed 0x%zx", Status);
+        DBG_ERROR("FileCopyToFile() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -2009,7 +2009,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
 
     Status = FileFindFirst(SourceDir);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Read() failed with status 0x%zx", Status);
+        DBG_ERROR("Read() failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -2021,7 +2021,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
 
         Status = FileFindNext(SourceDir, &FileInfo);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Read() failed with status 0x%zx", Status);
+            DBG_ERROR("Read() failed with status 0x%x", Status);
             goto Cleanup;
         }
 
@@ -2033,7 +2033,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
             goto Cleanup;
         }
 
-        DBG_INFO_U(L"Copying %-15s %s",
+        DBG_INFO_U(L"Copying %-15a %a",
                    ((FileInfo->Attribute & EFI_FILE_DIRECTORY) == EFI_FILE_DIRECTORY) ?
                        L"Directory" :
                        L"File",
@@ -2050,7 +2050,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
                                      EFI_FILE_MODE_READ,
                                      EFI_FILE_DIRECTORY);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Open() failed 0x%zx", Status);
+                DBG_ERROR("Open() failed 0x%x", Status);
                 goto Cleanup;
             }
 
@@ -2060,7 +2060,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
 
             Status = FileCreateDirectory(DestDir, FileInfo->FileName);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("FileCreateDirectory() failed 0x%zx", Status);
+                DBG_ERROR("FileCreateDirectory() failed 0x%x", Status);
                 goto Cleanup;
             }
 
@@ -2074,7 +2074,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
                                    EFI_FILE_MODE_READ,
                                    EFI_FILE_DIRECTORY);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Open() failed 0x%zx", Status);
+                DBG_ERROR("Open() failed 0x%x", Status);
                 goto Cleanup;
             }
 
@@ -2084,7 +2084,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
 
             Status = FileCopyRecursive(Directory1, Directory2);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("FileCopy() failed 0x%zx", Status);
+                DBG_ERROR("FileCopy() failed 0x%x", Status);
                 goto Cleanup;
             }
         } else {
@@ -2094,7 +2094,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
 
             Status = SourceDir->Open(SourceDir, &File, FileInfo->FileName, EFI_FILE_MODE_READ, 0);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Open() failed 0x%zx", Status);
+                DBG_ERROR("Open() failed 0x%x", Status);
                 goto Cleanup;
             }
 
@@ -2105,7 +2105,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
 
             Status = FileCopy(File, DestDir);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("FileCopy() failed 0x%zx", Status);
+                DBG_ERROR("FileCopy() failed 0x%x", Status);
                 goto Cleanup;
             }
         }

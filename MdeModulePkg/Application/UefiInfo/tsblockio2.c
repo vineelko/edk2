@@ -89,7 +89,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
     DataSize = 128 * KB;
     Data = AllocatePool(DataSize);
     if (Data == NULL) {
-        DBG_ERROR("AllocatePool() failed to allocate buffer of size %zd", DataSize);
+        DBG_ERROR("AllocatePool() failed to allocate buffer of size %d", DataSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -107,14 +107,14 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
     DBG_INFO_RAW("[+] Sync Read of 128 KB %u blocks:", MAX_SYNC_ASYNC_OPERATIONS);
     Status = GetTime(&StartTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StartTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StartTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     for (UINT32 i = 0; i < MAX_SYNC_ASYNC_OPERATIONS; i++) {
         Status = BlockIoIf->ReadBlocks(BlockIoIf, BlockIoMedia->MediaId, 0, DataSize, Data);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("ReadBlocks() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("ReadBlocks() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -131,7 +131,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
 
     Status = GetTime(&StopTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StopTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StopTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -144,7 +144,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
 
     Tokens = AllocateZeroPool(MAX_SYNC_ASYNC_OPERATIONS * sizeof(EFI_BLOCK_IO2_TOKEN));
     if (Tokens == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   MAX_SYNC_ASYNC_OPERATIONS * sizeof(EFI_BLOCK_IO2_TOKEN));
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -157,7 +157,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
                                   &Tokens[i],
                                   &Tokens[i].Event);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Unable to create Async IO opertion token. CreateEvent() failed : %s(0x%zx)",
+            DBG_ERROR("Unable to create Async IO opertion token. CreateEvent() failed : %a(0x%x)",
                       E(Status),
                       Status);
             goto Exit;
@@ -170,14 +170,14 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
                               NULL,
                               &WaitForAsyncOperation);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     DBG_INFO_RAW("[+] Async Read of 128 KB %u blocks:", MAX_SYNC_ASYNC_OPERATIONS);
     Status = GetTime(&StartTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StartTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StartTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -190,7 +190,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
                                           DataSize,
                                           Data);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("ReadBlocksEx() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("ReadBlocksEx() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -211,13 +211,13 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
 
     Status = gBS->WaitForEvent(1, &WaitForAsyncOperation, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = GetTime(&StopTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StopTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StopTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -237,14 +237,14 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
     DBG_INFO_RAW("[+] Sync Write of 128 KB %u blocks:", MAX_SYNC_ASYNC_OPERATIONS);
     Status = GetTime(&StartTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StartTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StartTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     for (UINT32 i = 0; i < MAX_SYNC_ASYNC_OPERATIONS; i++) {
         Status = BlockIoIf->WriteBlocks(BlockIoIf, BlockIoMedia->MediaId, 0, DataSize, Data);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WriteBlocks() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WriteBlocks() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -261,7 +261,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
 
     Status = GetTime(&StopTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StopTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StopTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -275,7 +275,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
     DBG_INFO_RAW("[+] Async Write of 128 KB %u blocks:", MAX_SYNC_ASYNC_OPERATIONS);
     Status = GetTime(&StartTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StartTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StartTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -288,7 +288,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
                                            DataSize,
                                            Data);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WriteBlocksEx() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WriteBlocksEx() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -309,13 +309,13 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
 
     Status = gBS->WaitForEvent(1, &WaitForAsyncOperation, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = GetTime(&StopTime);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Querying for StopTime failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Querying for StopTime failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -385,7 +385,7 @@ static EFI_STATUS BlockIo2SyncAsync128KReadWriteTest(IN PBM_PROTOCOL_INFO Protoc
                                      &HandleCount,
                                      &BlockIoHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

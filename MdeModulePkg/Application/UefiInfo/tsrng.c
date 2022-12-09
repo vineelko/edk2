@@ -40,7 +40,7 @@ static EFI_STATUS RngProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
 
     Status = ProtocolArray[EFI_RNG_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_RNG_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_RNG_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -48,35 +48,35 @@ static EFI_STATUS RngProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
 
     Status = RngProtocol->GetInfo(RngProtocol, &AlgorithmListSize, AlgorithmList);
     if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
-        DBG_ERROR("GetInfo() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetInfo() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     AlgorithmList = AllocateZeroPool(AlgorithmListSize);
     if (AlgorithmList == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd", AlgorithmListSize);
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d", AlgorithmListSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
 
     Status = RngProtocol->GetInfo(RngProtocol, &AlgorithmListSize, AlgorithmList);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetInfo() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetInfo() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("Found %zu RNG algorithms", AlgorithmListSize / sizeof(EFI_RNG_ALGORITHM));
+    DBG_INFO("Found %u RNG algorithms", AlgorithmListSize / sizeof(EFI_RNG_ALGORITHM));
 
     for (UINTN i = 0; i < AlgorithmListSize / sizeof(EFI_RNG_ALGORITHM); i++) {
         ZeroMem(RngData, _countof(RngData));
         Status = RngProtocol->GetRNG(RngProtocol, &AlgorithmList[i], _countof(RngData), RngData);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetRNG() call for algorithm %zu failed : %s(0x%zx)", i, E(Status), Status);
+            DBG_ERROR("GetRNG() call for algorithm %u failed : %a(0x%x)", i, E(Status), Status);
             Status = EFI_SUCCESS;
             continue;
         }
 
-        DBG_INFO("Dumping %zu bytes of RNG data", _countof(RngData));
+        DBG_INFO("Dumping %u bytes of RNG data", _countof(RngData));
         HexDump(RngData, _countof(RngData));
     }
 

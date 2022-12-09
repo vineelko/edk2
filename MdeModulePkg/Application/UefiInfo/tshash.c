@@ -111,7 +111,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
 
     Status = ProtocolArray[EFI_HASH_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HASH_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HASH_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -139,7 +139,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
 
         Status = HashProtocol->GetHashSize(HashProtocol, HashAlgorithmsMap[i].Guid, &HashSize);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("[-] %s is not supported error %s(0x%zx)",
+            DBG_ERROR("[-] %a is not supported error %a(0x%x)",
                       HashAlgorithmsMap[i].Name,
                       E(Status),
                       Status);
@@ -155,7 +155,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
                                     HASH_INPUT_SIZE,
                                     &Output);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("[-] %s Hash function failed : %s(0x%zx)",
+            DBG_ERROR("[-] %a Hash function failed : %a(0x%x)",
                       HashAlgorithmsMap[i].Name,
                       E(Status),
                       Status);
@@ -166,9 +166,9 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
         if (EFI_ERROR(HashEquals((UINT8*)Output.Sha512Hash,
                                  HashAlgorithmsMap[i].ExpectedHash,
                                  HashSize))) {
-            DBG_INFO("[+] %s is supported", HashAlgorithmsMap[i].Name);
+            DBG_INFO("[+] %a is supported", HashAlgorithmsMap[i].Name);
         } else {
-            DBG_INFO("[+] %s is supported", HashAlgorithmsMap[i].Name);
+            DBG_INFO("[+] %a is supported", HashAlgorithmsMap[i].Name);
         }
 
         HashAlgorithmsSupported = TRUE;
@@ -180,7 +180,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
 
     Status = ProtocolArray[EFI_HASH2_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HASH2_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HASH2_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -203,7 +203,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
 
         Status = Hash2Protocol->GetHashSize(Hash2Protocol, HashAlgorithmsMap[i].Guid, &HashSize);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("[-] %s is not supported error %s(0x%zx)",
+            DBG_ERROR("[-] %a is not supported error %a(0x%x)",
                       HashAlgorithmsMap[i].Name,
                       E(Status),
                       Status);
@@ -218,7 +218,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
                                      HASH_INPUT_SIZE,
                                      &Output2);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("[-] %s Hash function failed : %s(0x%zx)",
+            DBG_ERROR("[-] %a Hash function failed : %a(0x%x)",
                       HashAlgorithmsMap[i].Name,
                       E(Status),
                       Status);
@@ -228,9 +228,9 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
 
         if (EFI_ERROR(
                 HashEquals(Output2.Sha512Hash, HashAlgorithmsMap[i].ExpectedHash, HashSize))) {
-            DBG_INFO("[+] %s is supported", HashAlgorithmsMap[i].Name);
+            DBG_INFO("[+] %a is supported", HashAlgorithmsMap[i].Name);
         } else {
-            DBG_INFO("[+] %s is supported", HashAlgorithmsMap[i].Name);
+            DBG_INFO("[+] %a is supported", HashAlgorithmsMap[i].Name);
         }
 
         HashAlgorithmsSupported = TRUE;
@@ -254,7 +254,7 @@ static EFI_STATUS Hash2Twice(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
 
     Status = ProtocolArray[EFI_HASH2_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HASH2_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HASH2_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -305,7 +305,7 @@ static EFI_STATUS Hash2Twice(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
             //
 
             if (EFI_ERROR(Status) && j == 1) {
-                DBG_INFO("[+] %s double hashing failed with %s(0x%zx)",
+                DBG_INFO("[+] %a double hashing failed with %a(0x%x)",
                          HashAlgorithmsMap[i].Name,
                          E(Status),
                          Status);
@@ -313,10 +313,10 @@ static EFI_STATUS Hash2Twice(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
 
             if (EFI_ERROR(
                     HashEquals(Output.Sha512Hash, HashAlgorithmsMap[i].ExpectedHash, HashSize))) {
-                DBG_INFO("[+] %s double hashing failed", HashAlgorithmsMap[i].Name);
+                DBG_INFO("[+] %a double hashing failed", HashAlgorithmsMap[i].Name);
                 break;
             } else if (j == 1) {
-                DBG_INFO("[+] %s double hashing passed", HashAlgorithmsMap[i].Name);
+                DBG_INFO("[+] %a double hashing passed", HashAlgorithmsMap[i].Name);
             }
         }
     }
@@ -352,7 +352,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = ProtocolArray[EFI_HASH_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HASH_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HASH_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -365,7 +365,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                               &TimerEvent);
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Unable to CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -387,7 +387,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Data = AllocatePool(MaxDataSize);
     if (Data == NULL) {
-        DBG_ERROR("AllocatePool() failed to allocate buffer of size %zd", MaxDataSize);
+        DBG_ERROR("AllocatePool() failed to allocate buffer of size %d", MaxDataSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -407,7 +407,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
             continue;
         }
 
-        DBG_INFO_RAW("[+] Hash Perf Test(%s):", HashAlgorithmsMap[i].Name);
+        DBG_INFO_RAW("[+] Hash Perf Test(%a):", HashAlgorithmsMap[i].Name);
 
         //
         // Start with 256 MB and increment in 50 MB steps until TimeLapsed is 1 sec
@@ -419,7 +419,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
             while (DataSize < MaxDataSize) {
                 Status = gBS->SetTimer(TimerEvent, TimerRelative, SEC_TO_100_NS(1));
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("SetTimer() failed : %s(0x%zx)", E(Status), Status);
+                    DBG_ERROR("SetTimer() failed : %a(0x%x)", E(Status), Status);
                     Status = EFI_SUCCESS;
                     goto HashAlgoExit;
                 }
@@ -432,7 +432,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                                             DataSize,
                                             &Output);
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("Hash algorithm not supported %s(0x%zx)", E(Status), Status);
+                    DBG_ERROR("Hash algorithm not supported %a(0x%x)", E(Status), Status);
                     Status = EFI_SUCCESS;
                     goto HashAlgoExit;
                 }
@@ -473,7 +473,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = ProtocolArray[EFI_HASH2_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HASH2_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HASH2_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -486,7 +486,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                               &TimerEvent);
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Unable to CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -508,7 +508,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Data = AllocatePool(MaxDataSize);
     if (Data == NULL) {
-        DBG_ERROR("AllocatePool() failed to allocate buffer of size %zd", MaxDataSize);
+        DBG_ERROR("AllocatePool() failed to allocate buffer of size %d", MaxDataSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -522,7 +522,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
             continue;
         }
 
-        DBG_INFO_RAW("[+] Hash Perf Test(%s):", HashAlgorithmsMap[i].Name);
+        DBG_INFO_RAW("[+] Hash Perf Test(%a):", HashAlgorithmsMap[i].Name);
 
         //
         // Start with 256 MB and increment in 50 MB steps until TimeLapsed is 1 sec
@@ -534,7 +534,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
             while (DataSize < MaxDataSize) {
                 Status = gBS->SetTimer(TimerEvent, TimerRelative, SEC_TO_100_NS(1));
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("SetTimer() failed : %s(0x%zx)", E(Status), Status);
+                    DBG_ERROR("SetTimer() failed : %a(0x%x)", E(Status), Status);
                     Status = EFI_SUCCESS;
                     goto HashAlgoExit;
                 }
@@ -546,7 +546,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                                              DataSize,
                                              &Output);
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("Hash algorithm not supported %s(0x%zx)", E(Status), Status);
+                    DBG_ERROR("Hash algorithm not supported %a(0x%x)", E(Status), Status);
                     Status = EFI_SUCCESS;
                     goto HashAlgoExit;
                 }
@@ -597,7 +597,7 @@ static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
                               &TimerEvent);
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Unable to CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -619,7 +619,7 @@ static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Data = AllocatePool(MaxDataSize);
     if (Data == NULL) {
-        DBG_ERROR("AllocatePool() failed to allocate buffer of size %zd", MaxDataSize);
+        DBG_ERROR("AllocatePool() failed to allocate buffer of size %d", MaxDataSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -636,7 +636,7 @@ static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
         while (DataSize < MaxDataSize) {
             Status = gBS->SetTimer(TimerEvent, TimerRelative, SEC_TO_100_NS(1));
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("SetTimer() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("SetTimer() failed : %a(0x%x)", E(Status), Status);
                 Status = EFI_SUCCESS;
                 goto Exit;
             }

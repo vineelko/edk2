@@ -364,7 +364,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Client->TransmitToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -380,7 +380,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Client->ReceiveToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -394,7 +394,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Server->TransmitToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -410,7 +410,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Server->ReceiveToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -424,7 +424,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &LoopbackContext->WaitForClientTransmitServerReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -438,7 +438,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &LoopbackContext->WaitForServerTransmitClientReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -455,7 +455,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = Client->Protocol->Transmit(Client->Protocol, &Client->TransmitToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Transmit() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -465,7 +465,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = Server->Protocol->Receive(Server->Protocol, &Server->ReceiveToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Receive() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Receive() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -475,14 +475,14 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = gBS->WaitForEvent(1, &LoopbackContext->WaitForClientTransmitServerReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         if (Server->DataVerified == TRUE && EFI_ERROR(Server->ReceiveToken.Status) == FALSE) {
             DBG_INFO("   Client transmit ==> Server receive (passed)");
         } else {
-            DBG_ERROR("   Client transmit ==> Server receive (failed) : %s(0x%zx)",
+            DBG_ERROR("   Client transmit ==> Server receive (failed) : %a(0x%x)",
                       E(Server->ReceiveToken.Status),
                       Server->ReceiveToken.Status);
             Status = EFI_INVALID_PARAMETER;
@@ -495,7 +495,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = gBS->SignalEvent(Server->ReceiveToken.Packet.RxData->RecycleSignal);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("SignalEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("SignalEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -509,7 +509,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = Server->Protocol->Transmit(Server->Protocol, &Server->TransmitToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Transmit() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -519,7 +519,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = Client->Protocol->Receive(Client->Protocol, &Client->ReceiveToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Receive() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Receive() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -529,14 +529,14 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = gBS->WaitForEvent(1, &LoopbackContext->WaitForServerTransmitClientReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         if (Client->DataVerified == TRUE && EFI_ERROR(Client->ReceiveToken.Status) == FALSE) {
             DBG_INFO("   Server transmit ==> Client receive (passed)");
         } else {
-            DBG_ERROR("   Server transmit ==> Client receive (failed) : %s(0x%zx)",
+            DBG_ERROR("   Server transmit ==> Client receive (failed) : %a(0x%x)",
                       E(Client->ReceiveToken.Status),
                       Client->ReceiveToken.Status);
             Status = EFI_INVALID_PARAMETER;
@@ -549,7 +549,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_LOOPBACK_CONTEXT Loopba
 
         Status = gBS->SignalEvent(Client->ReceiveToken.Packet.RxData->RecycleSignal);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("SignalEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("SignalEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -590,7 +590,7 @@ static EFI_STATUS Udp4ConfigureClient(IN PBM_UDP4_LOOPBACK_CONTEXT LoopbackConte
 
     Status = Client->Protocol->Configure(Client->Protocol, &Client->ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -624,7 +624,7 @@ static EFI_STATUS Udp4ConfigureServer(IN PBM_UDP4_LOOPBACK_CONTEXT LoopbackConte
 
     Status = Server->Protocol->Configure(Server->Protocol, &Server->ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -682,7 +682,7 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = ProtocolGetUdp4ClientServer(&UdpClientServer[0], &UdpClientServer[1]);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ProtocolGetUdp4ClientServer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("ProtocolGetUdp4ClientServer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -697,7 +697,7 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Udp4ConfigureServer(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4ConfigureServer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4ConfigureServer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -707,7 +707,7 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Udp4ConfigureClient(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4ConfigureClient() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4ConfigureClient() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -717,7 +717,7 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Udp4TransmitAndReceiveData(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4TransmitAndReceiveData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4TransmitAndReceiveData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

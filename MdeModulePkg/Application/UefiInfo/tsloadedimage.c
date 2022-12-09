@@ -42,7 +42,7 @@ static EFI_STATUS LoadedImageProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = gBS->HandleProtocol(gImageHandle, &gEfiLoadedImageProtocolGuid, (void**)&LoadedImage);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HandleProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HandleProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -50,7 +50,7 @@ static EFI_STATUS LoadedImageProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                                  &gEfiDevicePathProtocolGuid,
                                  (void**)&DevicePathProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HandleProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HandleProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -60,7 +60,7 @@ static EFI_STATUS LoadedImageProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = gBS->LoadImage(FALSE, gImageHandle, DevicePathProtocol, NULL, 0, &LoadedImageHandle);
     if (EFI_ERROR(Status)) {
-        DBG_INFO("HandleProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_INFO("HandleProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

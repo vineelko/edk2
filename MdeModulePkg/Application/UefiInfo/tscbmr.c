@@ -50,11 +50,11 @@ static VOID ReadinessPrintProtocolInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
     // Display support status
     //
 
-    DBG_INFO("%-45s %s ",
+    DBG_INFO("%-45a %a ",
              ProtocolInfo->ProtocolName,
              EFI_ERROR(ProtocolInfo->ProtocolStatus) ? "Not Supported" : "Supported");
     if (ProtocolInfo->ServiceBindingProtocolName != NULL) {
-        DBG_INFO("%-45s %s ",
+        DBG_INFO("%-45a %a ",
                  ProtocolInfo->ServiceBindingProtocolName,
                  EFI_ERROR(ProtocolInfo->ServiceBindingProtocolStatus) ? "Not Supported" :
                                                                          "Supported");
@@ -191,7 +191,7 @@ static EFI_STATUS CbmrUnload(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
         for (UINTN j = 0; j < HandleCount; j++) {
             Status = gBS->UnloadImage(Handles[i]);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Unload() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("Unload() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 
@@ -222,14 +222,14 @@ static EFI_STATUS CbmrWriteSI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
     DBG_INFO_U(L"Locating %s", SiWimFileName);
     Status = FileLocateAndOpen(SiWimFileName, EFI_FILE_MODE_READ, &SiWimFile);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR_U(L"FileLocateAndOpen() Failed 0x%zx %s", Status, SiWimFileName);
+        DBG_ERROR_U(L"FileLocateAndOpen() Failed 0x%x %s", Status, SiWimFileName);
         goto Exit;
     }
 
     DBG_INFO_U(L"Getting %s file size", SiWimFileName);
     Status = FileGetSize(SiWimFile, &SiWimFileSize);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileGetSize() failed : 0x%zx", Status);
+        DBG_ERROR("FileGetSize() failed : 0x%x", Status);
         goto Exit;
     }
 
@@ -242,7 +242,7 @@ static EFI_STATUS CbmrWriteSI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
     DBG_INFO_U(L"Reading %s", SiWimFileName);
     Status = FileRead(SiWimFile, (UINTN*)&SiWimFileSize, SiWimFileBuffer);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FileRead() failed : 0x%zx", Status);
+        DBG_ERROR("FileRead() failed : 0x%x", Status);
         goto Exit;
     }
 
@@ -253,7 +253,7 @@ static EFI_STATUS CbmrWriteSI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                               (UINTN)SiWimFileSize,
                               SiWimFileBuffer);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("SetVariable() failed : 0x%zx", Status);
+        DBG_ERROR("SetVariable() failed : 0x%x", Status);
         goto Exit;
     }
 

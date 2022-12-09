@@ -61,7 +61,7 @@ static EFI_STATUS SmbiosDumpTables(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = ProtocolArray[EFI_SMBIOS_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_SMBIOS_PROTOCOL_GUID Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_SMBIOS_PROTOCOL_GUID Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

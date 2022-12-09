@@ -48,7 +48,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     Status = gBS->HandleProtocol(gImageHandle, &gEfiLoadedImageProtocolGuid, (void**)&LoadedImage);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Unable to located EFI_LOADED_IMAGE_PROTOCOL protocol on "
-                  "image handle. HandleProtocol() failed : %s(0x%zx)",
+                  "image handle. HandleProtocol() failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -61,7 +61,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
                                  (void**)&SimpleFileSystem);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Unable to located EFI_SIMPLE_FILE_SYSTEM_PROTOCOL protocol "
-                  "on image handle. HandleProtocol() failed : %s(0x%zx)",
+                  "on image handle. HandleProtocol() failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -70,7 +70,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     Status = SimpleFileSystem->OpenVolume(SimpleFileSystem, &Root);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("OpenVolume() failed to open device where the "
-                  "current image is loaded : %s(0x%zx)",
+                  "current image is loaded : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -79,7 +79,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (PVOID*)&ToTextPath);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Unable to located EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID "
-                  "protocol failed : %s(0x%zx)",
+                  "protocol failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -93,7 +93,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
 
     Status = Root->Open(Root, &LoadedImageFile, BinaryFilePath, EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR_U("EFI_FILE_PROTOCOL.Open() for %s failed : %S(0x%zx)",
+        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.Open() for %s failed : %S(0x%x)",
                     BinaryFilePath,
                     E(Status),
                     Status);
@@ -109,7 +109,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
                                       &FileInfoSize,
                                       FileInfo);
     if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
-        DBG_ERROR_U("EFI_FILE_PROTOCOL.GetInfo() for %s failed : %S(0x%zx)",
+        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.GetInfo() for %s failed : %S(0x%x)",
                     BinaryFilePath,
                     E(Status),
                     Status);
@@ -118,7 +118,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
 
     FileInfo = AllocateZeroPool(FileInfoSize);
     if (FileInfo == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd", FileInfoSize);
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d", FileInfoSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -128,7 +128,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
                                       &FileInfoSize,
                                       FileInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR_U("EFI_FILE_PROTOCOL.GetInfo() for %s failed : %S(0x%zx)",
+        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.GetInfo() for %s failed : %S(0x%x)",
                     BinaryFilePath,
                     E(Status),
                     Status);

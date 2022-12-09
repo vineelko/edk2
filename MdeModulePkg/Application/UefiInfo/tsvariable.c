@@ -82,13 +82,13 @@ static EFI_STATUS GetMaxVariableSize(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
                                         &RemainingVariableStorageSize,
                                         &MaximumVariableSize);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("%-40s : QueryVariableInfo() call failed : %s(0x%zx)",
+            DBG_ERROR("%-40a : QueryVariableInfo() call failed : %a(0x%x)",
                       VariableAttributesMap[i].String,
                       E(Status),
                       Status);
         } else {
             DBG_INFO(
-                "%-40s : MaximumVariableSize = %4llu%-6s MaximumVariableStorageSize = %4llu%-6s RemainingVariableStorageSize = %4llu%-6s",
+                "%-40a : MaximumVariableSize = %4llu%-6a MaximumVariableStorageSize = %4llu%-6a RemainingVariableStorageSize = %4llu%-6a",
                 VariableAttributesMap[i].String,
                 PrettySize(MaximumVariableSize),
                 PrettySizeStr(MaximumVariableSize),

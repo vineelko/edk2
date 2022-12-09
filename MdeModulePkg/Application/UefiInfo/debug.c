@@ -87,13 +87,13 @@ VOID EFIAPI DebugPrintFormatted(IN DEBUG_FLAGS DebugFlag,
                                 ...)
 {
     CHAR8 Buffer[512];
-    va_list ArgList;
+    VA_LIST ArgList;
 
     UNREFERENCED_PARAMETER(DebugFlag);
 
-    va_start(ArgList, Fmt);
-    StringCchVPrintfA((STRSAFE_LPSTR)Buffer, _countof(Buffer), (STRSAFE_LPSTR)Fmt, ArgList);
-    va_end(ArgList);
+    VA_START(ArgList, Fmt);
+    AsciiVSPrint(Buffer, sizeof(Buffer), Fmt, ArgList);
+    VA_END(ArgList);
 
     if (Buffer) {
         DebugWrite(Buffer, _countof(Buffer));
@@ -105,13 +105,13 @@ VOID EFIAPI DebugPrintFormattedU(IN DEBUG_FLAGS DebugFlag,
                                  ...)
 {
     CHAR16 BufferWide[512];
-    va_list ArgList;
+    VA_LIST ArgList;
 
     UNREFERENCED_PARAMETER(DebugFlag);
 
-    va_start(ArgList, FmtW);
-    StringCchVPrintfW(BufferWide, _countof(BufferWide), (CHAR16*)FmtW, ArgList);
-    va_end(ArgList);
+    VA_START(ArgList, FmtW);
+    UnicodeVSPrint(BufferWide, sizeof(BufferWide), (CHAR16*)FmtW, ArgList);
+    VA_END(ArgList);
 
     if (BufferWide) {
         CHAR8 Buffer[1024];

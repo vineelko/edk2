@@ -52,11 +52,11 @@ static VOID ReadinessExPrintProtocolInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
     // Display support status
     //
 
-    DBG_INFO("%-45s %s ",
+    DBG_INFO("%-45a %a ",
              ProtocolInfo->ProtocolName,
              EFI_ERROR(ProtocolInfo->ProtocolStatus) ? "Not Supported" : "Supported");
     if (ProtocolInfo->ServiceBindingProtocolName != NULL) {
-        DBG_INFO("%-45s %s ",
+        DBG_INFO("%-45a %a ",
                  ProtocolInfo->ServiceBindingProtocolName,
                  EFI_ERROR(ProtocolInfo->ServiceBindingProtocolStatus) ? "Not Supported" :
                                                                          "Supported");

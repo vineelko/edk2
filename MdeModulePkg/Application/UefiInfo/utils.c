@@ -61,7 +61,7 @@ GetTime(IN EFI_TIME* Time)
 
     Status = gRT->GetTime(Time, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetTime() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetTime() failed : %a(0x%x)", E(Status), Status);
     }
 
     return Status;
@@ -111,9 +111,7 @@ CHAR8* PrettySizeStr(IN UINT64 Size)
 //
 
 EFI_STATUS
-GetHostArgument(IN const CHAR8* HostArguments,
-                IN const CHAR8* Key,
-                OUT CHAR8** Value)
+GetHostArgument(IN const CHAR8* HostArguments, IN const CHAR8* Key, OUT CHAR8** Value)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     UINTN Length = 0;
@@ -132,13 +130,13 @@ GetHostArgument(IN const CHAR8* HostArguments,
     Length = AsciiStrLen(Key);
     Key2 = AllocateZeroPool(sizeof(CHAR8) * (Length + 2)); // include =
     if (Key2 == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   sizeof(CHAR8) * (Length + 2));
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
 
-    StringCchPrintfA((STRSAFE_LPSTR)Key2, Length + 2, (CHAR8*) "%s=", Key); // append =
+    AsciiSPrint(Key2, Length + 2, (CHAR8*)"%a=", Key); // append =
 
     Found = AsciiStrStr(HostArguments, Key2);
     if (Found == NULL) {
@@ -153,7 +151,7 @@ GetHostArgument(IN const CHAR8* HostArguments,
 
     RetValue = AllocateZeroPool(sizeof(CHAR8) * (ValueLength + 1));
     if (RetValue == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   sizeof(CHAR8) * (ValueLength + 1));
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -270,7 +268,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 
 //     Status = gBS->HandleProtocol(gImageHandle, &gEfiLoadedImageProtocolGuid,
 //     (void**)&LoadedImage); if (EFI_ERROR(Status)) {
-//         DBG_ERROR("HandleProtocol() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("HandleProtocol() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
@@ -280,19 +278,19 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                                  &gEfiSimpleFileSystemProtocolGuid,
 //                                  (void**)&SimpleFileSystem);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR("HandleProtocol() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("HandleProtocol() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
 //     Status = SimpleFileSystem->OpenVolume(SimpleFileSystem, &Root);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR("OpenVolume() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("OpenVolume() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
 //     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (PVOID*)&ToTextPath);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR("LocateProtocol() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("LocateProtocol() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
@@ -304,7 +302,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 
 //     Status = Root->Open(Root, &LoadedImageFile, BinaryFilePath, EFI_FILE_MODE_READ, 0);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR_U(L"Open() failed : for %s = %S(0x%zx)", BinaryFilePath, E(Status), Status);
+//         DBG_ERROR_U(L"Open() failed : for %s = %S(0x%x)", BinaryFilePath, E(Status), Status);
 //         goto Exit;
 //     }
 
@@ -317,13 +315,13 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                                       &FileInfoSize,
 //                                       FileInfo);
 //     if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
-//         DBG_ERROR("GetInfo() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("GetInfo() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
 //     FileInfo = AllocateZeroPool(FileInfoSize);
 //     if (FileInfo == NULL) {
-//         DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd", FileInfoSize);
+//         DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d", FileInfoSize);
 //         Status = EFI_OUT_OF_RESOURCES;
 //         goto Exit;
 //     }
@@ -333,7 +331,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                                       &FileInfoSize,
 //                                       FileInfo);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR("GetInfo() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("GetInfo() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
@@ -344,7 +342,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //     Length = StrLen(BinaryFilePath);
 //     RetFilePath = AllocateZeroPool(sizeof(CHAR8) * (Length + 1));
 //     if (RetFilePath == NULL) {
-//         DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+//         DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
 //                   sizeof(CHAR8) * (Length + 1));
 //         Status = EFI_OUT_OF_RESOURCES;
 //         goto Exit;
@@ -360,12 +358,12 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //         goto Exit;
 //     }
 
-//     Hr = StringCchPrintfA((STRSAFE_LPSTR)RetFileSize,
+//     Hr = AsciiSPrint(RetFileSize,
 //                           MAX_FILE_SUMMARY_FIELD_SIZE,
-//                           (STRSAFE_LPSTR) "%llu bytes",
+//                            "%llu bytes",
 //                           FileInfo->FileSize);
 //     if (FAILED(Hr)) {
-//         DBG_ERROR("StringCchPrintfA failed 0x%x", Hr);
+//         DBG_ERROR("AsciiSPrint failed 0x%x", Hr);
 //         Status = EFI_INVALID_PARAMETER;
 //         goto Exit;
 //     }
@@ -378,9 +376,9 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //         goto Exit;
 //     }
 
-//     Hr = StringCchPrintfA((STRSAFE_LPSTR)RetCreatedTime,
+//     Hr = AsciiSPrint(RetCreatedTime,
 //                           MAX_FILE_SUMMARY_FIELD_SIZE,
-//                           (STRSAFE_LPSTR) "%02u/%02u/%02u %02u:%02u:%02u",
+//                            "%02u/%02u/%02u %02u:%02u:%02u",
 //                           FileInfo->CreateTime.Month,
 //                           FileInfo->CreateTime.Day,
 //                           (UINT16)(FileInfo->CreateTime.Year % 100),
@@ -388,7 +386,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                           FileInfo->CreateTime.Minute,
 //                           FileInfo->CreateTime.Second);
 //     if (FAILED(Hr)) {
-//         DBG_ERROR("StringCchPrintfA failed 0x%x", Hr);
+//         DBG_ERROR("AsciiSPrint failed 0x%x", Hr);
 //         Status = EFI_INVALID_PARAMETER;
 //         goto Exit;
 //     }
@@ -401,9 +399,9 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //         goto Exit;
 //     }
 
-//     Hr = StringCchPrintfA((STRSAFE_LPSTR)RetLastAccessedTime,
+//     Hr = AsciiSPrint(RetLastAccessedTime,
 //                           MAX_FILE_SUMMARY_FIELD_SIZE,
-//                           (STRSAFE_LPSTR) "%02u/%02u/%02u %02u:%02u:%02u",
+//                            "%02u/%02u/%02u %02u:%02u:%02u",
 //                           FileInfo->LastAccessTime.Month,
 //                           FileInfo->LastAccessTime.Day,
 //                           (UINT16)(FileInfo->LastAccessTime.Year % 100),
@@ -411,7 +409,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                           FileInfo->LastAccessTime.Minute,
 //                           FileInfo->LastAccessTime.Second);
 //     if (FAILED(Hr)) {
-//         DBG_ERROR("StringCchPrintfA failed 0x%x", Hr);
+//         DBG_ERROR("AsciiSPrint failed 0x%x", Hr);
 //         Status = EFI_INVALID_PARAMETER;
 //         goto Exit;
 //     }
@@ -424,9 +422,9 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //         goto Exit;
 //     }
 
-//     Hr = StringCchPrintfA((STRSAFE_LPSTR)RetModifiedTime,
+//     Hr = AsciiSPrint(RetModifiedTime,
 //                           MAX_FILE_SUMMARY_FIELD_SIZE,
-//                           (STRSAFE_LPSTR) "%02u/%02u/%02u %02u:%02u:%02u",
+//                            "%02u/%02u/%02u %02u:%02u:%02u",
 //                           FileInfo->ModificationTime.Month,
 //                           FileInfo->ModificationTime.Day,
 //                           (UINT16)(FileInfo->ModificationTime.Year % 100),
@@ -434,7 +432,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                           FileInfo->ModificationTime.Minute,
 //                           FileInfo->ModificationTime.Second);
 //     if (FAILED(Hr)) {
-//         DBG_ERROR("StringCchPrintfA failed 0x%x", Hr);
+//         DBG_ERROR("AsciiSPrint failed 0x%x", Hr);
 //         Status = EFI_INVALID_PARAMETER;
 //         goto Exit;
 //     }
@@ -446,14 +444,14 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //     FileBufferSize = (UINTN)FileInfo->FileSize;
 //     FileBuffer = AllocateZeroPool(FileBufferSize);
 //     if (FileBuffer == NULL) {
-//         DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd", FileBufferSize);
+//         DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d", FileBufferSize);
 //         Status = EFI_OUT_OF_RESOURCES;
 //         goto Exit;
 //     }
 
 //     Status = LoadedImageFile->Read(LoadedImageFile, &FileBufferSize, FileBuffer);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR("Read() failed : %s(0x%zx)", E(Status), Status);
+//         DBG_ERROR("Read() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
 //     }
 
@@ -484,12 +482,12 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //     }
 
 //     for (UINTN i = 0; i < HashSize; i++) {
-//         Hr = StringCchPrintfA((STRSAFE_LPSTR)&RetSHA256Hash[2 * i],
+//         Hr = AsciiSPrint(&RetSHA256Hash[2 * i],
 //                               MAX_FILE_SUMMARY_FIELD_SIZE,
-//                               (STRSAFE_LPSTR) "%02x",
+//                                "%02x",
 //                               CalculatedHash[i] & 0xff);
 //         if (FAILED(Hr)) {
-//             DBG_ERROR("StringCchPrintfA failed 0x%x", Hr);
+//             DBG_ERROR("AsciiSPrint failed 0x%x", Hr);
 //             Status = EFI_INVALID_PARAMETER;
 //             goto Exit;
 //         }
@@ -582,7 +580,7 @@ IsRunningInVM(VOID)
 
     Status = gBS->LocateProtocol(&gEfiSmbiosProtocolGuid, NULL, (PVOID*)&SmbiosProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -592,7 +590,7 @@ IsRunningInVM(VOID)
                                      (EFI_SMBIOS_TABLE_HEADER**)&SmbiosTableType1Ptr,
                                      NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Smbios GetNext() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Smbios GetNext() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

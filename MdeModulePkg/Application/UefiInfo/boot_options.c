@@ -45,7 +45,7 @@ EFI_STATUS EFIAPI BootOptionsEnumerateAll(_Inout_opt_ sUEFI_BOOT_OPTION* BootOpt
     // Pre-calculate necessary size for BootOptionsBuffer
     EfiStatus = EnumerateBootOptionsInternal(NULL, &BufferLength, &RetNumOptions);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain boot options buffer length, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain boot options buffer length, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -65,7 +65,7 @@ EFI_STATUS EFIAPI BootOptionsEnumerateAll(_Inout_opt_ sUEFI_BOOT_OPTION* BootOpt
     // Actually fill in BootOptionsBuffer
     EfiStatus = EnumerateBootOptionsInternal(BootOptionsBuffer, &BufferLength, &RetNumOptions);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain boot options, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain boot options, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -142,7 +142,7 @@ Return Value:
 
     DBG_INFO("Boot option %u", BootOption);
 
-    StringCchPrintfW(BootXXXX, _countof(BootXXXX), L"Boot%04X", BootOption);
+    UnicodeSPrint(BootXXXX, sizeof(BootXXXX), L"Boot%04X", BootOption);
     EfiStatus = gRT->GetVariable(BootXXXX, &gEdkGlobalVariableGuid, NULL, &BootOptionSize, NULL);
     if (EfiStatus == EFI_BUFFER_TOO_SMALL) {
         // This is good. It means the variable exists
@@ -150,7 +150,7 @@ Return Value:
     }
 
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain variable size for variable %S, 0x%zx", BootXXXX, EfiStatus);
+        DBG_ERROR("Failed to obtain variable size for variable %S, 0x%x", BootXXXX, EfiStatus);
         goto Exit;
     }
 
@@ -167,7 +167,7 @@ Return Value:
                                  &BootOptionSize,
                                  BootOptionPtr);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain %S value, 0x%zx", BootXXXX, EfiStatus);
+        DBG_ERROR("Failed to obtain %S value, 0x%x", BootXXXX, EfiStatus);
         goto Exit;
     }
 
@@ -176,21 +176,7 @@ Return Value:
     //
 
     if (CommandLine != NULL) {
-        //
-        // Prepend {UFP} to the command line to indicate it as UFP specific.
-        // As Windows boot manager uses WINDOWS_OS_OPTIONS structure for its
-        // encoding and we don't want to touch that when dumping command
-        // line
-        //
-
-        StringCchPrintfExW(CommandLineTemp,
-                           _countof(CommandLineTemp),
-                           NULL,
-                           NULL,
-                           0,
-                           (STRSAFE_LPCWSTR)L"{UFP} %s",
-                           CommandLine);
-        CommandLineLength = (StrLen(CommandLineTemp) + 1) * sizeof(CHAR16);
+        CommandLineLength = (StrLen(CommandLine) + 1) * sizeof(CHAR16);
     }
 
     EfiDescription = BootOptionPtr->Description;
@@ -257,7 +243,7 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 BootOption)
     }
 
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain variable size for BootOrder variable, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain variable size for BootOrder variable, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -276,7 +262,7 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 BootOption)
                                  &BootOrderSize,
                                  BootOrder);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain BootOrder variable value, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain BootOrder variable value, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -314,7 +300,7 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 BootOption)
                                  BootOrderSize,
                                  BootOrder);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to set BootOrder value, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to set BootOrder value, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -342,7 +328,7 @@ EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 BootOption)
         EfiStatus = EFI_SUCCESS;
     }
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain variable size for BootOrder variable, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain variable size for BootOrder variable, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -361,7 +347,7 @@ EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 BootOption)
                                  &BootOrderSize,
                                  BootOrder);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain BootOrder variable value, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain BootOrder variable value, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -397,7 +383,7 @@ EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 BootOption)
                                  BootOrderSize,
                                  BootOrder);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to set BootOrder value, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to set BootOrder value, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -419,7 +405,7 @@ EFI_STATUS EFIAPI BootOptionsGetCurrent(OUT UINT16* CurrentBootOption)
                                  &VariableSize,
                                  &RetCurrentBootOption);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Unable to retrieve BootCurrent variable, 0x%zx", EfiStatus);
+        DBG_ERROR("Unable to retrieve BootCurrent variable, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -461,7 +447,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
                                     NULL,
                                     (VOID**)&DevicePathToTextIf);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to locate device path to text protocol, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to locate device path to text protocol, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -475,7 +461,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         EfiStatus = EFI_SUCCESS;
     }
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain variable size for BootOrder variable, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain variable size for BootOrder variable, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -494,7 +480,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
                                  &BootOrderSize,
                                  BootOrder);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("Failed to obtain BootOrder variable value, 0x%zx", EfiStatus);
+        DBG_ERROR("Failed to obtain BootOrder variable value, 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -510,7 +496,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
 
         DBG_INFO("Boot option %u", Option);
 
-        StringCchPrintfW(BootXXXX, _countof(BootXXXX), L"Boot%04X", Option);
+        UnicodeSPrint(BootXXXX, sizeof(BootXXXX), L"Boot%04X", Option);
 
         EfiStatus = gRT->GetVariable(BootXXXX,
                                      &gEdkGlobalVariableGuid,
@@ -523,7 +509,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         }
 
         if (EFI_ERROR(EfiStatus)) {
-            DBG_ERROR("Failed to obtain variable size for variable %S, 0x%zx", BootXXXX, EfiStatus);
+            DBG_ERROR("Failed to obtain variable size for variable %S, 0x%x", BootXXXX, EfiStatus);
             break;
         }
 
@@ -540,7 +526,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
                                      &BootOptionSize,
                                      BootOption);
         if (EFI_ERROR(EfiStatus)) {
-            DBG_ERROR("Failed to obtain %S value, 0x%zx", BootXXXX, EfiStatus);
+            DBG_ERROR("Failed to obtain %S value, 0x%x", BootXXXX, EfiStatus);
             break;
         }
 

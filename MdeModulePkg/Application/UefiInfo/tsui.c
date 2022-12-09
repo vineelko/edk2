@@ -202,7 +202,7 @@ static VOID SetGraphicsMode()
 
     Status = GraphicsProtocol->SetMode(GraphicsProtocol, BestModeIndex);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to set resolution of %zux%zu",
+        DBG_ERROR("Unable to set resolution of %ux%u",
                   BestMode.HorizontalResolution,
                   BestMode.VerticalResolution);
         goto Exit;
@@ -210,7 +210,7 @@ static VOID SetGraphicsMode()
 
     CopyMem(&gsGraphicsMode, &BestMode, sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION));
 
-    DBG_INFO("Successfully set resolution of %zux%zu",
+    DBG_INFO("Successfully set resolution of %ux%u",
              BestMode.HorizontalResolution,
              BestMode.VerticalResolution);
 
@@ -527,7 +527,7 @@ EFI_STATUS UI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -545,11 +545,11 @@ EFI_STATUS UI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
     DBG_INFO("         Current Mode: %d", GraphicsMode->Mode);
     DBG_INFO("         Max Mode: %d", GraphicsMode->MaxMode);
     DBG_INFO("         Frame Buffer Base: 0x%llx", GraphicsMode->FrameBufferBase);
-    DBG_INFO("         Frame Buffer Size: 0x%zx", GraphicsMode->FrameBufferSize);
+    DBG_INFO("         Frame Buffer Size: 0x%x", GraphicsMode->FrameBufferSize);
     DBG_INFO("         Graphics Mode Info:");
     DBG_INFO("                Horizontal Resolution: %d", ModeInfo->HorizontalResolution);
     DBG_INFO("                Vertical Resolution: %d", ModeInfo->VerticalResolution);
-    DBG_INFO("                Pixel Format: %s", PixelFormatMap[ModeInfo->PixelFormat].String);
+    DBG_INFO("                Pixel Format: %a", PixelFormatMap[ModeInfo->PixelFormat].String);
     DBG_INFO("                Pixel Mask Information: R=0x%lx,G=0x%lx,B=0x%lx",
              ModeInfo->PixelInformation.RedMask,
              ModeInfo->PixelInformation.GreenMask,
@@ -559,7 +559,7 @@ EFI_STATUS UI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
     AllGraphicModes = AllocateZeroPool(sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION*) *
                                        GraphicsMode->MaxMode);
     if (AllGraphicModes == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION*) * GraphicsMode->MaxMode);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -578,7 +578,7 @@ EFI_STATUS UI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
         DBG_INFO("                Horizontal Resolution: %d",
                  AllGraphicModes[i]->HorizontalResolution);
         DBG_INFO("                Vertical Resolution: %d", AllGraphicModes[i]->VerticalResolution);
-        DBG_INFO("                Pixel Format: %s",
+        DBG_INFO("                Pixel Format: %a",
                  PixelFormatMap[AllGraphicModes[i]->PixelFormat].String);
         DBG_INFO("                Pixel Mask Information: R=0x%lx,G=0x%lx,B=0x%lx",
                  AllGraphicModes[i]->PixelInformation.RedMask,

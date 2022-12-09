@@ -203,7 +203,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
                               Context,
                               &Client->TransmitToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -219,7 +219,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
                               Context,
                               &Client->ReceiveToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -233,7 +233,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
                               Context,
                               &Context->WaitForClientTransmitServerReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -247,7 +247,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
                               Context,
                               &Context->WaitForServerTransmitClientReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -257,13 +257,13 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
 
     Status = GetHostArgument(gHostArguments, t("Rounds"), &RoundsStr);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetHostArgument() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetHostArgument() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Ret = sscanf_s((const char*)RoundsStr, "%d", &Rounds);
     if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %s", RoundsStr);
+        DBG_ERROR("sscanf_s() failed to parse : %a", RoundsStr);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -287,7 +287,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
 
         Status = Client->Protocol->Transmit(Client->Protocol, &Client->TransmitToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Transmit() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -297,7 +297,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
 
         Status = gBS->WaitForEvent(1, &Context->WaitForClientTransmitServerReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -310,7 +310,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
 
         Status = Client->Protocol->Receive(Client->Protocol, &Client->ReceiveToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Receive() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Receive() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -320,12 +320,12 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
 
         Status = gBS->WaitForEvent(1, &Context->WaitForServerTransmitClientReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         if (Client->DataVerified == FALSE || EFI_ERROR(Client->ReceiveToken.Status)) {
-            DBG_ERROR("   Server transmit ==> Client receive (failed) : %s(0x%zx)",
+            DBG_ERROR("   Server transmit ==> Client receive (failed) : %a(0x%x)",
                       E(Client->ReceiveToken.Status),
                       Client->ReceiveToken.Status);
             Status = EFI_INVALID_PARAMETER;
@@ -338,7 +338,7 @@ static EFI_STATUS Udp4TransmitAndReceiveData(IN PBM_UDP4_CONTEXT Context)
 
         Status = gBS->SignalEvent(Client->ReceiveToken.Packet.RxData->RecycleSignal);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("SignalEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("SignalEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -366,7 +366,7 @@ static EFI_STATUS Udp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 
     Status = ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_DHCP4_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_DHCP4_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -374,13 +374,13 @@ static EFI_STATUS Udp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 
     Status = Dhcp4->GetModeData(Dhcp4, &RetMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     if (RetMode.State == Dhcp4Init || RetMode.State == Dhcp4InitReboot ||
         RetMode.State == Dhcp4Bound) {
-        DBG_ERROR("Dhcp mode is already in one of the expected state %s",
+        DBG_ERROR("Dhcp mode is already in one of the expected state %a",
                   Dhcp4StateMap[RetMode.State].String);
         goto Found;
     }
@@ -403,36 +403,36 @@ static EFI_STATUS Udp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 
     Status = Dhcp4->Configure(Dhcp4, &Config);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Dhcp4->GetModeData(Dhcp4, &RetMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     if (RetMode.State == Dhcp4Init) {
         Status = Dhcp4->Start(Dhcp4, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %s(0x%zx) Possibly no dhcp server",
+            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server",
                       E(Status),
                       Status);
             goto Exit;
         }
     } else {
-        DBG_ERROR("Dhcp is not in expected state %s", Dhcp4StateMap[RetMode.State].String);
+        DBG_ERROR("Dhcp is not in expected state %a", Dhcp4StateMap[RetMode.State].String);
         goto Exit;
     }
 
     Status = Dhcp4->GetModeData(Dhcp4, &RetMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("DHCP 4 State: %s", Dhcp4StateMap[RetMode.State].String);
+    DBG_INFO("DHCP 4 State: %a", Dhcp4StateMap[RetMode.State].String);
 
 Found:
     *Mode = RetMode;
@@ -453,13 +453,13 @@ static EFI_STATUS Udp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
 
     Status = GetHostArgument(gHostArguments, t("ServerIPAddress"), &ServerIPAddressStr);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetHostArgument() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetHostArgument() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Ret = sscanf_s((const char*)ServerIPAddressStr, "%u.%u.%u.%u", &U0, &U1, &U2, &U3);
     if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %s", ServerIPAddressStr);
+        DBG_ERROR("sscanf_s() failed to parse : %a", ServerIPAddressStr);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -471,13 +471,13 @@ static EFI_STATUS Udp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
 
     Status = GetHostArgument(gHostArguments, t("ServerPort"), &ServerPortStr);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetHostArgument() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetHostArgument() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Ret = sscanf_s((const char*)ServerPortStr, "%u", &U0);
     if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %s", ServerPortStr);
+        DBG_ERROR("sscanf_s() failed to parse : %a", ServerPortStr);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -499,13 +499,13 @@ static EFI_STATUS Udp4ConfigureClient(IN PBM_UDP4_CONTEXT Context)
 
     Status = Udp4GetClientMode(&Mode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4GetClientMode() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4GetClientMode() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Udp4GetServerIPAddressAndPort(&ServerIPAddress, &ServerPort);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4GetServerIPAddressAndPort() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4GetServerIPAddressAndPort() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -530,7 +530,7 @@ static EFI_STATUS Udp4ConfigureClient(IN PBM_UDP4_CONTEXT Context)
 
     Status = Client->Protocol->Configure(Client->Protocol, &Client->ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -569,7 +569,7 @@ Udp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
 
     Status = ProtocolArray[EFI_UDP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_UDP4_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_UDP4_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -581,7 +581,7 @@ Udp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
 
     Status = Udp4ConfigureClient(&Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4ConfigureClient() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4ConfigureClient() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -591,7 +591,7 @@ Udp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
 
     Status = Udp4TransmitAndReceiveData(&Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Udp4TransmitAndReceiveData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Udp4TransmitAndReceiveData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

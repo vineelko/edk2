@@ -56,7 +56,7 @@ static EFI_STATUS WindbgUnload(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
         for (UINTN j = 0; j < HandleCount; j++) {
             Status = gBS->UnloadImage(Handles[i]);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("Unload() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("Unload() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 

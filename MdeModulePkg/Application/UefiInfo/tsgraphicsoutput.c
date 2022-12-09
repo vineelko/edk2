@@ -52,7 +52,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -67,11 +67,11 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     DBG_INFO("         Current Mode: %d", GraphicsMode->Mode);
     DBG_INFO("         Max Mode: %d", GraphicsMode->MaxMode);
     DBG_INFO("         Frame Buffer Base: 0x%llx", GraphicsMode->FrameBufferBase);
-    DBG_INFO("         Frame Buffer Size: 0x%zx", GraphicsMode->FrameBufferSize);
+    DBG_INFO("         Frame Buffer Size: 0x%x", GraphicsMode->FrameBufferSize);
     DBG_INFO("         Graphics Mode Info:");
     DBG_INFO("                Horizontal Resolution: %d", GraphicsModeInfo->HorizontalResolution);
     DBG_INFO("                Vertical Resolution: %d", GraphicsModeInfo->VerticalResolution);
-    DBG_INFO("                Pixel Format: %s",
+    DBG_INFO("                Pixel Format: %a",
              PixelFormatMap[GraphicsModeInfo->PixelFormat].String);
     DBG_INFO("                Pixel Mask Information: R=0x%lx,G=0x%lx,B=0x%lx",
              GraphicsModeInfo->PixelInformation.RedMask,
@@ -82,7 +82,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     AllGraphicModes = AllocateZeroPool(sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION*) *
                                        GraphicsMode->MaxMode);
     if (AllGraphicModes == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION*) * GraphicsMode->MaxMode);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -101,7 +101,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
         DBG_INFO("                Horizontal Resolution: %d",
                  AllGraphicModes[i]->HorizontalResolution);
         DBG_INFO("                Vertical Resolution: %d", AllGraphicModes[i]->VerticalResolution);
-        DBG_INFO("                Pixel Format: %s",
+        DBG_INFO("                Pixel Format: %a",
                  PixelFormatMap[AllGraphicModes[i]->PixelFormat].String);
         DBG_INFO("                Pixel Mask Information: R=0x%lx,G=0x%lx,B=0x%lx",
                  AllGraphicModes[i]->PixelInformation.RedMask,
@@ -117,7 +117,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     FrameBufferContent = AllocateZeroPool(GraphicsMode->FrameBufferSize);
     if (FrameBufferContent == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   GraphicsMode->FrameBufferSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -139,8 +139,8 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
                      AllGraphicModes[i]->VerticalResolution);
         Status = GraphicsProtocol->SetMode(GraphicsProtocol, i);
         if (EFI_ERROR(Status)) {
-            DBG_INFO("Failed : %s(0x%zx)", E(Status), Status);
-            DBG_ERROR("Unable to set graphics mode(%dx%d). Failed : %s(0x%zx)",
+            DBG_INFO("Failed : %a(0x%x)", E(Status), Status);
+            DBG_ERROR("Unable to set graphics mode(%dx%d). Failed : %a(0x%x)",
                       AllGraphicModes[i]->HorizontalResolution,
                       AllGraphicModes[i]->VerticalResolution,
                       E(Status),
@@ -156,7 +156,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = GraphicsProtocol->SetMode(GraphicsProtocol, CurrentMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to restore default graphics mode. Failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Unable to restore default graphics mode. Failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

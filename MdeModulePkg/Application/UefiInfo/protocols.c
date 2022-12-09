@@ -330,7 +330,7 @@ ProtocolOpenServiceBinding(IN EFI_HANDLE DeviceHandle,
                                NULL,
                                EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("OpenProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("OpenProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -361,7 +361,7 @@ ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* Service
 
     Status = ServiceBindingProtocol->CreateChild(ServiceBindingProtocol, &ChildHandle);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateChild() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateChild() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -376,7 +376,7 @@ ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* Service
                                NULL,
                                EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("OpenProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("OpenProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -409,7 +409,7 @@ ProtocolServiceBindingClose(IN EFI_HANDLE DeviceHandle,
     if (ProtocolHandle != NULL && Protocol != NULL) {
         Status = gBS->CloseProtocol(ProtocolHandle, ProtocolGuid, gImageHandle, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("CloseProtocol() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("CloseProtocol() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -421,7 +421,7 @@ ProtocolServiceBindingClose(IN EFI_HANDLE DeviceHandle,
     if (ServiceBindingProtocol != NULL && ProtocolHandle != NULL) {
         Status = ServiceBindingProtocol->DestroyChild(ServiceBindingProtocol, ProtocolHandle);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("DestroyChild() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("DestroyChild() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -433,7 +433,7 @@ ProtocolServiceBindingClose(IN EFI_HANDLE DeviceHandle,
     if (DeviceHandle != NULL && ServiceBindingProtocol != NULL) {
         Status = gBS->CloseProtocol(DeviceHandle, ServiceBindingProtocolGuid, gImageHandle, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("CloseProtocol() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("CloseProtocol() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -474,7 +474,7 @@ static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
                                      (PVOID*)&ProtocolInfo->Protocol);
         ProtocolInfo->ProtocolStatus = Status;
         if (EFI_ERROR(Status)) {
-            // DBG_ERROR("ProtocolName = %s ProtocolStatus = %s(0x%zx)",
+            // DBG_ERROR("ProtocolName = %a ProtocolStatus = %a(0x%x)",
             //           ProtocolInfo->ProtocolName,
             //           E(Status),
             //           Status);
@@ -488,7 +488,7 @@ static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
                                          &DeviceHandles);
         ProtocolInfo->ServiceBindingProtocolStatus = Status;
         if (EFI_ERROR(Status)) {
-            // DBG_ERROR("ProtocolName = %s LocateHandleBuffer() failed Status = %s(0x%zx)",
+            // DBG_ERROR("ProtocolName = %a LocateHandleBuffer() failed Status = %a(0x%x)",
             //           ProtocolInfo->ProtocolName,
             //           E(Status),
             //           Status);
@@ -508,7 +508,7 @@ static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
             ProtocolInfo->ServiceBindingProtocolStatus = Status;
             if (EFI_ERROR(Status)) {
                 // DBG_ERROR(
-                //     "ProtocolName = %s ProtocolOpenServiceBinding() failed Status = %s(0x%zx)",
+                //     "ProtocolName = %a ProtocolOpenServiceBinding() failed Status = %a(0x%x)",
                 //     ProtocolInfo->ProtocolName,
                 //     E(Status),
                 //     Status);
@@ -526,7 +526,7 @@ static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
             ProtocolInfo->ProtocolStatus = Status;
             if (EFI_ERROR(Status)) {
                 // DBG_ERROR(
-                //     "ProtocolName = %s ProtocolOpenServiceBindingChildProtocol() failed Status = %s(0x%zx)",
+                //     "ProtocolName = %a ProtocolOpenServiceBindingChildProtocol() failed Status = %a(0x%x)",
                 //     ProtocolInfo->ProtocolName,
                 //     E(Status),
                 //     Status);

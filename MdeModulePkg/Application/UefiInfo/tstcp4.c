@@ -212,7 +212,7 @@ static EFI_STATUS Tcp4AcceptConnections(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackCon
                               LoopbackContext,
                               &LoopbackContext->WaitForAcceptConnection);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -222,13 +222,13 @@ static EFI_STATUS Tcp4AcceptConnections(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackCon
                               LoopbackContext,
                               &Server->AcceptToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Server->Protocol->Accept(Server->Protocol, &Server->AcceptToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Accept() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Accept() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -264,13 +264,13 @@ static EFI_STATUS Tcp4ConnectToServer(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackConte
                               LoopbackContext,
                               &Client->ConnectToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Client->Protocol->Connect(Client->Protocol, &Client->ConnectToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Connect() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Connect() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -536,7 +536,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Client->TransmitToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -552,7 +552,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Client->ReceiveToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -568,7 +568,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Server->TransmitToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -584,7 +584,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &Server->ReceiveToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -600,7 +600,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &LoopbackContext->WaitForClientTransmitServerReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -614,7 +614,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
                               LoopbackContext,
                               &LoopbackContext->WaitForServerTransmitClientReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -631,7 +631,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
 
         Status = Client->Protocol->Transmit(Client->Protocol, &Client->TransmitToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Transmit() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -642,7 +642,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
         Status = Server->ConnectedClientProtocol->Receive(Server->ConnectedClientProtocol,
                                                           &Server->ReceiveToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Receive() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Receive() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -652,13 +652,13 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
 
         Status = gBS->WaitForEvent(1, &LoopbackContext->WaitForClientTransmitServerReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         if (Server->DataVerified == FALSE ||
             EFI_ERROR(Server->ReceiveToken.CompletionToken.Status)) {
-            DBG_ERROR("   Client transmit ==> Server receive (failed) : %s(0x%zx)",
+            DBG_ERROR("   Client transmit ==> Server receive (failed) : %a(0x%x)",
                       E(Server->ReceiveToken.CompletionToken.Status),
                       Server->ReceiveToken.CompletionToken.Status);
             Status = EFI_INVALID_PARAMETER;
@@ -678,7 +678,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
         Status = Server->ConnectedClientProtocol->Transmit(Server->ConnectedClientProtocol,
                                                            &Server->TransmitToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Transmit() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -688,7 +688,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
 
         Status = Client->Protocol->Receive(Client->Protocol, &Client->ReceiveToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Receive() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Receive() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -698,13 +698,13 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_LOOPBACK_CONTEXT Loopba
 
         Status = gBS->WaitForEvent(1, &LoopbackContext->WaitForServerTransmitClientReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         if (Client->DataVerified == FALSE ||
             EFI_ERROR(Client->ReceiveToken.CompletionToken.Status)) {
-            DBG_ERROR("   Server transmit ==> Client receive (failed) : %s(0x%zx)",
+            DBG_ERROR("   Server transmit ==> Client receive (failed) : %a(0x%x)",
                       E(Client->ReceiveToken.CompletionToken.Status),
                       Client->ReceiveToken.CompletionToken.Status);
             Status = EFI_INVALID_PARAMETER;
@@ -771,7 +771,7 @@ static EFI_STATUS Tcp4ConfigureClient(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackConte
 
     Status = Client->Protocol->Configure(Client->Protocol, &Client->ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -817,7 +817,7 @@ static EFI_STATUS Tcp4ConfigureServer(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackConte
 
     Status = Server->Protocol->Configure(Server->Protocol, &Server->ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -828,14 +828,14 @@ static EFI_STATUS Tcp4ConfigureServer(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackConte
                                            NULL,
                                            NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     if (Server->State == Tcp4StateListen) {
         DBG_INFO("Server TCP instance successfully set to Tcp4StateListen state");
     } else {
-        DBG_ERROR("Server TCP instance is not in expected state = %s(0x%x)",
+        DBG_ERROR("Server TCP instance is not in expected state = %a(0x%x)",
                   Tcp4StateMap[Server->State].String,
                   Tcp4StateMap[Server->State].Value);
         Status = EFI_PROTOCOL_ERROR;
@@ -901,7 +901,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = ProtocolGetTcp4ClientServer(&TcpClientServer[0], &TcpClientServer[1]);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ProtocolGetTcp4ClientServer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("ProtocolGetTcp4ClientServer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -921,7 +921,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Tcp4ConfigureServer(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4ConfigureServer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4ConfigureServer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -931,7 +931,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Tcp4ConfigureClient(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4ConfigureClient() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4ConfigureClient() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -941,7 +941,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Tcp4AcceptConnections(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4AcceptConnections() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4AcceptConnections() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -949,7 +949,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
         Status = Server->Protocol
                      ->GetModeData(Server->Protocol, &Server->State, NULL, NULL, NULL, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -960,7 +960,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Tcp4ConnectToServer(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4ConnectToServer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4ConnectToServer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -970,29 +970,29 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = gBS->WaitForEvent(1, &LoopbackContext.WaitForAcceptConnection, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Client->Protocol
                  ->GetModeData(Client->Protocol, &Client->State, NULL, NULL, NULL, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("Client TCP instance is in %s(0x%x) state",
+    DBG_INFO("Client TCP instance is in %a(0x%x) state",
              Tcp4StateMap[Client->State].String,
              Tcp4StateMap[Client->State].Value);
 
     Status = Server->Protocol
                  ->GetModeData(Server->Protocol, &Server->State, NULL, NULL, NULL, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("Server TCP instance is in %s(0x%x) state",
+    DBG_INFO("Server TCP instance is in %a(0x%x) state",
              Tcp4StateMap[Server->State].String,
              Tcp4StateMap[Server->State].Value);
 
@@ -1005,7 +1005,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
                                  &gEfiTcp4ProtocolGuid,
                                  (VOID**)&Server->ConnectedClientProtocol);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HandleProtocol() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HandleProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1015,7 +1015,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
 
     Status = Tcp4TransmitAndReceiveData(&LoopbackContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4TransmitAndReceiveData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4TransmitAndReceiveData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

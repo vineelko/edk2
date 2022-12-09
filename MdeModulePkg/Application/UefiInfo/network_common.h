@@ -4,7 +4,7 @@
 #define DUMP_IP4_PORT(message, ip, port)              \
     {                                                 \
         {                                             \
-            DBG_INFO("%s: IPv4:%u.%u.%u.%u, Port:%u", \
+            DBG_INFO("%a: IPv4:%u.%u.%u.%u, Port:%u", \
                      message,                         \
                      ip.Addr[0],                      \
                      ip.Addr[1],                      \

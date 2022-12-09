@@ -94,7 +94,7 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
 
     Tokens = AllocateZeroPool(MAX_SYNC_ASYNC_OPERATIONS * sizeof(EFI_BLOCK_IO2_TOKEN));
     if (Tokens == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   MAX_SYNC_ASYNC_OPERATIONS * sizeof(EFI_BLOCK_IO2_TOKEN));
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -107,7 +107,7 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
                                   &Tokens[i],
                                   &Tokens[i].Event);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Unable to create Async IO opertion token. CreateEvent() failed : %s(0x%zx)",
+            DBG_ERROR("Unable to create Async IO opertion token. CreateEvent() failed : %a(0x%x)",
                       E(Status),
                       Status);
             goto Exit;
@@ -120,7 +120,7 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
                               NULL,
                               &WaitForAsyncOperation);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -132,10 +132,10 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
     // Async write of MAX_SYNC_ASYNC_OPERATIONS number of 128 KB blocks
     //
 
-    DBG_INFO("Disk Block Size: %lld%s",
+    DBG_INFO("Disk Block Size: %lld%a",
              PrettySize(BlockIoMedia->BlockSize),
              PrettySizeStr(BlockIoMedia->BlockSize));
-    DBG_INFO("Total Disk Size: %lld%s", PrettySize(TotalDiskSize), PrettySizeStr(TotalDiskSize));
+    DBG_INFO("Total Disk Size: %lld%a", PrettySize(TotalDiskSize), PrettySizeStr(TotalDiskSize));
     DBG_INFO("Number of Blocks: %llu", BlockIoMedia->LastBlock);
     DataSize = MaxDataSize;
     UINT64 i = 0;
@@ -151,7 +151,7 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
             break;
 
         for (UINTN j = 0; j < MAX_SYNC_ASYNC_OPERATIONS; j++) {
-            DBG_INFO_RAW("Async writing %lld%s start @ block: %llu(%llu%%)\r",
+            DBG_INFO_RAW("Async writing %lld%a start @ block: %llu(%llu%%)\r",
                          PrettySize(DataSize),
                          PrettySizeStr(DataSize),
                          i,
@@ -164,7 +164,7 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
                                                (UINTN)DataSize,
                                                Data);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("WriteBlocksEx() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("WriteBlocksEx() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 
@@ -177,7 +177,7 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
 
         Status = gBS->WaitForEvent(1, &WaitForAsyncOperation, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -192,14 +192,14 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
     for (; i < BlockIoMedia->LastBlock; i += (DataSize / BlockIoMedia->BlockSize)) {
         DataSize = RemainingDiskSize < DataSize ? RemainingDiskSize : DataSize;
 
-        DBG_INFO_RAW("Writing %lld%s start @ block: %llu(%llu%%)\r",
+        DBG_INFO_RAW("Writing %lld%a start @ block: %llu(%llu%%)\r",
                      PrettySize(DataSize),
                      PrettySizeStr(DataSize),
                      i,
                      ((i * 100) / BlockIoMedia->LastBlock));
         Status = BlockIoIf->WriteBlocks(BlockIoIf, BlockIoMedia->MediaId, i, (UINTN)DataSize, Data);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("\nFailed to write to block %llu failed : %s(0x%zx)", i, E(Status), Status);
+            DBG_ERROR("\nFailed to write to block %llu failed : %a(0x%x)", i, E(Status), Status);
             break;
         }
 
@@ -245,7 +245,7 @@ BlockIo2WriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
                                      &HandleCount,
                                      &BlockIoHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -295,7 +295,7 @@ BlockIo2WriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
 
             Status = UefiInfoBlockIo2WriteToAllSectors(BlockIoIf, BlockIo2If);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("\nUefiInfoBlockIo2WriteToAllSectors() failed : %s(0x%zx)",
+                DBG_ERROR("\nUefiInfoBlockIo2WriteToAllSectors() failed : %a(0x%x)",
                           E(Status),
                           Status);
             }

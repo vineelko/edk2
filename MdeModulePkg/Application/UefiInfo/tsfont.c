@@ -49,7 +49,7 @@ static EFI_STATUS FontEnumerateInstalledFonts(IN PBM_PROTOCOL_INFO ProtocolArray
 
     Status = ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -61,7 +61,7 @@ static EFI_STATUS FontEnumerateInstalledFonts(IN PBM_PROTOCOL_INFO ProtocolArray
 
     Status = FontProtocol->GetFontInfo(FontProtocol, &FontHandle, NULL, &FontInfoOut, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetFontInfo() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetFontInfo() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -87,7 +87,7 @@ static EFI_STATUS FontEnumerateInstalledFonts(IN PBM_PROTOCOL_INFO ProtocolArray
                 Status = EFI_SUCCESS;
                 break;
             }
-            DBG_ERROR("GetFontInfo() call failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("GetFontInfo() call failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -159,7 +159,7 @@ static EFI_STATUS FontRasterString(IN EFI_FONT_DISPLAY_INFO* Font,
                                          &RowInfoSize,
                                          NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("StringToImage() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("StringToImage() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -180,7 +180,7 @@ static EFI_STATUS FontRasterString(IN EFI_FONT_DISPLAY_INFO* Font,
                                        sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL)); // But sub-rectangle
                                                                                // from blt buffer
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Blt() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Blt() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -206,7 +206,7 @@ static EFI_STATUS FontRasterCharacter(IN EFI_FONT_DISPLAY_INFO* Font,
 
     Status = FontProtocol->GetGlyph(FontProtocol, Char, Font, &CharImageOut, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetGlyph() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetGlyph() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -225,7 +225,7 @@ static EFI_STATUS FontRasterCharacter(IN EFI_FONT_DISPLAY_INFO* Font,
                                    CharImageOut->Height,
                                    0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Blt() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Blt() call failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -244,7 +244,7 @@ static EFI_STATUS FontListFontsProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
 
     Status = FontEnumerateInstalledFonts(ProtocolArray, &FontList);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FontEnumerateInstalledFonts() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("FontEnumerateInstalledFonts() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -253,7 +253,7 @@ static EFI_STATUS FontListFontsProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
     //
 
     for (PBM_FONT_NODE Node = FontList; Node; Node = Node->Next, i++) {
-        DBG_INFO("Font %zd", i);
+        DBG_INFO("Font %d", i);
         DBG_INFO_U(L"    Font Name: %s", Node->Font->FontInfo.FontName);
         DBG_INFO("    Font Size(cell height): %upx", Node->Font->FontInfo.FontSize);
         DBG_INFO("    Font Style: 0x%x", Node->Font->FontInfo.FontStyle);
@@ -291,7 +291,7 @@ static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -299,7 +299,7 @@ static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -309,7 +309,7 @@ static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = FontEnumerateInstalledFonts(ProtocolArray, &FontList);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FontEnumerateInstalledFonts() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("FontEnumerateInstalledFonts() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -327,7 +327,7 @@ static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
                                   X,
                                   Y);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("FontRasterString() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("FontRasterString() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     }
@@ -354,7 +354,7 @@ static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -362,7 +362,7 @@ static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -372,7 +372,7 @@ static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = FontEnumerateInstalledFonts(ProtocolArray, &FontList);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("FontEnumerateInstalledFonts() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("FontEnumerateInstalledFonts() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -389,7 +389,7 @@ static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
         for (CHAR16* Char = AlphaNum; *Char; Char++, X += 30) {
             Status = FontRasterCharacter(Node->Font, FontProtocol, GraphicsProtocol, *Char, X, Y);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("FontRasterCharacter() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("FontRasterCharacter() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
         }
@@ -419,7 +419,7 @@ FontListFontPackageProbe (
 
     Status = ProtocolArray[EFI_HII_DATABASE_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_HII_DATABASE_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_HII_DATABASE_PROTOCOL Protocol not available : %a(0x%x)",
                            E(Status),
                            Status);
         goto Exit;
@@ -432,7 +432,7 @@ FontListFontPackageProbe (
         HandleArray = AllocateZeroPool(HandleBufferSize);
         Status = EFI_SUCCESS;
     } else if (EFI_ERROR(Status)) {
-        DBG_ERROR("ListPackageLists() call failed : %s(0x%zx)",
+        DBG_ERROR("ListPackageLists() call failed : %a(0x%x)",
                         E(Status),
                         Status);
         goto Exit;
@@ -440,7 +440,7 @@ FontListFontPackageProbe (
 
     Status = DBProtocol->ListPackageLists(DBProtocol, EFI_HII_PACKAGE_FONTS, NULL, &HandleBufferSize, HandleArray);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ListPackageLists() call failed : %s(0x%zx)",
+        DBG_ERROR("ListPackageLists() call failed : %a(0x%x)",
                         E(Status),
                         Status);
         goto Exit;
@@ -459,7 +459,7 @@ FontListFontPackageProbe (
             PackageListBuffer = AllocateZeroPool(PackageListBufferSize);
             Status = EFI_SUCCESS;
         } else if (EFI_ERROR(Status)) {
-            DBG_ERROR("ExportPackageLists() call failed : %s(0x%zx)",
+            DBG_ERROR("ExportPackageLists() call failed : %a(0x%x)",
                             E(Status),
                             Status);
             FreePool(PackageListBuffer);
@@ -468,7 +468,7 @@ FontListFontPackageProbe (
 
         Status = DBProtocol->ExportPackageLists(DBProtocol, HandleArray[i], &PackageListBufferSize, PackageListBuffer);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("ExportPackageLists() call failed : %s(0x%zx)",
+            DBG_ERROR("ExportPackageLists() call failed : %a(0x%x)",
                             E(Status),
                             Status);
             FreePool(PackageListBuffer);

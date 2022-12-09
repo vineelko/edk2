@@ -66,7 +66,7 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
                                   &DescriptorSize,
                                   &DescriptorVersion);
     if (EfiStatus != EFI_BUFFER_TOO_SMALL) {
-        DBG_ERROR("GetMemoryMap failed with error 0x%zx (expected EFI_BUFFER_TOO_SMALL)",
+        DBG_ERROR("GetMemoryMap failed with error 0x%x (expected EFI_BUFFER_TOO_SMALL)",
                   EfiStatus);
         if (!EFI_ERROR(EfiStatus)) {
             EfiStatus = EFI_ABORTED;
@@ -86,7 +86,7 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
                                    (EFI_PHYSICAL_ADDRESS*)&MemoryMapBuffer);
 
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("AllocatePages failed with error 0x%zx", EfiStatus);
+        DBG_ERROR("AllocatePages failed with error 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -96,7 +96,7 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
                                   &DescriptorSize,
                                   &DescriptorVersion);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("2nd GetMemoryMap failed with error 0x%zx", EfiStatus);
+        DBG_ERROR("2nd GetMemoryMap failed with error 0x%x", EfiStatus);
         goto Exit;
     }
 
@@ -154,7 +154,7 @@ EFI_STATUS EFIAPI MemoryMapGetDescriptors(IN MEMORYMAP_CONTEXT* MemoryMapContext
 
     if (*MemoryMapBufferLength < MemoryMapContext->MemoryMapSize) {
         DBG_ERROR(
-            "Buffer length too small. Actual: %zd, required: %zd. Please call function with correct buffer length",
+            "Buffer length too small. Actual: %d, required: %d. Please call function with correct buffer length",
             *MemoryMapBufferLength,
             MemoryMapContext->MemoryMapSize);
 
@@ -322,7 +322,7 @@ EFI_STATUS EFIAPI MemoryMapPrintInfo(IN MEMORYMAP_CONTEXT* MemoryMapContext)
 
     EfiStatus = MemoryMapGetLargestRegion(MemoryMapContext, &LargestRegionSizeInBytes);
     if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR_RAW("MemoryMapGetLargestRegion failed with error 0x%zx\r\n", EfiStatus);
+        DBG_ERROR_RAW("MemoryMapGetLargestRegion failed with error 0x%x\r\n", EfiStatus);
     } else {
         DBG_INFO_RAW("\r\nLargest region size in bytes: %llu\r\n", LargestRegionSizeInBytes);
     }

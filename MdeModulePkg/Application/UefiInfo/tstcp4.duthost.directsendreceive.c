@@ -147,13 +147,13 @@ static EFI_STATUS Tcp4ConnectToServer(IN PBM_TCP4_CONTEXT Context)
                               Context,
                               &Client->ConnectToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Client->Protocol->Connect(Client->Protocol, &Client->ConnectToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Connect() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Connect() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -295,7 +295,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
                               Context,
                               &Client->TransmitToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -311,7 +311,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
                               Context,
                               &Client->ReceiveToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -327,7 +327,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
                               Context,
                               &Context->WaitForClientTransmitServerReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -341,7 +341,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
                               Context,
                               &Context->WaitForServerTransmitClientReceive);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -357,7 +357,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
 
         Status = Client->Protocol->Transmit(Client->Protocol, &Client->TransmitToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Transmit() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -367,7 +367,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
 
         Status = gBS->WaitForEvent(1, &Context->WaitForClientTransmitServerReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -380,7 +380,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
 
         Status = Client->Protocol->Receive(Client->Protocol, &Client->ReceiveToken);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
@@ -390,13 +390,13 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
 
         Status = gBS->WaitForEvent(1, &Context->WaitForServerTransmitClientReceive, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         if (Client->DataVerified == FALSE ||
             EFI_ERROR(Client->ReceiveToken.CompletionToken.Status)) {
-            DBG_ERROR("   Server transmit ==> Client receive (failed) : %s(0x%zx)",
+            DBG_ERROR("   Server transmit ==> Client receive (failed) : %a(0x%x)",
                       E(Client->ReceiveToken.CompletionToken.Status),
                       Client->ReceiveToken.CompletionToken.Status);
             Status = EFI_INVALID_PARAMETER;
@@ -425,7 +425,7 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 
     Status = ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_DHCP4_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_DHCP4_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -433,13 +433,13 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 
     Status = Dhcp4->GetModeData(Dhcp4, &RetMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     if (RetMode.State == Dhcp4Init || RetMode.State == Dhcp4InitReboot ||
         RetMode.State == Dhcp4Bound) {
-        DBG_ERROR("Dhcp mode is already in one of the expected state %s",
+        DBG_ERROR("Dhcp mode is already in one of the expected state %a",
                   Dhcp4StateMap[RetMode.State].String);
         goto Found;
     }
@@ -462,36 +462,36 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 
     Status = Dhcp4->Configure(Dhcp4, &Config);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Dhcp4->GetModeData(Dhcp4, &RetMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     if (RetMode.State == Dhcp4Init) {
         Status = Dhcp4->Start(Dhcp4, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %s(0x%zx) Possibly no dhcp server",
+            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server",
                       E(Status),
                       Status);
             goto Exit;
         }
     } else {
-        DBG_ERROR("Dhcp is not in expected state %s", Dhcp4StateMap[RetMode.State].String);
+        DBG_ERROR("Dhcp is not in expected state %a", Dhcp4StateMap[RetMode.State].String);
         goto Exit;
     }
 
     Status = Dhcp4->GetModeData(Dhcp4, &RetMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("DHCP 4 State: %s", Dhcp4StateMap[RetMode.State].String);
+    DBG_INFO("DHCP 4 State: %a", Dhcp4StateMap[RetMode.State].String);
 
 Found:
 #if 0
@@ -525,13 +525,13 @@ static EFI_STATUS Tcp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
 
     Status = GetHostArgument(gHostArguments, t("ServerIPAddress"), &ServerIPAddressStr);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetHostArgument() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetHostArgument() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Ret = sscanf_s((const char*)ServerIPAddressStr, "%u.%u.%u.%u", &U0, &U1, &U2, &U3);
     if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %s", ServerIPAddressStr);
+        DBG_ERROR("sscanf_s() failed to parse : %a", ServerIPAddressStr);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -543,13 +543,13 @@ static EFI_STATUS Tcp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
 
     Status = GetHostArgument(gHostArguments, t("ServerPort"), &ServerPortStr);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetHostArgument() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetHostArgument() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Ret = sscanf_s((const char*)ServerPortStr, "%u", &U0);
     if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %s", ServerPortStr);
+        DBG_ERROR("sscanf_s() failed to parse : %a", ServerPortStr);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -575,13 +575,13 @@ static EFI_STATUS Tcp4ConfigureClient(IN PBM_TCP4_CONTEXT Context)
 
     Status = Tcp4GetClientMode(&Mode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4GetClientMode() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4GetClientMode() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Tcp4GetServerIPAddressAndPort(&ServerIPAdress, &ServerPort);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4GetServerIPAddressAndPort() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4GetServerIPAddressAndPort() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -625,7 +625,7 @@ static EFI_STATUS Tcp4ConfigureClient(IN PBM_TCP4_CONTEXT Context)
 
     Status = Client->Protocol->Configure(Client->Protocol, &Client->ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -667,7 +667,7 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = ProtocolArray[EFI_TCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_TCP4_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_TCP4_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -685,7 +685,7 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
                               NULL,
                               &Context.WaitForAcceptConnection);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -695,7 +695,7 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = Tcp4ConfigureClient(&Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4ConfigureClient() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4ConfigureClient() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -705,7 +705,7 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = Tcp4ConnectToServer(&Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4ConnectToServer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4ConnectToServer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -715,18 +715,18 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = gBS->WaitForEvent(1, &Context.WaitForAcceptConnection, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Client->Protocol
                  ->GetModeData(Client->Protocol, &Client->State, NULL, NULL, NULL, NULL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("Client TCP instance is in %s(0x%x) state",
+    DBG_INFO("Client TCP instance is in %a(0x%x) state",
              Tcp4StateMap[Client->State].String,
              Tcp4StateMap[Client->State].Value);
 
@@ -736,7 +736,7 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = Tcp4TransmitAndReceiveData(&Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Tcp4TransmitAndReceiveData() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Tcp4TransmitAndReceiveData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

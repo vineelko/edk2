@@ -139,13 +139,13 @@ Return Value:
     if (Session->ListTestCases == TRUE) {
         if (Session->ListTestCases) {
             for (UINTN i = 0; i < _countof(TestSuites); i++) {
-                DBG_INFO("[%s]", TestSuites[i]->Description);
+                DBG_INFO("[%a]", TestSuites[i]->Description);
                 for (UINTN j = 0; j < TestSuites[i]->DutTestCount; j++) {
                     if (TestSuites[i]->DutTests[j].Name == NULL) {
                         continue;
                     }
 
-                    DBG_INFO(" %-30s - %s",
+                    DBG_INFO(" %-30a - %a",
                              TestSuites[i]->DutTests[j].Name,
                              TestSuites[i]->DutTests[j].Description);
                 }
@@ -155,7 +155,7 @@ Return Value:
                         continue;
                     }
 
-                    DBG_INFO(" %-30s - %s [HOST+DUT]",
+                    DBG_INFO(" %-30a - %a [HOST+DUT]",
                              TestSuites[i]->DutHostTests[j].Name,
                              TestSuites[i]->DutHostTests[j].Description);
                 }
@@ -174,7 +174,7 @@ Return Value:
 
                 if (AsciiStriCmp(Test->Name, Session->TestCase) == 0) {
                     if (Test->Description != NULL) {
-                        DBG_INFO("%s", Test->Description);
+                        DBG_INFO("%a", Test->Description);
                     }
 
                     if (Test->DutTestFn != NULL) {

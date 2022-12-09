@@ -39,7 +39,7 @@ static EFI_STATUS UsbInitProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     UNREFERENCED_PARAMETER(Session);
 
     if (EFI_ERROR(UsbInitProtocolInfo->ProtocolStatus)) {
-        DBG_INFO("USB INIT Protocol not found %s(0x%zx)",
+        DBG_INFO("USB INIT Protocol not found %a(0x%x)",
                  E(UsbInitProtocolInfo->ProtocolStatus),
                  UsbInitProtocolInfo->ProtocolStatus);
         Status = UsbInitProtocolInfo->ProtocolStatus;
@@ -48,7 +48,7 @@ static EFI_STATUS UsbInitProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
 
     Status = UsbInitProtocol->QueryCoreInfo(UsbInitProtocol, &USBPort, &UsbCoreInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("QueryCoreInfo() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("QueryCoreInfo() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -56,7 +56,7 @@ static EFI_STATUS UsbInitProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     Status = UsbInitProtocol->StartController(UsbInitProtocol,
                                               UsbCoreInfo.CoreNum,
                                               EFI_USB_PERIPHERAL_MODE);
-    DBG_INFO("                         Controller : %s",
+    DBG_INFO("                         Controller : %a",
              EFI_ERROR(Status) ? "Failed to start" : "Started");
 
     //(VOID)usbfnIo->StopController(usbfnIo);

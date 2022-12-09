@@ -185,20 +185,20 @@ static EFI_STATUS EFIAPI HttpPoll(IN PHTTP_CONTEXT Context,
 
     Status = gBS->CreateEvent(EVT_TIMER, TPL_CALLBACK, NULL, NULL, &TimerEvent);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed 0x%zx", Status);
+        DBG_ERROR("CreateEvent() failed 0x%x", Status);
         goto Exit;
     }
 
     Status = gBS->SetTimer(TimerEvent, TimerRelative, TimeoutInNs);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("SetTimer() failed 0x%zx", Status);
+        DBG_ERROR("SetTimer() failed 0x%x", Status);
         goto Exit;
     }
 
     while (*StateVariable == FALSE && gBS->CheckEvent(TimerEvent) == EFI_NOT_READY) {
         Status = Context->Http->Poll(Context->Http);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Poll() failed 0x%zx", Status);
+            DBG_ERROR("Poll() failed 0x%x", Status);
             goto Exit;
         }
     }
@@ -218,7 +218,7 @@ static VOID EFIAPI HttpDumpHeaders(IN EFI_HTTP_MESSAGE* Message)
 
     DBG_INFO("HTTP Headers:");
     for (UINTN Index = 0; Index < Message->HeaderCount; Index++) {
-        DBG_INFO("     %s: %s",
+        DBG_INFO("     %a: %a",
                  Message->Headers[Index].FieldName,
                  Message->Headers[Index].FieldValue);
     }
@@ -263,7 +263,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
                                      &HandleCount,
                                      &DeviceHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to locate DHCP4 service binding protocol handles, 0x%zx", Status);
+        DBG_ERROR("Unable to locate DHCP4 service binding protocol handles, 0x%x", Status);
         goto Exit;
     }
 
@@ -287,13 +287,13 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
 
     Status = gBS->LocateProtocol(&gEfiHttpServiceBindingProtocolGuid, NULL, &ServiceBinding);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Error 0x%zx", Status);
+        DBG_ERROR("Error 0x%x", Status);
         goto Exit;
     }
 
     Status = ServiceBinding->CreateChild(ServiceBinding, &Handle);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Error 0x%zx", Status);
+        DBG_ERROR("Error 0x%x", Status);
         goto Exit;
     }
 
@@ -304,7 +304,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
                                NULL,
                                EFI_OPEN_PROTOCOL_GET_PROTOCOL);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Error 0x%zx", Status);
+        DBG_ERROR("Error 0x%x", Status);
         goto Exit;
     }
 
@@ -352,20 +352,20 @@ EFI_STATUS EFIAPI HttpCreate(OUT HTTP_CONTEXT** Context)
 
     Status = HttpInit(RetContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpInit() failed : 0x%zx", Status);
+        DBG_ERROR("HttpInit() failed : 0x%x", Status);
         goto Exit;
     }
 
 #if 0
     Status = DhcpInit(RetContext->ParentHandle, &RetContext->Dhcp4Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("DhcpInit() failed : 0x%zx", Status);
+        DBG_ERROR("DhcpInit() failed : 0x%x", Status);
         goto Exit;
     }
 #endif
     Status = HttpConfigure(RetContext, FALSE);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpConfigure() failed 0x%zx", Status);
+        DBG_ERROR("HttpConfigure() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -391,7 +391,7 @@ EFI_STATUS EFIAPI HttpConfigure(IN OUT PHTTP_CONTEXT Context, IN BOOLEAN ResetFi
     // every time.
     Status = DhcpStart(Context->Dhcp4Context);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("DhcpStart() failed : 0x%zx", Status);
+        DBG_ERROR("DhcpStart() failed : 0x%x", Status);
         goto Exit;
     }
 #endif
@@ -399,7 +399,7 @@ EFI_STATUS EFIAPI HttpConfigure(IN OUT PHTTP_CONTEXT Context, IN BOOLEAN ResetFi
     if (ResetFirst) {
         Status = Context->Http->Configure(Context->Http, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("HTTP Configure() to reset failed : 0x%zx", Status);
+            DBG_ERROR("HTTP Configure() to reset failed : 0x%x", Status);
             goto Exit;
         }
     }
@@ -414,7 +414,7 @@ EFI_STATUS EFIAPI HttpConfigure(IN OUT PHTTP_CONTEXT Context, IN BOOLEAN ResetFi
 
     Status = Context->Http->Configure(Context->Http, &HttpConfig);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HTTP Configure() failed : 0x%zx", Status);
+        DBG_ERROR("HTTP Configure() failed : 0x%x", Status);
         goto Exit;
     }
 
@@ -433,14 +433,14 @@ EFI_STATUS EFIAPI HttpFree(IN PHTTP_CONTEXT Context)
     if (Context->HttpHandle != NULL) {
         Status = gBS->CloseProtocol(Context->HttpHandle, &gEfiHttpProtocolGuid, gImageHandle, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("CloseProtocol() failed : 0x%zx", Status);
+            DBG_ERROR("CloseProtocol() failed : 0x%x", Status);
             goto Exit;
         }
 
         Status = Context->HttpSvcBindingProtocol->DestroyChild(Context->HttpSvcBindingProtocol,
                                                                Context->HttpHandle);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("DestroyChild() failed : 0x%zx", Status);
+            DBG_ERROR("DestroyChild() failed : 0x%x", Status);
             goto Exit;
         }
     }
@@ -479,7 +479,7 @@ static EFI_STATUS EFIAPI HttpSendRequest(IN PHTTP_CONTEXT Context, IN OUT PHTTP_
 
     Status = Context->Http->Request(Context->Http, &Request->Token);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Request() failed 0x%zx", Status);
+        DBG_ERROR("Request() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -489,15 +489,15 @@ static EFI_STATUS EFIAPI HttpSendRequest(IN PHTTP_CONTEXT Context, IN OUT PHTTP_
 
     Status = HttpPoll(Context, &Request->CallbackTriggered, HTTP_REQUEST_WAIT_TIMEOUT);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpPoll() failed 0x%zx", Status);
+        DBG_ERROR("HttpPoll() failed 0x%x", Status);
         goto Exit;
     }
 
     if (!Request->CallbackTriggered) {
-        DBG_INFO("Cancelling the request 0x%zx", Status);
+        DBG_INFO("Cancelling the request 0x%x", Status);
         Status = Context->Http->Cancel(Context->Http, &Request->Token);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Cancel() failed 0x%zx", Status);
+            DBG_ERROR("Cancel() failed 0x%x", Status);
         }
         goto Exit;
     }
@@ -522,7 +522,7 @@ static EFI_STATUS EFIAPI HttpGetResponse(IN OUT PHTTP_CONTEXT Context,
 
     Status = Context->Http->Response(Context->Http, &Response->Token);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Response() failed 0x%zx", Status);
+        DBG_ERROR("Response() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -532,31 +532,31 @@ static EFI_STATUS EFIAPI HttpGetResponse(IN OUT PHTTP_CONTEXT Context,
 
     Status = HttpPoll(Context, &Response->CallbackTriggered, HTTP_RESPONSE_WAIT_TIMEOUT);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpPoll() failed 0x%zx", Status);
+        DBG_ERROR("HttpPoll() failed 0x%x", Status);
         goto Exit;
     }
 
     if (!Response->CallbackTriggered) {
-        DBG_INFO("Cancelling the response 0x%zx", Status);
+        DBG_INFO("Cancelling the response 0x%x", Status);
         Status = Context->Http->Cancel(Context->Http, &Response->Token);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("Cancel() failed 0x%zx", Status);
+            DBG_ERROR("Cancel() failed 0x%x", Status);
         }
         goto Exit;
     }
 
-    // DBG_INFO("HTTP status: %s(%d)",
+    // DBG_INFO("HTTP status: %a(%d)",
     //              HttpStatusMap[Response->Data.StatusCode].String,
     //              HttpStatusMap[Response->Data.StatusCode].Value);
 
     Response->ContentDownloaded += Response->Message.BodyLength;
 
-    // DBG_INFO("HTTP Current Chunk Length %zu bytes", Response->Message.BodyLength);
-    // DBG_INFO("HTTP Total Content Downloaded %zu bytes", Response->ContentDownloaded);
+    // DBG_INFO("HTTP Current Chunk Length %u bytes", Response->Message.BodyLength);
+    // DBG_INFO("HTTP Total Content Downloaded %u bytes", Response->ContentDownloaded);
 
     HttpReadHeaders(Response);
 
-    // DBG_INFO("HTTP Response->ContentLength %zu bytes", Response->ContentLength);
+    // DBG_INFO("HTTP Response->ContentLength %u bytes", Response->ContentLength);
 
     FreePool(Response->Message.Headers);
 
@@ -614,7 +614,7 @@ static EFI_STATUS HttpCreateRequestObject(IN OUT PHTTP_CONTEXT Context,
                               RetRequest,
                               &RetRequest->Token.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed 0x%zx", Status);
+        DBG_ERROR("CreateEvent() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -678,7 +678,7 @@ static EFI_STATUS HttpCreateResponseObject(IN OUT PHTTP_CONTEXT Context,
                               RetResponse,
                               &RetResponse->Token.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed 0x%zx", Status);
+        DBG_ERROR("CreateEvent() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -716,7 +716,7 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
 
     if (Response == NULL || Url == NULL) {
         Status = EFI_INVALID_PARAMETER;
-        DBG_ERROR("Invalid parameters 0x%zx", Status);
+        DBG_ERROR("Invalid parameters 0x%x", Status);
         goto Exit;
     }
 
@@ -729,7 +729,7 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
 
     Status = HttpConfigure(Context, TRUE);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpConfigure() failed 0x%zx", Status);
+        DBG_ERROR("HttpConfigure() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -746,7 +746,7 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
                                      BodyLength,
                                      &Request);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreateRequestObject() failed 0x%zx", Status);
+        DBG_ERROR("HttpCreateRequestObject() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -756,7 +756,7 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
 
     Status = HttpSendRequest(Context, Request);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpSendRequest() failed 0x%zx", Status);
+        DBG_ERROR("HttpSendRequest() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -766,7 +766,7 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
 
     Status = HttpCreateResponseObject(Context, Method, &RetResponse);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreateResponseObject() failed 0x%zx", Status);
+        DBG_ERROR("HttpCreateResponseObject() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -778,7 +778,7 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
 
     Status = HttpGetResponse(Context, RetResponse);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpGetResponse() failed 0x%zx", Status);
+        DBG_ERROR("HttpGetResponse() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -795,12 +795,12 @@ EFI_STATUS EFIAPI HttpGetNext(IN PHTTP_CONTEXT Context, IN PHTTP_RESPONSE Respon
 
     if (Response == NULL) {
         Status = EFI_INVALID_PARAMETER;
-        DBG_ERROR("Invalid parameters 0x%zx", Status);
+        DBG_ERROR("Invalid parameters 0x%x", Status);
         goto Exit;
     }
 
-    // DBG_INFO("HTTP ContentDownloaded %zu bytes", Response->ContentDownloaded);
-    // DBG_INFO("HTTP ContentLength %zu bytes", Response->ContentLength);
+    // DBG_INFO("HTTP ContentDownloaded %u bytes", Response->ContentDownloaded);
+    // DBG_INFO("HTTP ContentLength %u bytes", Response->ContentLength);
 
     if (Response->ContentDownloaded >= Response->ContentLength) {
         Status = EFI_END_OF_FILE;
@@ -825,7 +825,7 @@ EFI_STATUS EFIAPI HttpGetNext(IN PHTTP_CONTEXT Context, IN PHTTP_RESPONSE Respon
     Response->Message.BodyLength = HTTP_DEFAULT_RESPONSE_BUFFER_SIZE;
     Status = HttpGetResponse(Context, Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpGetResponse() failed 0x%zx", Status);
+        DBG_ERROR("HttpGetResponse() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -884,14 +884,14 @@ static VOID EFIAPI HttpResponseCallback(IN EFI_EVENT Event, IN VOID* Context)
 }
 
 static EFI_STATUS BuildRequestHeaders(IN CHAR8* Url,
-                                      _Outptr_result_buffer_(Count) EFI_HTTP_HEADER** Headers,
+                                      OUT EFI_HTTP_HEADER** Headers,
                                       OUT UINTN* Count)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     VOID* UrlParser = NULL;
     CHAR8* Hostname = NULL;
     UINT16 Port = 0;
-    CHAR8* FormatString = t("%s:%d"); // Host = hostname[:port]
+    CHAR8* FormatString = t("%a:%d"); // Host = hostname[:port]
     EFI_HTTP_HEADER* RequestHeaders;
     UINTN HeaderCount;
 
@@ -909,13 +909,13 @@ static EFI_STATUS BuildRequestHeaders(IN CHAR8* Url,
 
     Status = HttpParseUrl(Url, (UINT32)AsciiStrLen(Url), FALSE, &UrlParser);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpParseUrl() failed 0x%zx", Status);
+        DBG_ERROR("HttpParseUrl() failed 0x%x", Status);
         goto Exit;
     }
 
     Status = HttpUrlGetHostName(Url, UrlParser, &Hostname);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpUrlGetHostName() failed 0x%zx", Status);
+        DBG_ERROR("HttpUrlGetHostName() failed 0x%x", Status);
         goto Exit;
     }
 
@@ -928,9 +928,9 @@ static EFI_STATUS BuildRequestHeaders(IN CHAR8* Url,
             //
 
             Status = EFI_SUCCESS;
-            FormatString = t("%s");
+            FormatString = t("%a");
         } else {
-            DBG_ERROR("HttpUrlGetPort() failed 0x%zx", Status);
+            DBG_ERROR("HttpUrlGetPort() failed 0x%x", Status);
             goto Exit;
         }
     }
@@ -938,13 +938,13 @@ static EFI_STATUS BuildRequestHeaders(IN CHAR8* Url,
     UINTN Result = 0;
     CHAR8 AsciiHostHeaderValue[1024] = {0};
 
-    Result = StringCchPrintfA((STRSAFE_LPSTR)AsciiHostHeaderValue,
-                              _countof(AsciiHostHeaderValue),
-                              (STRSAFE_LPCSTR)FormatString,
-                              Hostname,
-                              Port);
+    Result = AsciiSPrint(AsciiHostHeaderValue,
+                         sizeof(AsciiHostHeaderValue),
+                         FormatString,
+                         Hostname,
+                         Port);
     if (FAILED(Result)) {
-        DBG_ERROR("StringCchPrintfA failed 0x%zx", Result);
+        DBG_ERROR("AsciiSPrint failed 0x%x", Result);
         Status = EFI_INVALID_PARAMETER;
         goto Exit;
     }
@@ -984,8 +984,7 @@ Exit:
 static EFI_STATUS EFIAPI DcatBuildRequestHeaders(IN CHAR8* Url,
                                                  IN UINTN BodyLength,
                                                  IN CHAR8* ContentType,
-                                                 _Outptr_result_buffer_(Count)
-                                                     EFI_HTTP_HEADER** Headers,
+                                                 OUT EFI_HTTP_HEADER** Headers,
                                                  OUT UINTN* Count)
 {
     EFI_STATUS Status = EFI_SUCCESS;
@@ -1068,12 +1067,12 @@ static EFI_STATUS EFIAPI DcatBuildRequestHeaders(IN CHAR8* Url,
             goto Exit;
         }
 
-        Result = StringCchPrintfA((STRSAFE_LPSTR)ContentLengthString,
-                                  _countof(ContentLengthString),
-                                  (STRSAFE_LPCSTR) "%zu",
-                                  BodyLength);
+        Result = AsciiSPrint(ContentLengthString,
+                             sizeof(ContentLengthString),
+                             "%u",
+                             BodyLength);
         if (FAILED(Result)) {
-            DBG_ERROR("StringCchPrintfA failed 0x%zx", Result);
+            DBG_ERROR("AsciiSPrint failed 0x%x", Result);
             Status = EFI_INVALID_PARAMETER;
             goto Exit;
         }
@@ -1244,7 +1243,7 @@ static EFI_STATUS TlsSetCACertList()
                               CertDatabaseSize,
                               LocalCert);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to set TLS certificate(s). 0x%zx", Status);
+        DBG_ERROR("Unable to set TLS certificate(s). 0x%x", Status);
     }
 
     FreePool(Cert);
@@ -1277,13 +1276,13 @@ static EFI_STATUS HttpGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = BuildRequestHeaders(AsciiUrl, &HttpHeaders, &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1296,7 +1295,7 @@ static EFI_STATUS HttpGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
                               0,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1312,7 +1311,7 @@ static EFI_STATUS HttpGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
         Status = HttpGetNext(HttpContext, Response);
         if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-            DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     } while (Status != EFI_END_OF_FILE);
@@ -1352,19 +1351,19 @@ static EFI_STATUS HttpsGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = TlsSetCACertList();
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("TlsSetCACertList() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("TlsSetCACertList() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = BuildRequestHeaders(AsciiUrl, &HttpHeaders, &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1377,7 +1376,7 @@ static EFI_STATUS HttpsGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
                               0,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1393,7 +1392,7 @@ static EFI_STATUS HttpsGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
         Status = HttpGetNext(HttpContext, Response);
         if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-            DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     } while (Status != EFI_END_OF_FILE);
@@ -1433,13 +1432,13 @@ static EFI_STATUS HttpHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = BuildRequestHeaders(AsciiUrl, &HttpHeaders, &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1452,7 +1451,7 @@ static EFI_STATUS HttpHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
                               0,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1468,7 +1467,7 @@ static EFI_STATUS HttpHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
         Status = HttpGetNext(HttpContext, Response);
         if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-            DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     } while (Status != EFI_END_OF_FILE);
@@ -1508,19 +1507,19 @@ static EFI_STATUS HttpsHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = TlsSetCACertList();
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("TlsSetCACertList() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("TlsSetCACertList() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = BuildRequestHeaders(AsciiUrl, &HttpHeaders, &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1533,7 +1532,7 @@ static EFI_STATUS HttpsHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                               0,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1549,7 +1548,7 @@ static EFI_STATUS HttpsHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
         Status = HttpGetNext(HttpContext, Response);
         if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-            DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     } while (Status != EFI_END_OF_FILE);
@@ -1589,13 +1588,13 @@ static EFI_STATUS HttpPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = BuildRequestHeaders(AsciiUrl, &HttpHeaders, &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1608,7 +1607,7 @@ static EFI_STATUS HttpPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
                               0,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1624,7 +1623,7 @@ static EFI_STATUS HttpPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
         Status = HttpGetNext(HttpContext, Response);
         if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-            DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     } while (Status != EFI_END_OF_FILE);
@@ -1664,19 +1663,19 @@ static EFI_STATUS HttpsPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
     Status = TlsSetCACertList();
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("TlsSetCACertList() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("TlsSetCACertList() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = BuildRequestHeaders(AsciiUrl, &HttpHeaders, &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1689,7 +1688,7 @@ static EFI_STATUS HttpsPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                               0,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1705,7 +1704,7 @@ static EFI_STATUS HttpsPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
         Status = HttpGetNext(HttpContext, Response);
         if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-            DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
     } while (Status != EFI_END_OF_FILE);
@@ -1729,8 +1728,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                         IN PBM_SESSION Session)
+static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1752,13 +1750,13 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     Status = TlsSetCACertList();
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("TlsSetCACertList() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("TlsSetCACertList() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1770,7 +1768,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray,
                                      &HttpHeaders,
                                      &HeaderCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("BuildRequestHeaders() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("BuildRequestHeaders() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1783,7 +1781,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray,
                               BodyLength,
                               &Response);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("HttpIssueRequest() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("HttpIssueRequest() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -1800,7 +1798,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray,
 
         // Status = HttpGetNext(HttpContext, Response);
         // if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
-        //     DBG_ERROR("HttpGetNext() failed : %s(0x%zx)", E(Status), Status);
+        //     DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
         //     goto Exit;
         // }
     } while (Status != EFI_END_OF_FILE);

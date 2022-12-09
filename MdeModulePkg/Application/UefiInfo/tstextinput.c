@@ -38,7 +38,7 @@ static EFI_STATUS TextInputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     Status = ProtocolArray[EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -49,13 +49,13 @@ static EFI_STATUS TextInputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     do {
         Status = gBS->WaitForEvent(1, &TextInputProtocol->WaitForKeyEx, &Index);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("WaitForEvent failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("WaitForEvent failed : %a(0x%x)", E(Status), Status);
             break;
         }
 
         Status = TextInputProtocol->ReadKeyStrokeEx(TextInputProtocol, &Data);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("ReadKeyStrokeEx failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("ReadKeyStrokeEx failed : %a(0x%x)", E(Status), Status);
             break;
         }
 

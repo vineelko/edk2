@@ -53,7 +53,7 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
                                      &HandleCount,
                                      &BlockIoHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -100,10 +100,10 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
                 FreePool(DevicePath);
             }
 
-            DBG_INFO("Disk Block Size: %lld%s",
+            DBG_INFO("Disk Block Size: %lld%a",
                      PrettySize(BlockIoMedia->BlockSize),
                      PrettySizeStr(BlockIoMedia->BlockSize));
-            DBG_INFO("Total Disk Size: %lld%s",
+            DBG_INFO("Total Disk Size: %lld%a",
                      PrettySize(TotalDiskSize),
                      PrettySizeStr(TotalDiskSize));
             DBG_INFO("Number of Blocks: %llu", BlockIoMedia->LastBlock);
@@ -114,7 +114,7 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
                  i += (DataSize / BlockIoMedia->BlockSize)) {
                 DataSize = RemainingDiskSize < DataSize ? RemainingDiskSize : DataSize;
 
-                DBG_INFO_RAW("Writing %lld%s start @ block: %llu(%llu%%)\r",
+                DBG_INFO_RAW("Writing %lld%a start @ block: %llu(%llu%%)\r",
                              PrettySize(DataSize),
                              PrettySizeStr(DataSize),
                              i,
@@ -125,7 +125,7 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
                                                 (UINTN)DataSize,
                                                 Data);
                 if (EFI_ERROR(Status)) {
-                    DBG_ERROR("\nFailed to write to block %llu failed : %s(0x%zx)",
+                    DBG_ERROR("\nFailed to write to block %llu failed : %a(0x%x)",
                               i,
                               E(Status),
                               Status);

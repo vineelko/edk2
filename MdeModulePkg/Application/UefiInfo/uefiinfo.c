@@ -38,7 +38,7 @@ VOID ShowAppInfo(IN PBM_SESSION Session)
              gSystemTable->Hdr.Revision >> 16,                // Major
              (gSystemTable->Hdr.Revision & 0xFFFF) / 10 % 10, // Minor Upper
              (gSystemTable->Hdr.Revision & 0xFFFF) % 10);
-    DBG_INFO("CMD Line: %s", Session->CommandLine);
+    DBG_INFO("CMD Line: %a", Session->CommandLine);
     DBG_INFO(" ");
 }
 
@@ -121,7 +121,7 @@ Main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
     Status = SessionCreate(CommandLine, &Session);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("SessionCreate() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("SessionCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -152,7 +152,7 @@ Main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
     Status = ProtocolProbeAll();
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ProtocolProbeAll() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("ProtocolProbeAll() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -162,7 +162,7 @@ Main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
     Status = DispatchTestSuites(Session);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("DispatchTestSuites() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("DispatchTestSuites() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

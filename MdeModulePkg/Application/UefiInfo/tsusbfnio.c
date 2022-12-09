@@ -74,7 +74,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
 
     Status = ProtocolArray[EFI_USBFN_IO_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("USB FN IO Protocol is not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("USB FN IO Protocol is not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -92,11 +92,11 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
 
     Status = UsbFnIoProtocol->GetMaxTransferSize(UsbFnIoProtocol, &MaxSingleTransferSize);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetMaxTransferSize() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetMaxTransferSize() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("Max Transfer Size : %zd bytes(%lld%s)",
+    DBG_INFO("Max Transfer Size : %d bytes(%lld%a)",
              MaxSingleTransferSize,
              PrettySize(MaxSingleTransferSize),
              PrettySizeStr(MaxSingleTransferSize));
@@ -108,7 +108,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     DBG_INFO("Max packet size:");
     for (UINTN EndPointType = UsbEndpointControl; EndPointType <= UsbEndpointInterrupt;
          EndPointType++) {
-        DBG_INFO("    End point type %s:", UsbEndPointType[EndPointType].String);
+        DBG_INFO("    End point type %a:", UsbEndPointType[EndPointType].String);
         for (UINTN Speed = UsbBusSpeedLow; Speed <= UsbBusSpeedSuper; Speed++) {
             MaxPacketSize = 0;
             Status = UsbFnIoProtocol->GetEndpointMaxPacketSize(UsbFnIoProtocol,
@@ -117,7 +117,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
                                                                &MaxPacketSize);
             if (EFI_ERROR(Status)) {
                 DBG_ERROR(
-                    "GetEndpointMaxPacketSize() failed @ end point type %s @ speed %s : %s(0x%zx)",
+                    "GetEndpointMaxPacketSize() failed @ end point type %a @ speed %a : %a(0x%x)",
                     UsbEndPointType[EndPointType].String,
                     UsbBusSpeed[Speed].String,
                     E(Status),
@@ -126,7 +126,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
                 continue;
             }
 
-            DBG_INFO("        @ %s is %d bytes(%lld%s)",
+            DBG_INFO("        @ %a is %d bytes(%lld%a)",
                      UsbBusSpeed[Speed].String,
                      MaxPacketSize,
                      PrettySize(MaxPacketSize),
@@ -150,7 +150,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
                                                         &BufferSize,
                                                         &MaxTransactionSize);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("GetEndpointPolicy() failed. EP%u %s : %s(0x%zx)",
+                DBG_ERROR("GetEndpointPolicy() failed. EP%u %a : %a(0x%x)",
                           EndPoint,
                           UsbEndPointDirection[Direction].String,
                           E(Status),
@@ -159,7 +159,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
                 continue;
             }
 
-            DBG_INFO("Max Transaction Size (EP%u %s): %zd bytes(%lld%s)",
+            DBG_INFO("Max Transaction Size (EP%u %a): %d bytes(%lld%a)",
                      EndPoint,
                      UsbEndPointDirection[Direction].String,
                      MaxTransactionSize,
@@ -177,7 +177,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
         BufferSize = _countof(Buffer);
         Status = UsbFnIoProtocol->GetDeviceInfo(UsbFnIoProtocol, InfoId, &BufferSize, Buffer);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetDeviceInfo() failed to query %zd %s : %s(0x%zx)",
+            DBG_ERROR("GetDeviceInfo() failed to query %d %a : %a(0x%x)",
                       BufferSize,
                       UsbDeviceInfoId[InfoId].String,
                       E(Status),
@@ -195,7 +195,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
 
     Status = UsbFnIoProtocol->GetVendorIdProductId(UsbFnIoProtocol, &Vid, &Pid);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetVendorIdProductId() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetVendorIdProductId() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

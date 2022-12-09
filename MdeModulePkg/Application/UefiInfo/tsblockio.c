@@ -70,7 +70,7 @@ static EFI_STATUS UefiInfoBlockIo(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf)
                               &TimerEvent);
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Unable to CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -92,7 +92,7 @@ static EFI_STATUS UefiInfoBlockIo(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf)
 
     Data = AllocatePool(MaxDataSize);
     if (Data == NULL) {
-        DBG_ERROR("AllocatePool() failed to allocate buffer of size %zd", MaxDataSize);
+        DBG_ERROR("AllocatePool() failed to allocate buffer of size %d", MaxDataSize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -113,13 +113,13 @@ static EFI_STATUS UefiInfoBlockIo(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf)
         while (DataSize < MaxDataSize) {
             Status = gBS->SetTimer(TimerEvent, TimerRelative, SEC_TO_100_NS(1));
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("SetTimer() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("SetTimer() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 
             Status = BlockIoIf->ReadBlocks(BlockIoIf, BlockIoMedia->MediaId, 0, DataSize, Data);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("ReadBlocks() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("ReadBlocks() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 
@@ -147,13 +147,13 @@ static EFI_STATUS UefiInfoBlockIo(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf)
         while (DataSize < MaxDataSize) {
             Status = gBS->SetTimer(TimerEvent, TimerRelative, SEC_TO_100_NS(1));
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("SetTimer() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("SetTimer() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 
             Status = BlockIoIf->WriteBlocks(BlockIoIf, BlockIoMedia->MediaId, 0, DataSize, Data);
             if (EFI_ERROR(Status)) {
-                DBG_ERROR("WriteBlocks() failed : %s(0x%zx)", E(Status), Status);
+                DBG_ERROR("WriteBlocks() failed : %a(0x%x)", E(Status), Status);
                 goto Exit;
             }
 
@@ -199,7 +199,7 @@ static EFI_STATUS BlockIoLargestBlockReadWriteTest(IN PBM_PROTOCOL_INFO Protocol
                                      &HandleCount,
                                      &BlockIoHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -272,7 +272,7 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                                      &HandleCount,
                                      &BlockIoHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -300,11 +300,11 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                 DevicePath = DevicePathToTextIf->ConvertDevicePathToText(DevicePathIf,
                                                                          FALSE,
                                                                          FALSE);
-                DBG_INFO_U(L"DevicePath                           : %s", DevicePath);
+                DBG_INFO_U(L"DevicePath                           : %a", DevicePath);
                 FreePool(DevicePath);
             }
 
-            DBG_INFO("Block IO 2                           : %s",
+            DBG_INFO("Block IO 2                           : %a",
                      BlockIo2If ? "Supported" : "Not Supported");
             DBG_INFO("MediaId                              : 0x%08x", BlockIoMedia->MediaId);
             DBG_INFO("ReadOnly                             : %u", BlockIoMedia->ReadOnly);
@@ -325,7 +325,7 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
                          BlockIoMedia->OptimalTransferLengthGranularity);
             }
 
-            DBG_INFO("Size                                 : %lld %s",
+            DBG_INFO("Size                                 : %lld %a",
                      PrettySize(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize),
                      PrettySizeStr(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize));
 
@@ -360,7 +360,7 @@ static EFI_STATUS BlockIoAPITest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
                                      &HandleCount,
                                      &BlockIoHandles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -384,7 +384,7 @@ static EFI_STATUS BlockIoAPITest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         if (BlockIoIf->Revision != EFI_BLOCK_IO_PROTOCOL_REVISION &&
             BlockIoIf->Revision != EFI_BLOCK_IO_PROTOCOL_REVISION2 &&
             BlockIoIf->Revision != EFI_BLOCK_IO_PROTOCOL_REVISION3) {
-            DBG_INFO("%s property: Expected (0x%zx or 0x%zx or 0x%zx) : Found (0x%llx)",
+            DBG_INFO("%a property: Expected (0x%x or 0x%x or 0x%x) : Found (0x%llx)",
                      PROP(Revision),
                      EFI_BLOCK_IO_PROTOCOL_REVISION,
                      EFI_BLOCK_IO_PROTOCOL_REVISION2,
@@ -394,35 +394,35 @@ static EFI_STATUS BlockIoAPITest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         }
 
         if (!TEST_BOOLEAN(Media->RemovableMedia)) {
-            DBG_INFO("%s property: Expected (TRUE or FALSE) : Found (0x%x)",
+            DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(RemovableMedia),
                      Media->RemovableMedia);
             TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->MediaPresent)) {
-            DBG_INFO("%s property: Expected (TRUE or FALSE) : Found (0x%x)",
+            DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(MediaPresent),
                      Media->MediaPresent);
             TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->LogicalPartition)) {
-            DBG_INFO("%s property: Expected (TRUE or FALSE) : Found (0x%x)",
+            DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(LogicalPartition),
                      Media->LogicalPartition);
             TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->ReadOnly)) {
-            DBG_INFO("%s property: Expected (TRUE or FALSE) : Found (0x%x)",
+            DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(ReadOnly),
                      Media->ReadOnly);
             TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->WriteCaching)) {
-            DBG_INFO("%s property: Expected (TRUE or FALSE) : Found (0x%x)",
+            DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(WriteCaching),
                      Media->WriteCaching);
             TestPassed = FALSE;

@@ -1459,51 +1459,6 @@ Exit:
 }
 
 #ifndef UEFI_BUILD_SYSTEM
-//
-// Description:
-//      Helper for converting GUID to string.
-//      128 bit GUID to human-readable string.
-//
-VOID EFIAPI GuidToWideString(IN const GUID* Guid,
-                             _Out_writes_z_(BufferSize) CHAR16 Buffer[],
-                             IN UINT8 BufferSize)
-{
-    UNREFERENCED_PARAMETER(BufferSize);
-
-    // Get the beginning guid sequence (first 19 characters)
-    size_t TempSize = BufferSize;
-    CHAR16* TempBuffer = Buffer;
-    StringCchPrintfExW((STRSAFE_LPWSTR)TempBuffer,
-                       TempSize,
-                       &TempBuffer,
-                       &TempSize,
-                       0,
-                       L"%.8lX-%.4hX-%.4hX-",
-                       Guid->Data1,
-                       Guid->Data2,
-                       Guid->Data3);
-    for (int i = 0; i < sizeof(Guid->Data4); ++i) {
-#pragma prefast(suppress : 26018, "TempSize will not be larger than BufferSize.");
-        StringCchPrintfExW((STRSAFE_LPWSTR)TempBuffer,
-                           TempSize,
-                           &TempBuffer,
-                           &TempSize,
-                           0,
-                           L"%.2hhX",
-                           Guid->Data4[i]);
-        if (i == 1) {
-            StringCchPrintfExW((STRSAFE_LPWSTR)TempBuffer,
-                               TempSize,
-                               &TempBuffer,
-                               &TempSize,
-                               0,
-                               L"-");
-        }
-    }
-}
-#endif
-
-#ifndef UEFI_BUILD_SYSTEM
 
 BOOLEAN
 InternalSafeStringIsOverlap(IN VOID* Base1, IN UINTN Size1, IN VOID* Base2, IN UINTN Size2)

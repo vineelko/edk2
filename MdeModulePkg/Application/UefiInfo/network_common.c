@@ -49,14 +49,14 @@ EFI_STATUS EFIAPI NetworkCommonInitStack()
                                                NULL);
         if (EFI_ERROR(Status)) {
             DBG_ERROR(
-                "network_init_network_stack: Unable to install of gsMsNetworkDelayProtocol 0x%zx",
+                "network_init_network_stack: Unable to install of gsMsNetworkDelayProtocol 0x%x",
                 Status);
             goto Exit;
         }
 
     } else if (EFI_ERROR(Status)) {
         DBG_ERROR(
-            "network_init_network_stack: Unable to locate gsMsNetworkDelayProtocol with status 0x%zx",
+            "network_init_network_stack: Unable to locate gsMsNetworkDelayProtocol with status 0x%x",
             Status);
         goto Exit;
     }
@@ -120,7 +120,7 @@ BOOLEAN EFIAPI NetworkCommonIsEthernetHandle(IN EFI_HANDLE DeviceHandle)
 
     Status = gBS->ProtocolsPerHandle(DeviceHandle, &ProtocolBuffer, &ProtocolBufferCount);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ProtocolsPerHandle failed, 0x%zx", Status);
+        DBG_ERROR("ProtocolsPerHandle failed, 0x%x", Status);
         goto Exit;
     }
 

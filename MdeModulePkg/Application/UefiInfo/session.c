@@ -34,7 +34,7 @@ SessionCreate(IN CHAR16* CommandLine, OUT PBM_SESSION* Session)
 
     RetSession = AllocateZeroPool(sizeof(BM_SESSION));
     if (RetSession == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd", sizeof(BM_SESSION));
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d", sizeof(BM_SESSION));
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -75,7 +75,7 @@ SessionCreate(IN CHAR16* CommandLine, OUT PBM_SESSION* Session)
     Length = StrLen(CommandLine);
     RetSession->CommandLine = AllocateZeroPool(sizeof(CHAR8) * (Length + 1));
     if (RetSession->CommandLine == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   sizeof(CHAR8) * (Length + 1));
         return EFI_OUT_OF_RESOURCES;
     }

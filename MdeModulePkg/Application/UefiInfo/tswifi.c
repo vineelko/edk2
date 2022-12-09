@@ -83,7 +83,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = ProtocolArray[EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -97,7 +97,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
                               NULL,
                               &WaitForNetworkOperation);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -107,7 +107,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
                               &GetNetworksToken,
                               &GetNetworksToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to create get network token's event. CreateEvent() failed : %s(0x%zx)",
+        DBG_ERROR("Unable to create get network token's event. CreateEvent() failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -117,7 +117,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = ConMgr2Protocol->GetNetworks(ConMgr2Protocol, &GetNetworksToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get network list. GetNetworks() failed : %s(0x%zx)",
+        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -129,7 +129,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -151,7 +151,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
         if (Network->SSId.SSIdLen == 0)
             continue;
 
-        DBG_INFO("SSID: %-30s Quality:%3d BSS: %d",
+        DBG_INFO("SSID: %-30a Quality:%3d BSS: %d",
                  Network->SSId.SSId,
                  NetworkDesc->NetworkQuality,
                  Network->BSSType); // Basic service sets
@@ -220,7 +220,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
 
     Status = ProtocolArray[EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -230,7 +230,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
 
     Status = ProtocolArray[EFI_SUPPLICANT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_SUPPLICANT_PROTOCOL Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_SUPPLICANT_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -242,7 +242,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                               NULL,
                               &WaitForNetworkOperation);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -252,7 +252,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                               &GetNetworksToken,
                               &GetNetworksToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to create get network token's event. CreateEvent() failed : %s(0x%zx)",
+        DBG_ERROR("Unable to create get network token's event. CreateEvent() failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -262,7 +262,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
 
     Status = ConMgr2Protocol->GetNetworks(ConMgr2Protocol, &GetNetworksToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get network list. GetNetworks() failed : %s(0x%zx)",
+        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -274,7 +274,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
 
     Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -318,7 +318,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
     //
     if (Found == FALSE) {
         Status = EFI_NOT_FOUND;
-        DBG_ERROR("Wireless network with %s not found", NetworkName);
+        DBG_ERROR("Wireless network with %a not found", NetworkName);
         goto Exit;
     }
 
@@ -333,7 +333,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                                 &Ssid,
                                 sizeof(EFI_80211_SSID));
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Suplicant SetData for Ssid failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Suplicant SetData for Ssid failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -343,7 +343,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                                 AsciiStrLen(Password) + 1);
     ZeroMem(Password, AsciiStrLen(Password));
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Suplicant SetData for Password failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Suplicant SetData for Password failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -354,7 +354,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                               &NetworkConnectToken.Event);
     if (EFI_ERROR(Status)) {
         DBG_ERROR(
-            "Unable to create network connect token's event. CreateEvent() failed : %s(0x%zx)",
+            "Unable to create network connect token's event. CreateEvent() failed : %a(0x%x)",
             E(Status),
             Status);
         goto Exit;
@@ -364,7 +364,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
     // Dump Network object fields
     //
 
-    DBG_INFO("SSID: %-30s BSS: %d", Network.SSId.SSId,
+    DBG_INFO("SSID: %-30a BSS: %d", Network.SSId.SSId,
              Network.BSSType); // Basic service sets
 
     // Dump Authentication and Key Management(AKM) suites
@@ -400,14 +400,14 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
     ConnectData.Network = &Network;
     ConnectData.FailureTimeout = 20; // 20 Sec
     NetworkConnectToken.Data = &ConnectData;
-    DBG_INFO("Network name: %s", Network.SSId.SSId);
+    DBG_INFO("Network name: %a", Network.SSId.SSId);
 
     //
     // Connect to the Network
     //
     Status = ConMgr2Protocol->ConnectNetwork(ConMgr2Protocol, &NetworkConnectToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ConnectNetwork() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("ConnectNetwork() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -417,15 +417,15 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
 
     Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    DBG_INFO("NetworkConnectToken.Status = %s(0x%zx)",
+    DBG_INFO("NetworkConnectToken.Status = %a(0x%x)",
              E(NetworkConnectToken.Status),
              NetworkConnectToken.Status);
 
-    DBG_INFO("Connection Status : %s(0x%x)",
+    DBG_INFO("Connection Status : %a(0x%x)",
              ConnectionStateMap[NetworkConnectToken.ResultCode].String,
              ConnectionStateMap[NetworkConnectToken.ResultCode].Value);
 
@@ -460,8 +460,6 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     EFI_IP4_CONFIG2_POLICY Policy = Ip4Config2PolicyDhcp;
     UINTN Size = 0;
     CHAR8 MacString[32 * 2] = {0};
-    STRSAFE_LPSTR MacStringEnd = NULL;
-    size_t Remaining = 0;
     EFI_IPv4_ADDRESS* DnsInfo = NULL;
 
     UNREFERENCED_PARAMETER(ProtocolArray);
@@ -474,7 +472,7 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
                                      &HandleCount,
                                      &Handles);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateHandleBuffer() failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -490,7 +488,7 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         if (Status == EFI_BUFFER_TOO_SMALL) {
             InterfaceInfo = AllocateZeroPool(Size);
         } else if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %s(0x%zx)",
+            DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %a(0x%x)",
                       E(Status),
                       Status);
             goto Exit;
@@ -502,7 +500,7 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
                                      InterfaceInfo);
 
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %s(0x%zx)",
+            DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %a(0x%x)",
                       E(Status),
                       Status);
             goto Exit;
@@ -511,31 +509,27 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         Size = sizeof(EFI_IP4_CONFIG2_POLICY);
         Status = Ip4Config2->GetData(Ip4Config2, Ip4Config2DataTypePolicy, &Size, &Policy);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() failed : %s(0x%zx)", E(Status), Status);
+            DBG_ERROR("GetData() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
-        DBG_INFO_U(L"Interface Name: %s", InterfaceInfo->Name);
-        DBG_INFO("Interface Type: %u(%s)",
+        DBG_INFO_U(L"Interface Name: %a", InterfaceInfo->Name);
+        DBG_INFO("Interface Type: %u(%a)",
                  InterfaceInfo->IfType,
                  InterfaceInfo->IfType == 1 ? "NET_IFTYPE_ETHERNET" : "UNKNOWN");
-        DBG_INFO("Policy: %s", Policy == Ip4Config2PolicyStatic ? "Static" : "DHCP");
+        DBG_INFO("Policy: %a", Policy == Ip4Config2PolicyStatic ? "Static" : "DHCP");
 
-        MacStringEnd = (STRSAFE_LPSTR)MacString;
-        Remaining = _countof(MacString);
+        AsciiSPrint(MacString,
+                    sizeof(MacString),
+                    "%02x-%02x-%02x-%02x-%02x-%02x",
+                    InterfaceInfo->HwAddress.Addr[0],
+                    InterfaceInfo->HwAddress.Addr[1],
+                    InterfaceInfo->HwAddress.Addr[2],
+                    InterfaceInfo->HwAddress.Addr[3],
+                    InterfaceInfo->HwAddress.Addr[4],
+                    InterfaceInfo->HwAddress.Addr[5]);
 
-        for (UINTN j = 0; j < InterfaceInfo->HwAddressSize; j++) {
-            StringCchPrintfExA(MacStringEnd,
-                               Remaining,
-                               &MacStringEnd,
-                               &Remaining,
-                               0,
-                               (STRSAFE_LPSTR) "%02x%s",
-                               InterfaceInfo->HwAddress.Addr[j],
-                               j < InterfaceInfo->HwAddressSize - 1 ? "-" : " ");
-        }
-
-        DBG_INFO("MAC Address: %s", MacString);
+        DBG_INFO("MAC Address: %a", MacString);
         DBG_INFO("IP Address: %u.%u.%u.%u",
                  InterfaceInfo->StationAddress.Addr[0],
                  InterfaceInfo->StationAddress.Addr[1],
@@ -582,7 +576,7 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         if (Status == EFI_BUFFER_TOO_SMALL) {
             DnsInfo = AllocateZeroPool(Size);
         } else if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %s(0x%zx)",
+            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %a(0x%x)",
                       E(Status),
                       Status);
             goto Exit;
@@ -591,7 +585,7 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         Status = Ip4Config2->GetData(Ip4Config2, Ip4Config2DataTypeDnsServer, &Size, DnsInfo);
 
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %s(0x%zx)",
+            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %a(0x%x)",
                       E(Status),
                       Status);
             goto Exit;

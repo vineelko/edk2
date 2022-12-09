@@ -42,7 +42,7 @@ static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
 
     Status = ProtocolArray[EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -58,11 +58,11 @@ static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
     DBG_INFO("         Cursor Column: %d", ConOutMode->CursorColumn);
     DBG_INFO("         Cursor Row: %d", ConOutMode->CursorRow);
     DBG_INFO("         Attribute: 0x%x", ConOutMode->Attribute);
-    DBG_INFO("         Cursor Visible?: %s", ConOutMode->CursorVisible ? "Yes" : "No");
+    DBG_INFO("         Cursor Visible?: %a", ConOutMode->CursorVisible ? "Yes" : "No");
 
     AllConsoleResolutions = AllocateZeroPool(sizeof(BM_CONSOLE_RESOLUTION) * ConOutMode->MaxMode);
     if (AllConsoleResolutions == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %zd",
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
                   sizeof(BM_CONSOLE_RESOLUTION) * ConOutMode->MaxMode);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
@@ -79,7 +79,7 @@ static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
             continue;
         }
 
-        DBG_INFO("         Console Mode %d (%zdx%zd)",
+        DBG_INFO("         Console Mode %d (%dx%d)",
                  i,
                  AllConsoleResolutions[i].Columns,
                  AllConsoleResolutions[i].Rows);
@@ -103,8 +103,8 @@ static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
                         AllConsoleResolutions[i].Rows);
         Status = ConOutProtocol->SetMode(ConOutProtocol, i);
         if (EFI_ERROR(Status)) {
-            DBG_INFO("Failed : %s(0x%zx)", E(Status), Status);
-            DBG_ERROR("Unable to set console mode(%dx%d). Failed : %s(0x%zx)",
+            DBG_INFO("Failed : %a(0x%x)", E(Status), Status);
+            DBG_ERROR("Unable to set console mode(%dx%d). Failed : %a(0x%x)",
                                 AllConsoleResolutions[i].Columns,
                                 AllConsoleResolutions[i].Rows,
                                 E(Status),
@@ -120,7 +120,7 @@ static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
 
     Status = ConOutProtocol->SetMode(ConOutProtocol, CurrentMode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to restore default graphics mode. Failed : %s(0x%zx)",
+        DBG_ERROR("Unable to restore default graphics mode. Failed : %a(0x%x)",
                         E(Status),
                         Status);
         goto Exit;

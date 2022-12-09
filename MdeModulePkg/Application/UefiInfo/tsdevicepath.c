@@ -38,7 +38,7 @@ static EFI_STATUS DevicePathProbeApi(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
 
     Status = ProtocolArray[EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -46,7 +46,7 @@ static EFI_STATUS DevicePathProbeApi(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
 
     Status = ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_DEVICE_PATH_TO_TEXT_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_DEVICE_PATH_TO_TEXT_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;

@@ -35,7 +35,7 @@ static EFI_STATUS ValidateConnectDeviceClassTest(IN PBM_PROTOCOL_INFO ProtocolAr
 
     Status = ProtocolArray[EFI_BOOT_MANAGER_POLICY_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_BOOT_MANAGER_POLICY_PROTOCOL Protocol not available : %s(0x%zx)",
+        DBG_ERROR("EFI_BOOT_MANAGER_POLICY_PROTOCOL Protocol not available : %a(0x%x)",
                   E(Status),
                   Status);
         goto Exit;
@@ -44,7 +44,7 @@ static EFI_STATUS ValidateConnectDeviceClassTest(IN PBM_PROTOCOL_INFO ProtocolAr
     BootManager = ProtocolArray[EFI_BOOT_MANAGER_POLICY_PROTOCOL_INDEX].Protocol;
     Status = BootManager->ConnectDeviceClass(BootManager, &gEfiBootManagerPolicyConnectAllGuid);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("ConnectDeviceClass() returned : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("ConnectDeviceClass() returned : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 

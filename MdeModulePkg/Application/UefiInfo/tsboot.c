@@ -44,7 +44,7 @@ static EFI_STATUS EnumerateBootOrder(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
                                      &BootOptionsLength,
                                      &NumBootOptions);
     if (Status != EFI_BUFFER_TOO_SMALL && EFI_ERROR(Status)) {
-        DBG_ERROR("boot_options_enumerate_all failed with error %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("boot_options_enumerate_all failed with error %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -60,7 +60,7 @@ static EFI_STATUS EnumerateBootOrder(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
                                      &BootOptionsLength,
                                      &NumBootOptions);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("boot_options_enumerate_all failed with error %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("boot_options_enumerate_all failed with error %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -71,7 +71,7 @@ static EFI_STATUS EnumerateBootOrder(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
         Option = (sUEFI_BOOT_OPTION*)(BootOptions + Offset);
         DBG_INFO("Index                               : %u", Option->uIndex);
         DBG_INFO("Boot option                         : Boot%04X", GETB16(Option->wBootOption));
-        DBG_INFO("Attributes                          : 0x%08X%s%s%s%s",
+        DBG_INFO("Attributes                          : 0x%08X%a%a%a%a",
                  GETB32(Option->dwAttributes),
                  (GETB32(Option->dwAttributes) & LOAD_OPTION_ACTIVE) ? "(LOAD_OPTION_ACTIVE)" : "",
                  (GETB32(Option->dwAttributes) & LOAD_OPTION_FORCE_RECONNECT) ?
