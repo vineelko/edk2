@@ -253,7 +253,7 @@ BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX] = {
     [EFI_UDP4_PROTOCOL_INDEX] = SB_PROTO(&gEfiUdp4ProtocolGuid, t("EFI_UDP4_PROTOCOL"), &gEfiUdp4ServiceBindingProtocolGuid, t("EFI_UDP4_SERVICE_BINDING_PROTOCOL")),
     [EFI_UDP6_PROTOCOL_INDEX] = SB_PROTO(&gEfiUdp6ProtocolGuid, t("EFI_UDP6_PROTOCOL"), &gEfiUdp6ServiceBindingProtocolGuid, t("EFI_UDP6_SERVICE_BINDING_PROTOCOL")),
     [EFI_MTFTP4_PROTOCOL_INDEX] = SB_PROTO(&gEfiMtftp4ProtocolGuid, t("EFI_MTFTP4_PROTOCOL"), &gEfiMtftp4ServiceBindingProtocolGuid, t("EFI_MTFTP4_SERVICE_BINDING_PROTOCOL")),
-    [EFI_MTFTP6_PROTOCOL_INDEX] = SB_PROTO(&gEfiMtftp6ProtocolGuid, t("EFI_MTFTP6_PROTOCOL"), &gEfiMtftp4ServiceBindingProtocolGuid, t("EFI_MTFTP4_SERVICE_BINDING_PROTOCOL")),
+    [EFI_MTFTP6_PROTOCOL_INDEX] = SB_PROTO(&gEfiMtftp6ProtocolGuid, t("EFI_MTFTP6_PROTOCOL"), &gEfiMtftp6ServiceBindingProtocolGuid, t("EFI_MTFTP6_SERVICE_BINDING_PROTOCOL")),
 
     //
     // PROTOCOLS - HII - Chapter 34
