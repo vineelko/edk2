@@ -28,13 +28,15 @@ Environment:
 static EFI_STATUS DevicePathProbeApi(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    CHAR16 Path[1024] = L"FS0:\\do-not-exist.efi";
+    CHAR16 Path[1024];
     EFI_DEVICE_PATH_PROTOCOL* DevicePath = NULL;
     EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* ToTextPath = NULL;
     EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL* FromTextPath = NULL;
     CHAR16* TextPath = NULL;
 
     UNREFERENCED_PARAMETER(Session);
+
+    StrCpyS(Path, _countof(Path), L"FS0:\\do-not-exist.efi");
 
     Status = ProtocolArray[EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

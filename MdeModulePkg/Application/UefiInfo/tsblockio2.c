@@ -25,9 +25,11 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 #include "utils.h"
+#include <Protocol/BlockIo2.h>
+#include <Library/SynchronizationLib.h>
 
 #define MAX_SYNC_ASYNC_OPERATIONS 20000
-static volatile LONG AsyncOperationCount = 0;
+static volatile UINT32 AsyncOperationCount = 0;
 static EFI_EVENT WaitForAsyncOperation = NULL;
 
 static VOID EFIAPI BlockIo2AsyncWaitCallback(IN EFI_EVENT Event, IN PVOID Context)

@@ -32,22 +32,22 @@ extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 // List of UEFI tests that are registered to test/uefiinfo one or more protocol
 //
 
-// extern BM_TEST_SUITE ReadinessTestSuite;
-// extern BM_TEST_SUITE BlockIoTestSuite;
-// extern BM_TEST_SUITE BlockIo2TestSuite;
+extern BM_TEST_SUITE ReadinessTestSuite;
+extern BM_TEST_SUITE BlockIoTestSuite;
+extern BM_TEST_SUITE BlockIo2TestSuite;
 // extern BM_TEST_SUITE BootTestSuite;
 // extern BM_TEST_SUITE BootManagerTestSuite;
-// extern BM_TEST_SUITE DevicePathTestSuite;
-// extern BM_TEST_SUITE TextInputTestSuite;
-// extern BM_TEST_SUITE ConsoleOutputTestSuite;
-// extern BM_TEST_SUITE GraphicsOutputTestSuite;
-// extern BM_TEST_SUITE FontTestSuite;
+extern BM_TEST_SUITE DevicePathTestSuite;
+extern BM_TEST_SUITE TextInputTestSuite;
+extern BM_TEST_SUITE ConsoleOutputTestSuite;
+extern BM_TEST_SUITE GraphicsOutputTestSuite;
+extern BM_TEST_SUITE FontTestSuite;
 // extern BM_TEST_SUITE HashTestSuite;
-// extern BM_TEST_SUITE LoadImageTestSuite;
+extern BM_TEST_SUITE LoadImageTestSuite;
 // extern BM_TEST_SUITE MemoryTestSuite;
 // extern BM_TEST_SUITE RamdiskTestSuite;
 // extern BM_TEST_SUITE RandomNumberGeneratorTestSuite;
-// extern BM_TEST_SUITE CBMRTestSuite;
+extern BM_TEST_SUITE CBMRTestSuite;
 // extern BM_TEST_SUITE FileSystemTestSuite;
 // extern BM_TEST_SUITE SmbiosTestSuite;
 // extern BM_TEST_SUITE TimestampTestSuite;
@@ -59,7 +59,7 @@ extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 // extern BM_TEST_SUITE Tcp6TestSuite;
 // extern BM_TEST_SUITE Udp4TestSuite;
 // extern BM_TEST_SUITE Udp6TestSuite;
-// extern BM_TEST_SUITE UEFIVariableTestSuite;
+extern BM_TEST_SUITE UEFIVariableTestSuite;
 // extern BM_TEST_SUITE UsbFnIoTestSuite;
 // extern BM_TEST_SUITE UsbInitTestSuite;
 // extern BM_TEST_SUITE UITestSuite;
@@ -68,30 +68,29 @@ extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 // extern BM_TEST_SUITE WindbgTestSuite;
 
 PBM_TEST_SUITE TestSuites[] = {
-    NULL
 
     //
     // Readiness is the first test suite to replicate existing readiness
     // functionality
     //
 
-    // &ReadinessTestSuite,
+    &ReadinessTestSuite,
     // &SmbiosTestSuite,
     // &MemoryTestSuite,
-    // &BlockIoTestSuite,
-    // &BlockIo2TestSuite,
+    &BlockIoTestSuite,
+    &BlockIo2TestSuite,
     // &BootTestSuite,
     // &BootManagerTestSuite,
-    // &DevicePathTestSuite,
-    // &TextInputTestSuite,
-    // &ConsoleOutputTestSuite,
-    // &GraphicsOutputTestSuite,
-    // &FontTestSuite,
+    &DevicePathTestSuite,
+    &TextInputTestSuite,
+    &ConsoleOutputTestSuite,
+    &GraphicsOutputTestSuite,
+    &FontTestSuite,
     // &HashTestSuite,
-    // &LoadImageTestSuite,
+    &LoadImageTestSuite,
     // &RamdiskTestSuite,
     // &RandomNumberGeneratorTestSuite,
-    // &CBMRTestSuite,
+    &CBMRTestSuite,
     // &FileSystemTestSuite,
     // &Dhcp4TestSuite,
     // //    &Dhcp6TestSuite,
@@ -102,7 +101,7 @@ PBM_TEST_SUITE TestSuites[] = {
     // &Udp4TestSuite,
     // //    &Udp6TestSuite,
     // &TimestampTestSuite,
-    // &UEFIVariableTestSuite,
+    &UEFIVariableTestSuite,
     // &UsbFnIoTestSuite,
     // &UsbInitTestSuite,
     // &UITestSuite,

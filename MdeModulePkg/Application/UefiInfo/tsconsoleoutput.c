@@ -24,6 +24,7 @@ Environment:
 
 #include "protocols.h"
 #include "testsuites.h"
+#include <Protocol/SimpleTextOut.h>
 
 typedef struct _BM_CONSOLE_RESOLUTION {
     UINTN Columns;
@@ -33,8 +34,8 @@ typedef struct _BM_CONSOLE_RESOLUTION {
 static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    SIMPLE_TEXT_OUTPUT_INTERFACE* ConOutProtocol = NULL;
-    SIMPLE_TEXT_OUTPUT_MODE* ConOutMode = NULL;
+    EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOutProtocol = NULL;
+    EFI_SIMPLE_TEXT_OUTPUT_MODE* ConOutMode = NULL;
     PBM_CONSOLE_RESOLUTION AllConsoleResolutions = NULL;
     UINT32 CurrentMode = 0;
 

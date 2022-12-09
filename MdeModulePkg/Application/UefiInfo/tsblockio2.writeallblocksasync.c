@@ -25,9 +25,11 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 #include "utils.h"
+#include <Protocol/BlockIo2.h>
+#include <Library/SynchronizationLib.h>
 
 #define MAX_SYNC_ASYNC_OPERATIONS 200
-static volatile LONG AsyncOperationCount = 0;
+static volatile UINT32 AsyncOperationCount = 0;
 static EFI_EVENT WaitForAsyncOperation = NULL;
 
 static VOID EFIAPI BlockIo2AsyncWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
@@ -211,8 +213,8 @@ static EFI_STATUS UefiInfoBlockIo2WriteToAllSectors(IN EFI_BLOCK_IO_PROTOCOL* Bl
 Exit:
 
     if (Tokens != NULL) {
-        for (UINT32 i = 0; i < MAX_SYNC_ASYNC_OPERATIONS; i++) {
-            gBS->CloseEvent(Tokens[i].Event);
+        for (UINT32 j = 0; j < MAX_SYNC_ASYNC_OPERATIONS; j++) {
+            gBS->CloseEvent(Tokens[j].Event);
         }
         FreePool(Tokens);
     }

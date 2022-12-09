@@ -110,23 +110,23 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
 
             UINT64 RemainingDiskSize = TotalDiskSize;
             DataSize = MaxDataSize;
-            for (UINT64 i = 0; i < BlockIoMedia->LastBlock;
-                 i += (DataSize / BlockIoMedia->BlockSize)) {
+            for (UINT64 j = 0; j < BlockIoMedia->LastBlock;
+                 j += (DataSize / BlockIoMedia->BlockSize)) {
                 DataSize = RemainingDiskSize < DataSize ? RemainingDiskSize : DataSize;
 
                 DBG_INFO_RAW("Writing %lld%a start @ block: %llu(%llu%%)\r",
                              PrettySize(DataSize),
                              PrettySizeStr(DataSize),
-                             i,
-                             ((i * 100) / BlockIoMedia->LastBlock));
+                             j,
+                             ((j * 100) / BlockIoMedia->LastBlock));
                 Status = BlockIoIf->WriteBlocks(BlockIoIf,
                                                 BlockIoMedia->MediaId,
-                                                i,
+                                                j,
                                                 (UINTN)DataSize,
                                                 Data);
                 if (EFI_ERROR(Status)) {
                     DBG_ERROR("\nFailed to write to block %llu failed : %a(0x%x)",
-                              i,
+                              j,
                               E(Status),
                               Status);
                     break;

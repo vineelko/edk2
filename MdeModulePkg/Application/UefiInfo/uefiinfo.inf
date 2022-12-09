@@ -33,28 +33,28 @@
   safe_arithmetic.c
   session.c
   testsuites.c
-#  tsblockio.c
-#  tsblockio.writeallblocks.c
-#  tsblockio2.c
-#  tsblockio2.writeallblocksasync.c
+  tsblockio.c
+  tsblockio.writeallblocks.c
+  tsblockio2.c
+  tsblockio2.writeallblocksasync.c
 #  tsboot.c
 #  tsbootmanagerpolicy.c
-#  tscbmr.c
-#  tsconsoleoutput.c
-#  tsdevicepath.c
+  tscbmr.c
+  tsconsoleoutput.c
+  tsdevicepath.c
 #  tsdhcp4.c
 #  tsdhcp6.c
-#  tsfont.c
-#  tsgraphicsoutput.c
-#  tsgraphicsoutput.rgb.c
+  tsfont.c
+  tsgraphicsoutput.c
+  tsgraphicsoutput.rgb.c
 #  tshash.c
 #  tshttp.c
 #  tsip4config2.c
 #  tsip6config.c
-#  tsloadedimage.c
+  tsloadedimage.c
 #  tsmemory.c
 #  tsramdisk.c
-#  tsreadiness.c
+  tsreadiness.c
 #  tsrng.c
 #  tsfilesystem.c
 #  tssmbios.c
@@ -62,7 +62,7 @@
 #  tstcp4.duthost.directperf.c
 #  tstcp4.duthost.directsendreceive.c
 #  tstcp6.c
-#  tstextinput.c
+  tstextinput.c
 #  tstimestamp.c
 #  tsudp4.c
 #  tsudp4.duthost.directperf.c
@@ -71,7 +71,7 @@
 #  tsui.c
 #  tsusbfnio.c
 #  tsusbinit.c
-#  tsvariable.c
+  tsvariable.c
 #  tswifi.c
   uefiinfo.c
   utils.c
@@ -90,6 +90,7 @@
   BaseMemoryLib
   MemoryAllocationLib
   SortLib
+  SynchronizationLib
 #  DebugLib
 #  NetLib
 
@@ -325,7 +326,7 @@
   gEfiIpSec2ProtocolGuid
   gEfiTimestampProtocolGuid
   gEdkiiVariableLockProtocolGuid
-  
+
 [FeaturePcd]
 
 [Pcd]

@@ -25,6 +25,7 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 #include "utils.h"
+#include <Protocol/BlockIo2.h>
 
 #define TEST_BOOLEAN(x) (((x) == FALSE) || ((x) == TRUE))
 #define PROP(x)         #x
