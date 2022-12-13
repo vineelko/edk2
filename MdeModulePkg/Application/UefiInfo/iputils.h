@@ -2,7 +2,6 @@
 #define _IPUTILS_H_
 
 #include "common.h"
-#include "efidef.h"
 
 inline static VOID DumpIP4Address(EFI_IPv4_ADDRESS* IP4Address)
 {

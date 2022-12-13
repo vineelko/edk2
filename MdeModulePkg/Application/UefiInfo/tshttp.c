@@ -30,6 +30,9 @@ Environment:
 
 #include "tshttp.dcat.certs.h"
 #include "tshttp.httpbin.certs.h"
+#include <Protocol/Http.h>
+#include <Library/HttpLib.h>
+#include <Guid/ImageAuthentication.h>
 
 //
 // Constants/Macros
@@ -233,7 +236,7 @@ static EFI_STATUS EFIAPI HttpReadHeaders(IN PHTTP_RESPONSE Response)
         for (UINTN Index = 0; Index < Response->Message.HeaderCount; Index++) {
             if (AsciiStrCmp((CHAR8*)Response->Message.Headers[Index].FieldName,
                             (CHAR8*)HTTP_HEADER_CONTENT_LENGTH) == 0) {
-                Response->ContentLength = (ULONG)AsciiStrDecimalToUintn(
+                Response->ContentLength = AsciiStrDecimalToUintn(
                     (CHAR8*)Response->Message.Headers[Index].FieldValue);
             }
         }
@@ -1067,10 +1070,7 @@ static EFI_STATUS EFIAPI DcatBuildRequestHeaders(IN CHAR8* Url,
             goto Exit;
         }
 
-        Result = AsciiSPrint(ContentLengthString,
-                             sizeof(ContentLengthString),
-                             "%u",
-                             BodyLength);
+        Result = AsciiSPrint(ContentLengthString, sizeof(ContentLengthString), "%u", BodyLength);
         if (FAILED(Result)) {
             DBG_ERROR("AsciiSPrint failed 0x%x", Result);
             Status = EFI_INVALID_PARAMETER;
@@ -1142,7 +1142,7 @@ typedef struct _EFI_SIGNATURE_DATA2 {
     //
     // An identifier which identifies the agent which added the signature to the list.
     //
-    GUID SignatureOwner;
+    EFI_GUID SignatureOwner;
 
     //
     // The format of the signature is defined by the SignatureType.
@@ -1164,10 +1164,10 @@ typedef struct _CERT {
 //
 
 static CERT TlsCaCertArray[] = {
-    {.Size = ARRAYSIZE(microsoft_update_secure_server_ca_2_1),
+    {.Size = _countof(microsoft_update_secure_server_ca_2_1),
      .Buffer = microsoft_update_secure_server_ca_2_1,
      .Revoked = FALSE},
-    {.Size = ARRAYSIZE(httpbin_cert), .Buffer = httpbin_cert, .Revoked = FALSE},
+    {.Size = _countof(httpbin_cert), .Buffer = httpbin_cert, .Revoked = FALSE},
 };
 
 //
@@ -1192,7 +1192,7 @@ static EFI_STATUS TlsSetCACertList()
     EFI_SIGNATURE_LIST* LocalCert = NULL;
     EFI_SIGNATURE_DATA2* CertData = NULL;
 
-    CertCount = ARRAYSIZE(TlsCaCertArray);
+    CertCount = _countof(TlsCaCertArray);
 
     for (UINT8 i = 0; i < CertCount; i++) {
         if (!TlsCaCertArray[i].Revoked) {
@@ -1201,8 +1201,7 @@ static EFI_STATUS TlsSetCACertList()
     }
 
     CertDatabaseSize = CertCount * sizeof(EFI_SIGNATURE_LIST) +
-                       CertCount * FIELD_OFFSET(EFI_SIGNATURE_DATA2, SignatureData) +
-                       TotalCertsSize;
+                       CertCount * OFFSET_OF(EFI_SIGNATURE_DATA2, SignatureData) + TotalCertsSize;
 
     Cert = AllocateZeroPool(CertDatabaseSize);
     if (Cert == NULL) {
@@ -1216,10 +1215,10 @@ static EFI_STATUS TlsSetCACertList()
     for (UINT8 i = 0; i < CertCount; i++) {
         if (!TlsCaCertArray[i].Revoked) {
             Cert->SignatureListSize = sizeof(EFI_SIGNATURE_LIST) +
-                                      FIELD_OFFSET(EFI_SIGNATURE_DATA2, SignatureData) +
+                                      OFFSET_OF(EFI_SIGNATURE_DATA2, SignatureData) +
                                       (UINT32)TlsCaCertArray[i].Size;
             Cert->SignatureHeaderSize = 0;
-            Cert->SignatureSize = FIELD_OFFSET(EFI_SIGNATURE_DATA2, SignatureData) +
+            Cert->SignatureSize = OFFSET_OF(EFI_SIGNATURE_DATA2, SignatureData) +
                                   (UINT32)TlsCaCertArray[i].Size;
             CopyMem(&Cert->SignatureType, &gEfiCertX509Guid, sizeof(EFI_GUID));
 
@@ -1232,7 +1231,7 @@ static EFI_STATUS TlsSetCACertList()
                     TlsCaCertArray[i].Size);
 
             Cert = (EFI_SIGNATURE_LIST*)((UINT8*)Cert + sizeof(EFI_SIGNATURE_LIST) +
-                                         FIELD_OFFSET(EFI_SIGNATURE_DATA2, SignatureData) +
+                                         OFFSET_OF(EFI_SIGNATURE_DATA2, SignatureData) +
                                          TlsCaCertArray[i].Size);
         }
     }
