@@ -22,7 +22,7 @@
 
 [Sources]
   buffer.c
-#  boot_options.c
+  boot_options.c
   file.c
   debug.c
 #  edk2compat.c
@@ -37,8 +37,8 @@
   tsblockio.writeallblocks.c
   tsblockio2.c
   tsblockio2.writeallblocksasync.c
-#  tsboot.c
-#  tsbootmanagerpolicy.c
+  tsboot.c
+  tsbootmanagerpolicy.c
   tscbmr.c
   tsconsoleoutput.c
   tsdevicepath.c
@@ -164,6 +164,7 @@
   gEfiSmbios3TableGuid
   gEfiMemoryAttributesTableGuid
   gEfiHiiKeyBoardLayoutGuid
+  gEfiGlobalVariableGuid
 
 [Ppis]
 

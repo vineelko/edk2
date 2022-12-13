@@ -27,14 +27,14 @@
 // Prototypes
 //
 static EFI_STATUS EFIAPI
-EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
+EnumerateBootOptionsInternal(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
                              OUT UINT32* BootOptionsBufferLength,
                              OUT UINT32* NumOptions);
 
 //
 // Interfaces
 //
-EFI_STATUS EFIAPI BootOptionsEnumerateAll(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
+EFI_STATUS EFIAPI BootOptionsEnumerateAll(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
                                           IN OUT UINT32* BootOptionsBufferLength,
                                           OUT UINT32* NumOptions)
 {
@@ -79,7 +79,7 @@ Exit:
 EFI_STATUS EFIAPI EFIAPI BootOptionsSetOneTimeBootSequence(IN UINT16 BootOption)
 {
     return gRT->SetVariable(VAR_BOOT_NEXT,
-                            &gEdkGlobalVariableGuid,
+                            &gEfiGlobalVariableGuid,
                             EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
                                 EFI_VARIABLE_RUNTIME_ACCESS,
                             sizeof(UINT16),
@@ -87,7 +87,7 @@ EFI_STATUS EFIAPI EFIAPI BootOptionsSetOneTimeBootSequence(IN UINT16 BootOption)
 }
 
 EFI_STATUS EFIAPI BootOptionsSetBootEntryOptionalData(IN UINT16 BootOption,
-                                                      _In_opt_z_ CHAR16* CommandLine)
+                                                      IN CHAR16* CommandLine)
 /*++
 
 Routine Description:
@@ -130,8 +130,8 @@ Return Value:
     EFI_STATUS EfiStatus = EFI_SUCCESS;
     EFI_LOAD_OPTION* BootOptionPtr = NULL;
     UINT8* NewBootOption = NULL;
-    const WCHAR BootXXXXFmt[] = L"BootXXXX";
-    WCHAR BootXXXX[_countof(BootXXXXFmt)] = {0};
+    const CHAR16 BootXXXXFmt[] = L"BootXXXX";
+    CHAR16 BootXXXX[_countof(BootXXXXFmt)] = {0};
     UINTN NewBootOptionSize = 0;
     UINTN CommandLineLength = 0;
     CHAR16* EfiDescription = NULL;
@@ -143,7 +143,7 @@ Return Value:
     DBG_INFO("Boot option %u", BootOption);
 
     UnicodeSPrint(BootXXXX, sizeof(BootXXXX), L"Boot%04X", BootOption);
-    EfiStatus = gRT->GetVariable(BootXXXX, &gEdkGlobalVariableGuid, NULL, &BootOptionSize, NULL);
+    EfiStatus = gRT->GetVariable(BootXXXX, &gEfiGlobalVariableGuid, NULL, &BootOptionSize, NULL);
     if (EfiStatus == EFI_BUFFER_TOO_SMALL) {
         // This is good. It means the variable exists
         EfiStatus = EFI_SUCCESS;
@@ -162,7 +162,7 @@ Return Value:
     }
 
     EfiStatus = gRT->GetVariable(BootXXXX,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOptionSize,
                                  BootOptionPtr);
@@ -179,10 +179,11 @@ Return Value:
         CommandLineLength = (StrLen(CommandLine) + 1) * sizeof(CHAR16);
     }
 
-    EfiDescription = BootOptionPtr->Description;
+    UINTN DescriptionFieldOffset = sizeof(UINT32) + sizeof(UINT16);
+    EfiDescription = (CHAR16*)(((UINT8*)BootOptionPtr) + DescriptionFieldOffset);
     EfiDescriptionSize = (UINT16)(StrLen(EfiDescription) + 1) * sizeof(CHAR16);
-    EfiCommandLineOffset = FIELD_OFFSET(EFI_LOAD_OPTION, Description) + EfiDescriptionSize +
-                           BootOptionPtr->FilePathLength;
+    EfiCommandLineOffset = DescriptionFieldOffset + EfiDescriptionSize +
+                           BootOptionPtr->FilePathListLength;
 
     NewBootOptionSize = EfiCommandLineOffset + CommandLineLength;
 
@@ -212,7 +213,7 @@ Return Value:
     //
 
     EfiStatus = gRT->SetVariable(BootXXXX,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
                                      EFI_VARIABLE_RUNTIME_ACCESS,
                                  NewBootOptionSize,
@@ -233,7 +234,7 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 BootOption)
 
     // Get the BootOrder list.
     EfiStatus = gRT->GetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOrderSize,
                                  NULL);
@@ -257,7 +258,7 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 BootOption)
     }
 
     EfiStatus = gRT->GetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOrderSize,
                                  BootOrder);
@@ -294,7 +295,7 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 BootOption)
 
     // Set updated BootOrder list.
     EfiStatus = gRT->SetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
                                      EFI_VARIABLE_RUNTIME_ACCESS,
                                  BootOrderSize,
@@ -319,7 +320,7 @@ EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 BootOption)
 
     // Get the BootOrder list.
     EfiStatus = gRT->GetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOrderSize,
                                  NULL);
@@ -342,7 +343,7 @@ EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 BootOption)
     }
 
     EfiStatus = gRT->GetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOrderSize,
                                  BootOrder);
@@ -377,7 +378,7 @@ EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 BootOption)
 
     // Set updated BootOrder list.
     EfiStatus = gRT->SetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
                                      EFI_VARIABLE_RUNTIME_ACCESS,
                                  BootOrderSize,
@@ -400,7 +401,7 @@ EFI_STATUS EFIAPI BootOptionsGetCurrent(OUT UINT16* CurrentBootOption)
     UINTN VariableSize = sizeof(UINT16);
 
     EfiStatus = gRT->GetVariable(VAR_BOOT_CURRENT,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &VariableSize,
                                  &RetCurrentBootOption);
@@ -420,7 +421,7 @@ Exit:
 //
 
 static EFI_STATUS EFIAPI
-EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
+EnumerateBootOptionsInternal(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
                              OUT UINT32* BootOptionsBufferLength,
                              OUT UINT32* NumOptions)
 {
@@ -433,8 +434,8 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
     UINT16* BootOrder = NULL;
     EFI_LOAD_OPTION* BootOption = NULL;
     sUEFI_BOOT_OPTION* BufferOffset = NULL;
-    const WCHAR BootXXXXFmt[] = L"BootXXXX";
-    WCHAR BootXXXX[_countof(BootXXXXFmt)] = {0};
+    const CHAR16 BootXXXXFmt[] = L"BootXXXX";
+    CHAR16 BootXXXX[_countof(BootXXXXFmt)] = {0};
     UINT16* EfiCommandLine = NULL;
     UINT16 EfiDescriptionSize = 0;
     UINT16 EfiDevicePathSize = 0;
@@ -452,7 +453,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
     }
 
     EfiStatus = gRT->GetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOrderSize,
                                  NULL);
@@ -475,7 +476,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
     }
 
     EfiStatus = gRT->GetVariable(VAR_BOOT_ORDER,
-                                 &gEdkGlobalVariableGuid,
+                                 &gEfiGlobalVariableGuid,
                                  NULL,
                                  &BootOrderSize,
                                  BootOrder);
@@ -499,7 +500,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         UnicodeSPrint(BootXXXX, sizeof(BootXXXX), L"Boot%04X", Option);
 
         EfiStatus = gRT->GetVariable(BootXXXX,
-                                     &gEdkGlobalVariableGuid,
+                                     &gEfiGlobalVariableGuid,
                                      NULL,
                                      &BootOptionSize,
                                      NULL);
@@ -521,7 +522,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         }
 
         EfiStatus = gRT->GetVariable(BootXXXX,
-                                     &gEdkGlobalVariableGuid,
+                                     &gEfiGlobalVariableGuid,
                                      NULL,
                                      &BootOptionSize,
                                      BootOption);
@@ -534,7 +535,8 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         // Description Offset. Begins immediately after the end of sUEFI_BOOT_OPTION
         //
 
-        CHAR16* EfiDescription = BootOption->Description;
+        UINTN DescriptionFieldOffset = sizeof(UINT32) + sizeof(UINT16);
+        CHAR16* EfiDescription = (CHAR16*)(((UINT8*)BootOption) + DescriptionFieldOffset);
         EfiDescriptionSize = (UINT16)(StrLen(EfiDescription) + 1) * sizeof(CHAR16);
         DescriptionOffset = sizeof(sUEFI_BOOT_OPTION);
 
@@ -543,8 +545,7 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         //
 
         EFI_DEVICE_PATH_PROTOCOL*
-            DevicePath = (EFI_DEVICE_PATH_PROTOCOL*)((UINT8*)(BootOption->Description) +
-                                                     EfiDescriptionSize);
+            DevicePath = (EFI_DEVICE_PATH_PROTOCOL*)((UINT8*)(EfiDescription) + EfiDescriptionSize);
         CHAR16* EfiDevicePathString = DevicePathToTextIf->ConvertDevicePathToText(DevicePath,
                                                                                   FALSE,
                                                                                   FALSE);
@@ -559,8 +560,12 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
         // present
         //
 
-        UINTN EfiCommandLineOffset = FIELD_OFFSET(EFI_LOAD_OPTION, Description) +
-                                     EfiDescriptionSize + BootOption->FilePathLength;
+        DescriptionFieldOffset = sizeof(UINT32) + sizeof(UINT16);
+        EfiDescription = (CHAR16*)(((UINT8*)BootOption) + DescriptionFieldOffset);
+        EfiDescriptionSize = (UINT16)(StrLen(EfiDescription) + 1) * sizeof(CHAR16);
+        UINTN EfiCommandLineOffset = DescriptionFieldOffset + EfiDescriptionSize +
+                                     BootOption->FilePathListLength;
+
         if (EfiCommandLineOffset < BootOptionSize) {
             EfiCommandLine = (UINT16*)((UINT8*)(BootOption) + EfiCommandLineOffset);
 
@@ -613,8 +618,8 @@ EnumerateBootOptionsInternal(_Inout_opt_ sUEFI_BOOT_OPTION* BootOptionsBuffer,
                        EfiCommandLineSize);
         }
 
-        Offset += (UINT32)sizeof(sUEFI_BOOT_OPTION) + EfiDescriptionSize + EfiDevicePathSize +
-                  EfiCommandLineSize;
+        Offset += (UINT32)(sizeof(sUEFI_BOOT_OPTION) + EfiDescriptionSize + EfiDevicePathSize +
+                           EfiCommandLineSize);
 
         FreePool(EfiDevicePathString);
         FreePool(BootOption);

@@ -35,8 +35,8 @@ extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 extern BM_TEST_SUITE ReadinessTestSuite;
 extern BM_TEST_SUITE BlockIoTestSuite;
 extern BM_TEST_SUITE BlockIo2TestSuite;
-// extern BM_TEST_SUITE BootTestSuite;
-// extern BM_TEST_SUITE BootManagerTestSuite;
+extern BM_TEST_SUITE BootTestSuite;
+extern BM_TEST_SUITE BootManagerTestSuite;
 extern BM_TEST_SUITE DevicePathTestSuite;
 extern BM_TEST_SUITE TextInputTestSuite;
 extern BM_TEST_SUITE ConsoleOutputTestSuite;
@@ -79,8 +79,8 @@ PBM_TEST_SUITE TestSuites[] = {
     // &MemoryTestSuite,
     &BlockIoTestSuite,
     &BlockIo2TestSuite,
-    // &BootTestSuite,
-    // &BootManagerTestSuite,
+    &BootTestSuite,
+    &BootManagerTestSuite,
     &DevicePathTestSuite,
     &TextInputTestSuite,
     &ConsoleOutputTestSuite,

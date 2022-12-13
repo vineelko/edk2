@@ -24,7 +24,7 @@ typedef struct {
 #define LOAD_OPTION_CATEGORY_BOOT 0x00000000
 #define LOAD_OPTION_CATEGORY_APP  0x00000100
 
-EFI_STATUS EFIAPI BootOptionsEnumerateAll(_Inout_opt_ sUEFI_BOOT_OPTION* pBootOptionsBuffer,
+EFI_STATUS EFIAPI BootOptionsEnumerateAll(IN OUT sUEFI_BOOT_OPTION* pBootOptionsBuffer,
                                           IN OUT UINT32* pdwBootOptionsBufferLength,
                                           OUT UINT32* pdwNumOptions);
 EFI_STATUS EFIAPI BootOptionsSetOneTimeBootSequence(IN UINT16 wBootOption);
@@ -32,5 +32,5 @@ EFI_STATUS EFIAPI BootOptionsSetFirst(IN UINT16 wBootOption);
 EFI_STATUS EFIAPI BootOptionsSetLast(IN UINT16 wBootOption);
 EFI_STATUS EFIAPI BootOptionsGetCurrent(OUT UINT16* pwCurrentBootOption);
 EFI_STATUS EFIAPI BootOptionsSetBootEntryOptionalData(IN UINT16 wBootOption,
-                                                      _In_opt_z_ CHAR16* pCommandLine);
+                                                      IN CHAR16* pCommandLine);
 #endif // _BOOT_OPTIONS_H_

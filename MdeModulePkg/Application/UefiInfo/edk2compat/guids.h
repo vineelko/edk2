@@ -311,7 +311,7 @@ extern EFI_GUID gEfiShellProtocolGuid;
 extern EFI_GUID gEfiSystemPartitionGuid;
 
 extern EFI_GUID gEdkiiVariableLockProtocolGuid;
-extern EFI_GUID gEdkGlobalVariableGuid;
+extern EFI_GUID gEfiGlobalVariableGuid;
 // clang-format on
 
 #endif // _EDK2COMPAT_GUIDS_H_

@@ -335,7 +335,7 @@ will immediately take you to the definition/declaration of the function
     HKEY SrcSubKey;
     DWORD Status;
     DWORD SubKeyLength;
-    WCHAR SubKeyName[MAX_PATH];
+    CHAR16 SubKeyName[MAX_PATH];
     DWORD SubKeysCount;
     LPBYTE ValueData;
     DWORD ValueDataLength;
@@ -500,8 +500,8 @@ will immediately take you to the definition/declaration of the function
 ```c
     while (*p != 0) {
         Ctx->AliasCount++;
-        Length = (USHORT)((wcslen(p) + 1) * sizeof(WCHAR));
-        Ctx->RequiredSize += sizeof(WCHAR) + Length + sizeof(ALIAS);
+        Length = (USHORT)((wcslen(p) + 1) * sizeof(CHAR16));
+        Ctx->RequiredSize += sizeof(CHAR16) + Length + sizeof(ALIAS);
         p = (PWCH)((PCHAR)p + Length);
     }
 ```

@@ -40,6 +40,7 @@ Environment:
 #include <Guid/FileSystemInfo.h>
 #include <Guid/FileInfo.h>
 #include <Guid/FileSystemVolumeLabelInfo.h>
+#include <Guid/GlobalVariable.h>
 #include <Protocol/BlockIo.h>
 #include <Protocol/DebugPort.h>
 #include <Protocol/DevicePathUtilities.h>

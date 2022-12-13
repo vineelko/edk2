@@ -82,13 +82,13 @@ static EFI_STATUS EnumerateBootOrder(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
                      "(LOAD_OPTION_CATEGORY_APP)" :
                      "(LOAD_OPTION_CATEGORY_BOOT)");
         DBG_INFO_U(L"Description                         : %s",
-                   (WCHAR*)(BootOptions + Offset + GETB16(Option->wDescriptionOffset)));
+                   (CHAR16*)(BootOptions + Offset + GETB16(Option->wDescriptionOffset)));
         DBG_INFO_U(L"Device Path                         : %s",
-                   (WCHAR*)(BootOptions + Offset + GETB16(Option->wDevicePathOffset)));
+                   (CHAR16*)(BootOptions + Offset + GETB16(Option->wDevicePathOffset)));
 
         if (GETB16(Option->wCommandLineOffset) != 0) {
             DBG_INFO_U(L"Command Line                        : %s",
-                       (WCHAR*)(BootOptions + Offset + GETB16(Option->wCommandLineOffset)));
+                       (CHAR16*)(BootOptions + Offset + GETB16(Option->wCommandLineOffset)));
         }
 
         Offset += GETB16(Option->wSize);
