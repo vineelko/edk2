@@ -311,7 +311,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //     //
 
 //     Status = LoadedImageFile->GetInfo(LoadedImageFile,
-//                                       &gEfiFileInfoIdGuid,
+//                                       &(EFI_GUID)EFI_FILE_INFO_ID,
 //                                       &FileInfoSize,
 //                                       FileInfo);
 //     if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
@@ -327,7 +327,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //     }
 
 //     Status = LoadedImageFile->GetInfo(LoadedImageFile,
-//                                       &gEfiFileInfoIdGuid,
+//                                       &(EFI_GUID)EFI_FILE_INFO_ID,
 //                                       &FileInfoSize,
 //                                       FileInfo);
 //     if (EFI_ERROR(Status)) {

@@ -38,6 +38,7 @@ Environment:
 #include <Library/SortLib.h>
 #include <Library/PrintLib.h>
 #include <Guid/FileSystemInfo.h>
+#include <Guid/FileInfo.h>
 #include <Guid/FileSystemVolumeLabelInfo.h>
 #include <Protocol/BlockIo.h>
 #include <Protocol/DebugPort.h>

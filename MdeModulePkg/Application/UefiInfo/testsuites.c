@@ -45,10 +45,10 @@ extern BM_TEST_SUITE FontTestSuite;
 // extern BM_TEST_SUITE HashTestSuite;
 extern BM_TEST_SUITE LoadImageTestSuite;
 // extern BM_TEST_SUITE MemoryTestSuite;
-// extern BM_TEST_SUITE RamdiskTestSuite;
+extern BM_TEST_SUITE RamdiskTestSuite;
 extern BM_TEST_SUITE RandomNumberGeneratorTestSuite;
 extern BM_TEST_SUITE CBMRTestSuite;
-// extern BM_TEST_SUITE FileSystemTestSuite;
+extern BM_TEST_SUITE FileSystemTestSuite;
 extern BM_TEST_SUITE SmbiosTestSuite;
 extern BM_TEST_SUITE TimestampTestSuite;
 extern BM_TEST_SUITE Dhcp4TestSuite;
@@ -88,10 +88,10 @@ PBM_TEST_SUITE TestSuites[] = {
     &FontTestSuite,
     // &HashTestSuite,
     &LoadImageTestSuite,
-    // &RamdiskTestSuite,
+    &RamdiskTestSuite,
     &RandomNumberGeneratorTestSuite,
     &CBMRTestSuite,
-    // &FileSystemTestSuite,
+    &FileSystemTestSuite,
     &Dhcp4TestSuite,
     &Dhcp6TestSuite,
     &Ip4ConfigTestSuite,

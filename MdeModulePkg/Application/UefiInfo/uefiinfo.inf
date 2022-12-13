@@ -53,10 +53,10 @@
   tsip6config.c
   tsloadedimage.c
 #  tsmemory.c
-#  tsramdisk.c
+  tsramdisk.c
   tsreadiness.c
   tsrng.c
-#  tsfilesystem.c
+  tsfilesystem.c
   tssmbios.c
   tstcp4.c
   tstcp4.duthost.directperf.c

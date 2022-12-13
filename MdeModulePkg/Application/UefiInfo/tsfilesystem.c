@@ -105,7 +105,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     //
 
     Status = LoadedImageFile->GetInfo(LoadedImageFile,
-                                      &gEfiFileInfoIdGuid,
+                                      &(EFI_GUID)EFI_FILE_INFO_ID,
                                       &FileInfoSize,
                                       FileInfo);
     if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
@@ -124,7 +124,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     }
 
     Status = LoadedImageFile->GetInfo(LoadedImageFile,
-                                      &gEfiFileInfoIdGuid,
+                                      &(EFI_GUID)EFI_FILE_INFO_ID,
                                       &FileInfoSize,
                                       FileInfo);
     if (EFI_ERROR(Status)) {
