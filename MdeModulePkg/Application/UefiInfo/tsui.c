@@ -104,7 +104,7 @@ typedef struct _CBMR_UI_LABEL {
     UINTN Row;
     UINTN Column;
     UINTN NumColumns;
-    CHAR* String;
+    CHAR8* String;
 } CBMR_UI_LABEL, *PCBMR_UI_LABEL;
 
 typedef enum _PROGRESS_BAR_NAME {
@@ -231,7 +231,7 @@ static VOID SetBackgroundColor(IN UINT32 Color)
 static VOID PutChar(IN UINTN Row, IN UINTN Column, IN UINT16 CharCode)
 {
     EFI_GRAPHICS_OUTPUT_PROTOCOL* GraphicsProtocol = gsGraphicsProtocol;
-    UINT8* FB = (UINT8*)(uintptr_t)GraphicsProtocol->Mode->FrameBufferBase;
+    UINT8* FB = (UINT8*)GraphicsProtocol->Mode->FrameBufferBase;
     UINT32 PixelsPerScanLine = gsGraphicsMode.PixelsPerScanLine;
 
     // The key here is casting FB to UINT32* which makes advancing pixel by
@@ -248,7 +248,7 @@ static VOID PutChar(IN UINTN Row, IN UINTN Column, IN UINT16 CharCode)
     }
 }
 
-static VOID PutString(IN UINTN Row, IN UINTN Column, IN CHAR* String)
+static VOID PutString(IN UINTN Row, IN UINTN Column, IN CHAR8* String)
 {
     while (*String) {
         PutChar(Row, Column++, *String++);

@@ -23,11 +23,9 @@ Environment:
 #include "common.h"
 
 #include "protocols.h"
-#undef EFI_USBFN_IO_PROTOCOL_GUID
-#include "usbfnio.h"
 #include "testsuites.h"
-
 #include "utils.h"
+#include <Protocol/UsbFunctionIo.h>
 
 static ENUM_TO_STRING UsbBusSpeed[] = {
     {UsbBusSpeedUnknown, STRINGIFY(UsbBusSpeedUnknown)},
@@ -39,9 +37,9 @@ static ENUM_TO_STRING UsbBusSpeed[] = {
 
 static ENUM_TO_STRING UsbEndPointType[] = {
     {UsbEndpointControl, STRINGIFY(UsbEndpointControl)},
-    {UsbEndpointIsochronous, STRINGIFY(UsbEndpointIsochronous)},
+    // {UsbEndpointIsochronous, STRINGIFY(UsbEndpointIsochronous)},
     {UsbEndpointBulk, STRINGIFY(UsbEndpointBulk)},
-    {UsbEndpointInterrupt, STRINGIFY(UsbEndpointInterrupt)},
+    // {UsbEndpointInterrupt, STRINGIFY(UsbEndpointInterrupt)},
 };
 
 static ENUM_TO_STRING UsbEndPointDirection[] = {
@@ -64,13 +62,15 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     UINTN MaxSingleTransferSize = 0;
     UINTN MaxTransactionSize = 0;
     UINT16 MaxPacketSize = 0;
-    WCHAR Buffer[1024] = {0};
+    CHAR16 Buffer[1024];
     UINT16 Vid = 0;
     UINT16 Pid = 0;
 
     UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
+
+    ZeroMem(Buffer, _countof(Buffer));
 
     Status = ProtocolArray[EFI_USBFN_IO_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
@@ -106,7 +106,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     //
 
     DBG_INFO("Max packet size:");
-    for (UINTN EndPointType = UsbEndpointControl; EndPointType <= UsbEndpointInterrupt;
+    for (UINTN EndPointType = UsbEndpointControl; EndPointType <= UsbEndpointBulk;
          EndPointType++) {
         DBG_INFO("    End point type %a:", UsbEndPointType[EndPointType].String);
         for (UINTN Speed = UsbBusSpeedLow; Speed <= UsbBusSpeedSuper; Speed++) {

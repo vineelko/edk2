@@ -60,9 +60,9 @@ extern BM_TEST_SUITE Tcp6TestSuite;
 extern BM_TEST_SUITE Udp4TestSuite;
 extern BM_TEST_SUITE Udp6TestSuite;
 extern BM_TEST_SUITE UEFIVariableTestSuite;
-// extern BM_TEST_SUITE UsbFnIoTestSuite;
+extern BM_TEST_SUITE UsbFnIoTestSuite;
 // extern BM_TEST_SUITE UsbInitTestSuite;
-// extern BM_TEST_SUITE UITestSuite;
+extern BM_TEST_SUITE UITestSuite;
 // extern BM_TEST_SUITE WifiTestSuite;
 extern BM_TEST_SUITE HttpTestSuite;
 // extern BM_TEST_SUITE WindbgTestSuite;
@@ -102,9 +102,9 @@ PBM_TEST_SUITE TestSuites[] = {
     &Udp6TestSuite,
     &TimestampTestSuite,
     &UEFIVariableTestSuite,
-    // &UsbFnIoTestSuite,
+    &UsbFnIoTestSuite,
     // &UsbInitTestSuite,
-    // &UITestSuite,
+    &UITestSuite,
     // &WifiTestSuite,
     &HttpTestSuite,
     // &WindbgTestSuite,

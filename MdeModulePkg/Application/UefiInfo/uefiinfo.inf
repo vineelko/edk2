@@ -68,8 +68,8 @@
   tsudp4.duthost.directperf.c
   tsudp4.duthost.directsendreceive.c
   tsudp6.c
-#  tsui.c
-#  tsusbfnio.c
+  tsui.c
+  tsusbfnio.c
 #  tsusbinit.c
   tsvariable.c
 #  tswifi.c
