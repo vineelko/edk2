@@ -169,7 +169,6 @@ EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
                                    OUT PHTTP_RESPONSE* Response);
 EFI_STATUS EFIAPI HttpGetNext(IN PHTTP_CONTEXT Context, IN PHTTP_RESPONSE Response);
 EFI_STATUS EFIAPI HttpFree(IN PHTTP_CONTEXT Context);
-VOID EFIAPI HttpFreeHeaderFields(IN EFI_HTTP_HEADER* HeaderFields, IN UINTN FieldCount);
 VOID EFIAPI HttpFreeResponse(IN PHTTP_CONTEXT Context, IN PHTTP_RESPONSE Response);
 UINTN EFIAPI HttpGetContentLength(IN PHTTP_RESPONSE Response);
 UINTN EFIAPI HttpGetChunkSize(IN PHTTP_RESPONSE Response);
@@ -386,8 +385,8 @@ Exit:
 EFI_STATUS EFIAPI HttpConfigure(IN OUT PHTTP_CONTEXT Context, IN BOOLEAN ResetFirst)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    EFI_HTTP_CONFIG_DATA HttpConfig = {0};
-    EFI_HTTPv4_ACCESS_POINT IPv4Node = {0};
+    EFI_HTTP_CONFIG_DATA HttpConfig;
+    EFI_HTTPv4_ACCESS_POINT IPv4Node;
 
 #if 0
     // TODO: Add check if DHCP already started, to avoid reentering this path
@@ -452,20 +451,6 @@ EFI_STATUS EFIAPI HttpFree(IN PHTTP_CONTEXT Context)
 
 Exit:
     return Status;
-}
-
-VOID EFIAPI HttpFreeHeaderFields(IN EFI_HTTP_HEADER* HeaderFields, IN UINTN FieldCount)
-{
-    UINTN Index;
-
-    if (HeaderFields != NULL) {
-        for (Index = 0; Index < FieldCount; Index++) {
-            FreePool(HeaderFields[Index].FieldName);
-            FreePool(HeaderFields[Index].FieldValue);
-        }
-
-        FreePool(HeaderFields);
-    }
 }
 
 static EFI_STATUS EFIAPI HttpSendRequest(IN PHTTP_CONTEXT Context, IN OUT PHTTP_REQUEST Request)
@@ -939,7 +924,7 @@ static EFI_STATUS BuildRequestHeaders(IN CHAR8* Url,
     }
 
     UINTN Result = 0;
-    CHAR8 AsciiHostHeaderValue[1024] = {0};
+    CHAR8 AsciiHostHeaderValue[1024];
 
     Result = AsciiSPrint(AsciiHostHeaderValue,
                          sizeof(AsciiHostHeaderValue),
@@ -1793,7 +1778,8 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN 
         }
 
         HexDump(Chunk, MIN(ChunkSize, 0x100));
-        break;
+
+        Status = EFI_END_OF_FILE;
 
         // Status = HttpGetNext(HttpContext, Response);
         // if (EFI_ERROR(Status) && Status != EFI_END_OF_FILE) {
