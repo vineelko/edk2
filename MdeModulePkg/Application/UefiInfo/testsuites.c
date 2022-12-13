@@ -46,10 +46,10 @@ extern BM_TEST_SUITE FontTestSuite;
 extern BM_TEST_SUITE LoadImageTestSuite;
 // extern BM_TEST_SUITE MemoryTestSuite;
 // extern BM_TEST_SUITE RamdiskTestSuite;
-// extern BM_TEST_SUITE RandomNumberGeneratorTestSuite;
+extern BM_TEST_SUITE RandomNumberGeneratorTestSuite;
 extern BM_TEST_SUITE CBMRTestSuite;
 // extern BM_TEST_SUITE FileSystemTestSuite;
-// extern BM_TEST_SUITE SmbiosTestSuite;
+extern BM_TEST_SUITE SmbiosTestSuite;
 extern BM_TEST_SUITE TimestampTestSuite;
 extern BM_TEST_SUITE Dhcp4TestSuite;
 extern BM_TEST_SUITE Dhcp6TestSuite;
@@ -75,7 +75,7 @@ PBM_TEST_SUITE TestSuites[] = {
     //
 
     &ReadinessTestSuite,
-    // &SmbiosTestSuite,
+    &SmbiosTestSuite,
     // &MemoryTestSuite,
     &BlockIoTestSuite,
     &BlockIo2TestSuite,
@@ -89,7 +89,7 @@ PBM_TEST_SUITE TestSuites[] = {
     // &HashTestSuite,
     &LoadImageTestSuite,
     // &RamdiskTestSuite,
-    // &RandomNumberGeneratorTestSuite,
+    &RandomNumberGeneratorTestSuite,
     &CBMRTestSuite,
     // &FileSystemTestSuite,
     &Dhcp4TestSuite,

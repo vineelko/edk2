@@ -34,9 +34,11 @@ static EFI_STATUS RngProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     UINTN AlgorithmListSize = 0;
     EFI_RNG_ALGORITHM* AlgorithmList = (EFI_RNG_ALGORITHM*)~0; // HACK: GetInfo do not accept NULL
                                                                // to query the size!
-    UINT8 RngData[128] = {0};
+    UINT8 RngData[128];
 
     UNREFERENCED_PARAMETER(Session);
+
+    ZeroMem(RngData, _countof(RngData));
 
     Status = ProtocolArray[EFI_RNG_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

@@ -59,6 +59,7 @@ Environment:
 #include <Protocol/Dhcp4.h>
 #include <IndustryStandard/Dhcp.h>
 #include <Protocol/Eap.h>
+#include <Protocol/Rng.h>
 
 #define PWSTR CHAR16*
 #define UNREFERENCED_PARAMETER(x)

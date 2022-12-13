@@ -47,7 +47,7 @@
   tsfont.c
   tsgraphicsoutput.c
   tsgraphicsoutput.rgb.c
-#  tshash.c
+#  tshash.c   # this requires mincrypt
   tshttp.c
   tsip4config2.c
   tsip6config.c
@@ -55,9 +55,9 @@
 #  tsmemory.c
 #  tsramdisk.c
   tsreadiness.c
-#  tsrng.c
+  tsrng.c
 #  tsfilesystem.c
-#  tssmbios.c
+  tssmbios.c
   tstcp4.c
   tstcp4.duthost.directperf.c
   tstcp4.duthost.directsendreceive.c
@@ -94,6 +94,7 @@
 #  NetLib
   HttpLib
 #  DebugLib
+  RngLib
 
 [Guids]
   gEfiBootManagerPolicyConsoleGuid
