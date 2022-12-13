@@ -72,7 +72,7 @@
   tsusbfnio.c
 #  tsusbinit.c
   tsvariable.c
-#  tswifi.c
+  tswifi.c
   uefiinfo.c
   utils.c
 
