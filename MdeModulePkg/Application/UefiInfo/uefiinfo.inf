@@ -42,15 +42,15 @@
   tscbmr.c
   tsconsoleoutput.c
   tsdevicepath.c
-#  tsdhcp4.c
-#  tsdhcp6.c
+  tsdhcp4.c
+  tsdhcp6.c
   tsfont.c
   tsgraphicsoutput.c
   tsgraphicsoutput.rgb.c
 #  tshash.c
-#  tshttp.c
-#  tsip4config2.c
-#  tsip6config.c
+  tshttp.c
+  tsip4config2.c
+  tsip6config.c
   tsloadedimage.c
 #  tsmemory.c
 #  tsramdisk.c

@@ -51,10 +51,10 @@ extern BM_TEST_SUITE CBMRTestSuite;
 // extern BM_TEST_SUITE FileSystemTestSuite;
 // extern BM_TEST_SUITE SmbiosTestSuite;
 extern BM_TEST_SUITE TimestampTestSuite;
-// extern BM_TEST_SUITE Dhcp4TestSuite;
-// extern BM_TEST_SUITE Dhcp6TestSuite;
-// extern BM_TEST_SUITE Ip4ConfigTestSuite;
-// extern BM_TEST_SUITE Ip6ConfigTestSuite;
+extern BM_TEST_SUITE Dhcp4TestSuite;
+extern BM_TEST_SUITE Dhcp6TestSuite;
+extern BM_TEST_SUITE Ip4ConfigTestSuite;
+extern BM_TEST_SUITE Ip6ConfigTestSuite;
 extern BM_TEST_SUITE Tcp4TestSuite;
 extern BM_TEST_SUITE Tcp6TestSuite;
 extern BM_TEST_SUITE Udp4TestSuite;
@@ -64,7 +64,7 @@ extern BM_TEST_SUITE UEFIVariableTestSuite;
 // extern BM_TEST_SUITE UsbInitTestSuite;
 // extern BM_TEST_SUITE UITestSuite;
 // extern BM_TEST_SUITE WifiTestSuite;
-// extern BM_TEST_SUITE HttpTestSuite;
+extern BM_TEST_SUITE HttpTestSuite;
 // extern BM_TEST_SUITE WindbgTestSuite;
 
 PBM_TEST_SUITE TestSuites[] = {
@@ -92,10 +92,10 @@ PBM_TEST_SUITE TestSuites[] = {
     // &RandomNumberGeneratorTestSuite,
     &CBMRTestSuite,
     // &FileSystemTestSuite,
-    // &Dhcp4TestSuite,
-    // //    &Dhcp6TestSuite,
-    // //    &Ip4ConfigTestSuite,
-    // //    &Ip6ConfigTestSuite,
+    &Dhcp4TestSuite,
+    &Dhcp6TestSuite,
+    &Ip4ConfigTestSuite,
+    &Ip6ConfigTestSuite,
     &Tcp4TestSuite,
     &Tcp6TestSuite,
     &Udp4TestSuite,
@@ -106,7 +106,7 @@ PBM_TEST_SUITE TestSuites[] = {
     // &UsbInitTestSuite,
     // &UITestSuite,
     // &WifiTestSuite,
-    // &HttpTestSuite,
+    &HttpTestSuite,
     // &WindbgTestSuite,
 };
 
