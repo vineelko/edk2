@@ -27,7 +27,7 @@
   debug.c
 #  edk2compat.c
 #  guids.c
-#  memory_map.c
+  memory_map.c
   network_common.c
   protocols.c
   safe_arithmetic.c
@@ -52,7 +52,7 @@
   tsip4config2.c
   tsip6config.c
   tsloadedimage.c
-#  tsmemory.c
+  tsmemory.c
   tsramdisk.c
   tsreadiness.c
   tsrng.c

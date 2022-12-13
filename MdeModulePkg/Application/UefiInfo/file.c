@@ -48,7 +48,7 @@ EFI_GUID gEfiPartitionRecordGuid = {0xfe2555be,
 
 static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
                                            OUT EFI_FILE_PROTOCOL** EfiFileProtocol,
-                                           _Out_opt_ EFI_HANDLE* PartitionHandle);
+                                           OUT EFI_HANDLE* PartitionHandle);
 static EFI_STATUS EFIAPI FileIsDirectory(IN EFI_FILE_HANDLE DirFs);
 static EFI_STATUS FileReadByte(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
                                OUT CHAR8* Char,
@@ -1573,7 +1573,7 @@ Exit:
 
 static EFI_STATUS EFIAPI FilePartitionOpen(IN CHAR16* PartitionName,
                                            OUT EFI_FILE_PROTOCOL** EfiFileProtocol,
-                                           _Out_opt_ EFI_HANDLE* PartitionHandle)
+                                           OUT EFI_HANDLE* PartitionHandle)
 {
     EFI_HANDLE* Handles = NULL;
     UINTN HandleCount = 0;

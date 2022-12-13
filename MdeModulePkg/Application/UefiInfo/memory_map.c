@@ -11,6 +11,13 @@
 //
 // Constants/Macros
 //
+#define ALIGN_RANGE_DOWN(_range, _alignment) \
+    ((_range) & ~((UINT64)(_alignment) - 1))
+
+#define ALIGN_RANGE_UP(_range, _alignment) \
+    ALIGN_RANGE_DOWN((_range) + (_alignment) - 1, _alignment)
+
+#define Add2Ptr(_Ptr, _Value) ((PVOID)((UINT8*)(_Ptr) + (_Value)))
 
 //
 // Structs
@@ -28,15 +35,7 @@ static INTN EFIAPI ComparePageNumDesc(IN CONST VOID* Left, IN CONST VOID* Right)
 //
 // Interfaces
 //
-#ifdef _WIN32
-#pragma prefast(push)
-#pragma prefast(disable : 6101, \
-                "False positive - *ppMemoryMapContext is always initialized upon success")
-#endif
 EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
-#ifdef _WIN32
-#pragma prefast(pop)
-#endif
 {
     EFI_STATUS EfiStatus = EFI_SUCCESS;
     MEMORYMAP_CONTEXT* RetMemoryMapContext = NULL;
@@ -78,7 +77,7 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
     // how much....)
     MemoryMapSize += 512;
 
-    PagesNeeded = ALIGN_RANGE_UP(MemoryMapSize, PAGE_SIZE) >> PAGE_SHIFT;
+    PagesNeeded = ALIGN_RANGE_UP(MemoryMapSize, EFI_PAGE_SIZE) >> EFI_PAGE_SHIFT;
 
     EfiStatus = gBS->AllocatePages(AllocateAnyPages,
                                    EfiLoaderData,

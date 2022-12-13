@@ -79,8 +79,8 @@ static HASH_ALGORITHM HashAlgorithmsMap[] = {
 
 #define HASH_INPUT_SIZE 512
 
-static EFI_STATUS HashEquals(_In_reads_(Size) UINT8* Input,
-                             _In_reads_(Size) UINT8* Expected,
+static EFI_STATUS HashEquals(IN UINT8* Input,
+                             IN UINT8* Expected,
                              IN UINTN Size)
 {
     for (UINTN i = 0; i < Size; i++) {

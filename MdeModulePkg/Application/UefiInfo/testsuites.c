@@ -44,7 +44,7 @@ extern BM_TEST_SUITE GraphicsOutputTestSuite;
 extern BM_TEST_SUITE FontTestSuite;
 // extern BM_TEST_SUITE HashTestSuite;
 extern BM_TEST_SUITE LoadImageTestSuite;
-// extern BM_TEST_SUITE MemoryTestSuite;
+extern BM_TEST_SUITE MemoryTestSuite;
 extern BM_TEST_SUITE RamdiskTestSuite;
 extern BM_TEST_SUITE RandomNumberGeneratorTestSuite;
 extern BM_TEST_SUITE CBMRTestSuite;
@@ -76,7 +76,7 @@ PBM_TEST_SUITE TestSuites[] = {
 
     &ReadinessTestSuite,
     &SmbiosTestSuite,
-    // &MemoryTestSuite,
+    &MemoryTestSuite,
     &BlockIoTestSuite,
     &BlockIo2TestSuite,
     &BootTestSuite,
