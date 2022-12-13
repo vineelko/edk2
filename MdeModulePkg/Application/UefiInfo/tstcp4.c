@@ -25,6 +25,8 @@ Environment:
 #include "testsuites.h"
 
 #include "network_config.h"
+#include <Protocol/Tcp4.h>
+#include <Protocol/Dhcp4.h>
 
 #define CLIENT_TX_DATA_SIZE 1024
 #define CLIENT_RX_DATA_SIZE 1024
@@ -118,7 +120,7 @@ static EFI_STATUS ProtocolGetTcp4ClientServer(IN OUT PBM_PROTOCOL_INFO Client,
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* DeviceHandles = NULL;
-    HANDLE ChildHandle = NULL;
+    EFI_HANDLE ChildHandle = NULL;
     UINTN DeviceHandleCount = 0;
 
     Status = gBS->LocateHandleBuffer(ByProtocol,
@@ -875,7 +877,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
                                                 IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    BM_TCP4_LOOPBACK_CONTEXT LoopbackContext = {0};
+    BM_TCP4_LOOPBACK_CONTEXT LoopbackContext;
     PBM_TCP4_CLIENT Client = &LoopbackContext.Client;
     PBM_TCP4_SERVER Server = &LoopbackContext.Server;
     UINTN Index = 0;

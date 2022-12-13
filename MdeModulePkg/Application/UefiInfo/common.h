@@ -55,6 +55,9 @@ Environment:
 #include <Protocol/Smbios.h>
 #include <Protocol/ServiceBinding.h>
 #include <Protocol/BootManagerPolicy.h>
+#include <Protocol/Timestamp.h>
+#include <Protocol/Dhcp4.h>
+#include <IndustryStandard/Dhcp.h>
 #include <Protocol/Eap.h>
 
 #define PWSTR CHAR16*

@@ -22,7 +22,6 @@
 
 static EFI_BOOT_MANAGER_POLICY_PROTOCOL* gsBootMgrPolicy = NULL;
 EFI_GUID gEfiMsNetworkDelayProtocolGuid                     = {0xff7d36aa, 0x96a5, 0x46c4, 0xb1, 0x66, 0xfe, 0x18, 0xd2, 0x93, 0x26, 0x06}; // EFI_MS_NETWORK_DELAY_PROTOCOL_GUID
-EFI_GUID gEfiWiFiProtocolGuid              = {0x0da55bc9, 0x45f8, 0x4bb4, 0x87, 0x19, 0x52, 0x24, 0xf1, 0x8a, 0x4d, 0x45}; // EFI_WIRELESS_MAC_CONNECTION_PROTOCOL_GUID
 
 //
 // Prototypes

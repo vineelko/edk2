@@ -42,9 +42,7 @@ BOOLEAN
 CSVListContains(IN const CHAR8* CSVList, IN const CHAR8* SearchString);
 
 EFI_STATUS
-GetHostArgument(IN const CHAR8* HostArguments,
-                IN const CHAR8* Key,
-                OUT CHAR8** Value);
+GetHostArgument(IN const CHAR8* HostArguments, IN const CHAR8* Key, OUT CHAR8** Value);
 
 //
 // VM Detection Utils

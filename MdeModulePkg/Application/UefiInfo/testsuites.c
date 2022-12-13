@@ -50,13 +50,13 @@ extern BM_TEST_SUITE LoadImageTestSuite;
 extern BM_TEST_SUITE CBMRTestSuite;
 // extern BM_TEST_SUITE FileSystemTestSuite;
 // extern BM_TEST_SUITE SmbiosTestSuite;
-// extern BM_TEST_SUITE TimestampTestSuite;
+extern BM_TEST_SUITE TimestampTestSuite;
 // extern BM_TEST_SUITE Dhcp4TestSuite;
 // extern BM_TEST_SUITE Dhcp6TestSuite;
 // extern BM_TEST_SUITE Ip4ConfigTestSuite;
 // extern BM_TEST_SUITE Ip6ConfigTestSuite;
-// extern BM_TEST_SUITE Tcp4TestSuite;
-// extern BM_TEST_SUITE Tcp6TestSuite;
+extern BM_TEST_SUITE Tcp4TestSuite;
+extern BM_TEST_SUITE Tcp6TestSuite;
 // extern BM_TEST_SUITE Udp4TestSuite;
 // extern BM_TEST_SUITE Udp6TestSuite;
 extern BM_TEST_SUITE UEFIVariableTestSuite;
@@ -96,11 +96,11 @@ PBM_TEST_SUITE TestSuites[] = {
     // //    &Dhcp6TestSuite,
     // //    &Ip4ConfigTestSuite,
     // //    &Ip6ConfigTestSuite,
-    // &Tcp4TestSuite,
-    // //    &Tcp6TestSuite,
+    &Tcp4TestSuite,
+       &Tcp6TestSuite,
     // &Udp4TestSuite,
     // //    &Udp6TestSuite,
-    // &TimestampTestSuite,
+    &TimestampTestSuite,
     &UEFIVariableTestSuite,
     // &UsbFnIoTestSuite,
     // &UsbInitTestSuite,

@@ -58,12 +58,12 @@
 #  tsrng.c
 #  tsfilesystem.c
 #  tssmbios.c
-#  tstcp4.c
-#  tstcp4.duthost.directperf.c
-#  tstcp4.duthost.directsendreceive.c
-#  tstcp6.c
+  tstcp4.c
+  tstcp4.duthost.directperf.c
+  tstcp4.duthost.directsendreceive.c
+  tstcp6.c
   tstextinput.c
-#  tstimestamp.c
+  tstimestamp.c
 #  tsudp4.c
 #  tsudp4.duthost.directperf.c
 #  tsudp4.duthost.directsendreceive.c
@@ -332,10 +332,9 @@
 [Pcd]
 
 [BuildOptions]
-#  MSFT:*_*_*_CC_FLAGS   = -DUEFI_BUILD_SYSTEM
+# Disable warnings as shown below
+MSFT:*_*_*_CC_FLAGS   = /wd4201
 #  GCC:*_*_*_CC_FLAGS    = -DUEFI_BUILD_SYSTEM
-##  MSFT:*_*_*_CC_FLAGS   = -DUEFI_BUILD_SYSTEM -DDEBUGMODE
-##  GCC:*_*_*_CC_FLAGS    = -DUEFI_BUILD_SYSTEM -DDEBUGMODE
 
 # Override MSFT build option to remove /GL
 #  MSFT:*_*_*_CC_FLAGS          = /GL- /WX-

@@ -26,6 +26,8 @@ Environment:
 
 #include "network_config.h"
 #include "utils.h"
+#include <Protocol/Tcp4.h>
+#include <Protocol/Dhcp4.h>
 
 #define CLIENT_TX_DATA_SIZE 1024
 #define CLIENT_RX_DATA_SIZE 1024
@@ -165,8 +167,7 @@ Exit:
 // Client/Server transmit/receive methods
 //
 
-static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -177,8 +178,7 @@ static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -251,8 +251,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
     EFI_TCP4_RECEIVE_DATA* ClientRxData = NULL;
     PBM_TCP4_CLIENT Client = &Context->Client;
     CHAR8* RoundsStr = NULL;
-    UINTN Ret = 0;
-    UINT32 Rounds = 10;
+    UINTN Rounds = 10;
 
     ClientTxData = &Client->TransmitData;
     ClientRxData = &Client->ReceiveData;
@@ -359,15 +358,10 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PBM_TCP4_CONTEXT Context)
         goto Exit;
     }
 
-    Ret = sscanf_s((const char*)RoundsStr, "%d", &Rounds);
-    if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %a", RoundsStr);
-        Status = EFI_INVALID_PARAMETER;
-        goto Exit;
-    }
+    Rounds = AsciiStrDecimalToUintn(RoundsStr);
 
     DBG_INFO_RAW("Send/Receive:");
-    for (UINT32 i = 0; i < Rounds; i++) {
+    for (UINTN i = 0; i < Rounds; i++) {
         //
         // Print progress @ 5%
         //
@@ -445,10 +439,10 @@ Exit:
 
 static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 {
-    BYTE OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
-    EFI_DHCP4_CONFIG_DATA Config = {0};
-    EFI_DHCP4_MODE_DATA RetMode = {0};
-    EFI_DHCP4_PACKET_OPTION* Option = {0};
+    UINT8 OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
+    EFI_DHCP4_CONFIG_DATA Config;
+    EFI_DHCP4_MODE_DATA RetMode;
+    EFI_DHCP4_PACKET_OPTION* Option;
     EFI_DHCP4_PROTOCOL* Dhcp4 = NULL;
     EFI_STATUS Status = EFI_SUCCESS;
     UINT32 Timeout[4] = {4, 8, 16, 32};
@@ -483,8 +477,8 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     Option = (EFI_DHCP4_PACKET_OPTION*)OptionBuffer;
     Option->OpCode = DHCP_OPTION_PARAMETER_REQUEST_LIST;
     Option->Length = 2;
-    Option->Data[0] = DHCP_OPTION_SUBNET;
-    Option->Data[1] = DHCP_OPTION_ROUTER;
+    Option->Data[0] = DHCP4_TAG_NETMASK;
+    Option->Data[1] = DHCP4_TAG_ROUTER;
 
     Config.DiscoverTryCount = DHCP_RETRIES;
     Config.DiscoverTimeout = Timeout;
@@ -506,9 +500,7 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     if (RetMode.State == Dhcp4Init) {
         Status = Dhcp4->Start(Dhcp4, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server",
-                      E(Status),
-                      Status);
+            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server", E(Status), Status);
             goto Exit;
         }
     } else {
@@ -551,8 +543,6 @@ static EFI_STATUS Tcp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
     EFI_STATUS Status = EFI_SUCCESS;
     CHAR8* ServerIPAddressStr = NULL;
     CHAR8* ServerPortStr = NULL;
-    UINTN Ret = 0;
-    UINT32 U0 = 0, U1 = 0, U2 = 0, U3 = 0;
 
     Status = GetHostArgument(gHostArguments, t("ServerIPAddress"), &ServerIPAddressStr);
     if (EFI_ERROR(Status)) {
@@ -560,17 +550,11 @@ static EFI_STATUS Tcp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
         goto Exit;
     }
 
-    Ret = sscanf_s((const char*)ServerIPAddressStr, "%u.%u.%u.%u", &U0, &U1, &U2, &U3);
-    if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %a", ServerIPAddressStr);
-        Status = EFI_INVALID_PARAMETER;
+    Status = AsciiStrToIpv4Address(ServerIPAddressStr, NULL, ServerIPAddress, NULL);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("AsciiStrToIpv4Address() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
-
-    ServerIPAddress->Addr[0] = (UINT8)U0;
-    ServerIPAddress->Addr[1] = (UINT8)U1;
-    ServerIPAddress->Addr[2] = (UINT8)U2;
-    ServerIPAddress->Addr[3] = (UINT8)U3;
 
     Status = GetHostArgument(gHostArguments, t("ServerPort"), &ServerPortStr);
     if (EFI_ERROR(Status)) {
@@ -578,14 +562,7 @@ static EFI_STATUS Tcp4GetServerIPAddressAndPort(IN OUT EFI_IPv4_ADDRESS* ServerI
         goto Exit;
     }
 
-    Ret = sscanf_s((const char*)ServerPortStr, "%u", &U0);
-    if (Ret == EOF) {
-        DBG_ERROR("sscanf_s() failed to parse : %a", ServerPortStr);
-        Status = EFI_INVALID_PARAMETER;
-        goto Exit;
-    }
-
-    *ServerPort = (UINT16)U0;
+    *ServerPort = (UINT16)AsciiStrDecimalToUintn(ServerPortStr);
 Exit:
     FreePool(ServerIPAddressStr);
     FreePool(ServerPortStr);
@@ -600,8 +577,8 @@ static EFI_STATUS Tcp4ConfigureClient(IN PBM_TCP4_CONTEXT Context)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PBM_TCP4_CLIENT Client = &Context->Client;
-    EFI_DHCP4_MODE_DATA Mode = {0};
-    EFI_IPv4_ADDRESS ServerIPAdress = {0};
+    EFI_DHCP4_MODE_DATA Mode;
+    EFI_IPv4_ADDRESS ServerIPAdress;
     UINT16 ServerPort = 0;
 
     Status = Tcp4GetClientMode(&Mode);
@@ -687,7 +664,7 @@ EFI_STATUS
 Tcp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    BM_TCP4_CONTEXT Context = {0};
+    BM_TCP4_CONTEXT Context;
     PBM_TCP4_CLIENT Client = &Context.Client;
     UINTN Index = 0;
 

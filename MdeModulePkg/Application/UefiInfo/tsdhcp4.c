@@ -108,8 +108,8 @@ static EFI_STATUS Dhcp4Probe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
     Option = (EFI_DHCP4_PACKET_OPTION*)OptionBuffer;
     Option->OpCode = DHCP_OPTION_PARAMETER_REQUEST_LIST;
     Option->Length = 2;
-    Option->Data[0] = DHCP_OPTION_SUBNET;
-    Option->Data[1] = DHCP_OPTION_ROUTER;
+    Option->Data[0] = DHCP4_TAG_NETMASK;
+    Option->Data[1] = DHCP4_TAG_ROUTER;
 
     Config.DiscoverTryCount = DHCP_RETRIES;
     Config.DiscoverTimeout = Timeout;
