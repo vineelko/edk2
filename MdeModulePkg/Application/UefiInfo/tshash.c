@@ -101,7 +101,7 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
     EFI_HASH_OUTPUT Output = {0};
     EFI_HASH2_OUTPUT Output2 = {0};
     BOOLEAN HashAlgorithmsSupported = FALSE;
-    BYTE HashBuffer[128] = {0};
+    UINT8 HashBuffer[128] = {0};
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -342,7 +342,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HASH_PROTOCOL* HashProtocol = NULL;
     EFI_HASH_OUTPUT Output;
-    BYTE HashBuffer[128] = {0};
+    UINT8 HashBuffer[128] = {0};
     PVOID Data = NULL;
     UINTN DataSize = 0;
     UINTN MaxDataSize = 0;
@@ -581,7 +581,7 @@ static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
     UINTN DataSize = 0;
     UINTN MaxDataSize = 0;
     EFI_EVENT TimerEvent = NULL;
-    BYTE CalculatedHash[RTL_MAX_HASH_LEN_V2] = {0};
+    UINT8 CalculatedHash[RTL_MAX_HASH_LEN_V2] = {0};
     CRYPT_DER_BLOB Blobs[1] = {0};
     ULONG HashSize = 0;
     NTSTATUS NtStatus;

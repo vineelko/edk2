@@ -25,6 +25,8 @@ Environment:
 #include "testsuites.h"
 
 #include "network_config.h"
+#include <Protocol/Udp4.h>
+#include <Protocol/Dhcp4.h>
 
 #define CLIENT_TX_DATA_SIZE 1024
 #define CLIENT_RX_DATA_SIZE 1024
@@ -76,7 +78,7 @@ static EFI_STATUS ProtocolGetUdp4ClientServer(IN OUT PBM_PROTOCOL_INFO Client,
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* DeviceHandles = NULL;
-    HANDLE ChildHandle = NULL;
+    EFI_HANDLE ChildHandle = NULL;
     UINTN DeviceHandleCount = 0;
 
     Status = gBS->LocateHandleBuffer(ByProtocol,
@@ -657,7 +659,7 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
                                                 IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    BM_UDP4_LOOPBACK_CONTEXT LoopbackContext = {0};
+    BM_UDP4_LOOPBACK_CONTEXT LoopbackContext;
     PBM_UDP4_SOCKET Client = &LoopbackContext.Client;
     PBM_UDP4_SOCKET Server = &LoopbackContext.Server;
 

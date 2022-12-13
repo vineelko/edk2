@@ -68,7 +68,7 @@ static VOID DumpDhcpPacket(EFI_DHCP4_PACKET* Packet)
 
 static EFI_STATUS Dhcp4Probe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 {
-    BYTE OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
+    UINT8 OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
     EFI_DHCP4_CONFIG_DATA Config = {0};
     EFI_DHCP4_MODE_DATA Mode = {0};
     EFI_DHCP4_PACKET_OPTION** Options = {0};

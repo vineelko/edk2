@@ -57,8 +57,8 @@ extern BM_TEST_SUITE TimestampTestSuite;
 // extern BM_TEST_SUITE Ip6ConfigTestSuite;
 extern BM_TEST_SUITE Tcp4TestSuite;
 extern BM_TEST_SUITE Tcp6TestSuite;
-// extern BM_TEST_SUITE Udp4TestSuite;
-// extern BM_TEST_SUITE Udp6TestSuite;
+extern BM_TEST_SUITE Udp4TestSuite;
+extern BM_TEST_SUITE Udp6TestSuite;
 extern BM_TEST_SUITE UEFIVariableTestSuite;
 // extern BM_TEST_SUITE UsbFnIoTestSuite;
 // extern BM_TEST_SUITE UsbInitTestSuite;
@@ -97,9 +97,9 @@ PBM_TEST_SUITE TestSuites[] = {
     // //    &Ip4ConfigTestSuite,
     // //    &Ip6ConfigTestSuite,
     &Tcp4TestSuite,
-       &Tcp6TestSuite,
-    // &Udp4TestSuite,
-    // //    &Udp6TestSuite,
+    &Tcp6TestSuite,
+    &Udp4TestSuite,
+    &Udp6TestSuite,
     &TimestampTestSuite,
     &UEFIVariableTestSuite,
     // &UsbFnIoTestSuite,

@@ -229,7 +229,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //                             OUT CHAR8** ModifiedTime,
 //                             OUT CHAR8** SHA256Hash)
 // {
-//     BYTE CalculatedHash[RTL_MAX_HASH_LEN_V2] = {0};
+//     UINT8 CalculatedHash[RTL_MAX_HASH_LEN_V2] = {0};
 //     CHAR16* BinaryFilePath = NULL;
 //     CHAR8* FileBuffer = NULL;
 //     CRYPT_DER_BLOB Blobs[1] = {0};

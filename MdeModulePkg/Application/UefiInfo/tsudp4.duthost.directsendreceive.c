@@ -26,6 +26,8 @@ Environment:
 
 #include "network_config.h"
 #include "utils.h"
+#include <Protocol/Udp4.h>
+#include <Protocol/Dhcp4.h>
 
 #define CLIENT_TX_DATA_SIZE 1024
 #define CLIENT_RX_DATA_SIZE 1024
@@ -334,7 +336,7 @@ Exit:
 
 static EFI_STATUS Udp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
 {
-    BYTE OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
+    UINT8 OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
     EFI_DHCP4_CONFIG_DATA Config;
     EFI_DHCP4_MODE_DATA RetMode;
     EFI_DHCP4_PACKET_OPTION* Option;
