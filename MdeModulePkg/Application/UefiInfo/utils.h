@@ -55,7 +55,7 @@ IsRunningInVM(VOID);
 // General Utils
 //
 
-VOID HexDump(IN PVOID Buffer, IN UINTN Length);
+VOID HexDump(IN VOID* Buffer, IN UINTN Length);
 
 //
 // Miscellaneous Utils

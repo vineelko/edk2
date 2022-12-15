@@ -312,7 +312,7 @@ typedef struct _BM_PROTOCOL_INFO {
     //  Out Parameters
     //
 
-    PVOID Protocol;
+    VOID* Protocol;
     EFI_SERVICE_BINDING_PROTOCOL* ServiceBindingProtocol;
     EFI_STATUS ProtocolStatus;
     EFI_STATUS ServiceBindingProtocolStatus;
@@ -326,6 +326,6 @@ ProtocolOpenServiceBinding(IN EFI_HANDLE DeviceHandle,
 EFI_STATUS
 ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* ServiceBindingProtocol,
                                         IN EFI_GUID* ProtocolGuid,
-                                        OUT PVOID* Protocol,
+                                        OUT VOID** Protocol,
                                         OUT EFI_HANDLE* ProtocolHandle);
 #endif // _PROTOCOLS_H_

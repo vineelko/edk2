@@ -43,7 +43,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE* GraphicsMode = NULL;
     EFI_GRAPHICS_OUTPUT_MODE_INFORMATION* GraphicsModeInfo = NULL;
     EFI_GRAPHICS_OUTPUT_MODE_INFORMATION** AllGraphicModes = NULL;
-    PVOID FrameBufferContent = NULL;
+    VOID* FrameBufferContent = NULL;
     UINT32 CurrentMode = 0;
 
     UNREFERENCED_PARAMETER(Session);
@@ -124,7 +124,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     }
 
     CopyMem(FrameBufferContent,
-            (PVOID)(UINTN)GraphicsMode->FrameBufferBase,
+            (VOID*)(UINTN)GraphicsMode->FrameBufferBase,
             GraphicsMode->FrameBufferSize);
 
     //
@@ -168,7 +168,7 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     //
 
     if (!IsRunningInVM()) {
-        CopyMem((PVOID)(UINTN)GraphicsMode->FrameBufferBase,
+        CopyMem((VOID*)(UINTN)GraphicsMode->FrameBufferBase,
                 FrameBufferContent,
                 GraphicsMode->FrameBufferSize);
     }

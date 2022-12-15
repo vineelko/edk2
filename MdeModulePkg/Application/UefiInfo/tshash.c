@@ -343,7 +343,7 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     EFI_HASH_PROTOCOL* HashProtocol = NULL;
     EFI_HASH_OUTPUT Output;
     UINT8 HashBuffer[128] = {0};
-    PVOID Data = NULL;
+    VOID* Data = NULL;
     UINTN DataSize = 0;
     UINTN MaxDataSize = 0;
     EFI_EVENT TimerEvent = NULL;
@@ -464,7 +464,7 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HASH2_PROTOCOL* Hash2Protocol = NULL;
     EFI_HASH2_OUTPUT Output;
-    PVOID Data = NULL;
+    VOID* Data = NULL;
     UINTN DataSize = 0;
     UINTN MaxDataSize = 0;
     EFI_EVENT TimerEvent = NULL;
@@ -577,7 +577,7 @@ static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
                                           IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    PVOID Data = NULL;
+    VOID* Data = NULL;
     UINTN DataSize = 0;
     UINTN MaxDataSize = 0;
     EFI_EVENT TimerEvent = NULL;

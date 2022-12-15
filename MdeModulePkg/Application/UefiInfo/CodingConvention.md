@@ -308,7 +308,7 @@ will immediately take you to the definition/declaration of the function
     FASTCALL
     KiSignalSynchronizationObjectEx (
         __inout PKPRCB Prcb,
-        __in PVOID Object,
+        __in VOID* Object,
         __deref_out_opt PKTHREAD *WakeThread    <---
         )
 ```

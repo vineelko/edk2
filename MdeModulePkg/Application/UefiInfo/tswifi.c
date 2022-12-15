@@ -84,7 +84,7 @@ static ENUM_TO_STRING ConnectionStateMap[] = {
     {ConnectFailedReasonUnspecified, STRINGIFY(ConnectFailedReasonUnspecified)},
 };
 
-static VOID EFIAPI WifiNetworkOperationWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI WifiNetworkOperationWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -95,14 +95,14 @@ static VOID EFIAPI WifiNetworkOperationWaitCallback(IN EFI_EVENT Event, IN PVOID
     //
 }
 
-static VOID EFIAPI WifiGetNetworksCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI WifiGetNetworksCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
     gBS->SignalEvent(WaitForNetworkOperation);
 }
 
-static VOID EFIAPI WifiNetworkConnectCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI WifiNetworkConnectCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -523,7 +523,7 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     }
 
     for (UINTN i = 0; i < HandleCount; i++) {
-        Status = gBS->HandleProtocol(Handles[i], &gEfiIp4Config2ProtocolGuid, (PVOID*)&Ip4Config2);
+        Status = gBS->HandleProtocol(Handles[i], &gEfiIp4Config2ProtocolGuid, (VOID**)&Ip4Config2);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;

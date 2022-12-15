@@ -1,7 +1,7 @@
 #include "buffer.h"
 
 typedef struct _BUFFER {
-    PVOID Content;
+    VOID* Content;
     UINT32 Capacity;
     UINT32 Size;
 } BUFFER, *PBUFFER;
@@ -27,7 +27,7 @@ EFI_STATUS EFIAPI BufferCreate(IN UINT32 Capacity, OUT BUFFER** Buffer)
     return EFI_SUCCESS;
 }
 
-EFI_STATUS EFIAPI BufferAppendContent(IN BUFFER* Buffer, IN PVOID Content, IN UINT32 Size)
+EFI_STATUS EFIAPI BufferAppendContent(IN BUFFER* Buffer, IN VOID* Content, IN UINT32 Size)
 {
     EFI_STATUS EfiStatus = EFI_SUCCESS;
 
@@ -41,7 +41,7 @@ EFI_STATUS EFIAPI BufferAppendContent(IN BUFFER* Buffer, IN PVOID Content, IN UI
     return EfiStatus;
 }
 
-PVOID EFIAPI BufferGetContent(IN BUFFER* Buffer)
+VOID* EFIAPI BufferGetContent(IN BUFFER* Buffer)
 {
     return Buffer->Content;
 }

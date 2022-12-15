@@ -57,9 +57,9 @@ static EFI_STATUS DevicePathProbeApi(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
     FromTextPath = ProtocolArray[EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_INDEX].Protocol;
     ToTextPath = ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX].Protocol;
 
-    DevicePath = FromTextPath->ConvertTextToDevicPath(Path);
+    DevicePath = FromTextPath->ConvertTextToDevicePath(Path);
     if (DevicePath == NULL) {
-        DBG_ERROR("ConvertTextToDevicPath() Api failed. Returned NULL");
+        DBG_ERROR("ConvertTextToDevicePath() Api failed. Returned NULL");
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }

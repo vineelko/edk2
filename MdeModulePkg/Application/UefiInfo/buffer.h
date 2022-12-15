@@ -6,8 +6,8 @@
 typedef struct _BUFFER BUFFER;
 
 EFI_STATUS EFIAPI BufferCreate(IN UINT32 Capacity, OUT BUFFER** Buffer);
-EFI_STATUS EFIAPI BufferAppendContent(IN BUFFER* Buffer, IN PVOID Content, IN UINT32 Size);
-PVOID EFIAPI BufferGetContent(IN BUFFER* Buffer);
+EFI_STATUS EFIAPI BufferAppendContent(IN BUFFER* Buffer, IN VOID* Content, IN UINT32 Size);
+VOID* EFIAPI BufferGetContent(IN BUFFER* Buffer);
 UINT32 EFIAPI BufferGetSize(IN BUFFER* Buffer);
 VOID EFIAPI BufferSetSize(IN BUFFER* Buffer, IN UINT32 Size);
 UINT32 EFIAPI BufferGetCapacity(IN BUFFER* Buffer);

@@ -169,7 +169,7 @@ Exit:
 // General Utils
 //
 
-VOID HexDump(IN PVOID Buffer, IN UINTN Length)
+VOID HexDump(IN VOID* Buffer, IN UINTN Length)
 {
     CHAR8* Byte = Buffer;
     UINTN Index = 0;
@@ -288,7 +288,7 @@ VOID HexDump(IN PVOID Buffer, IN UINTN Length)
 //         goto Exit;
 //     }
 
-//     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (PVOID*)&ToTextPath);
+//     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (VOID**)&ToTextPath);
 //     if (EFI_ERROR(Status)) {
 //         DBG_ERROR("LocateProtocol() failed : %a(0x%x)", E(Status), Status);
 //         goto Exit;
@@ -578,7 +578,7 @@ IsRunningInVM(VOID)
         return IsRunningInVM;
     }
 
-    Status = gBS->LocateProtocol(&gEfiSmbiosProtocolGuid, NULL, (PVOID*)&SmbiosProtocol);
+    Status = gBS->LocateProtocol(&gEfiSmbiosProtocolGuid, NULL, (VOID**)&SmbiosProtocol);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("LocateProtocol() failed : %a(0x%x)", E(Status), Status);
         goto Exit;

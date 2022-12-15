@@ -174,13 +174,13 @@ Exit:
 // Client/Server connect/accept(3-way handshake) functions
 //
 
-static VOID EFIAPI Tcp4AcceptConnectionWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4AcceptConnectionWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
 }
 
-static VOID EFIAPI Tcp4ServerAcceptCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4ServerAcceptCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     PBM_TCP4_CLIENT Client = &LoopbackContext->Client;
@@ -238,7 +238,7 @@ Exit:
     return Status;
 }
 
-static VOID EFIAPI Tcp4ClientConnectCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4ClientConnectCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     PBM_TCP4_CLIENT Client = &LoopbackContext->Client;
@@ -285,7 +285,7 @@ Exit:
 //
 
 static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -297,7 +297,7 @@ static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
 }
 
 static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -308,7 +308,7 @@ static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Tcp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4ClientTransmitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     PBM_TCP4_CLIENT Client = &LoopbackContext->Client;
@@ -330,7 +330,7 @@ static VOID EFIAPI Tcp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID Conte
     }
 }
 
-static VOID EFIAPI Tcp4ClientReceiveCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4ClientReceiveCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     EFI_TCP4_RECEIVE_DATA* ClientRxData = NULL;
@@ -378,7 +378,7 @@ static VOID EFIAPI Tcp4ClientReceiveCallback(IN EFI_EVENT Event, IN PVOID Contex
     }
 }
 
-static VOID EFIAPI Tcp4ServerTransmitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4ServerTransmitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     PBM_TCP4_CLIENT Client = &LoopbackContext->Client;
@@ -400,7 +400,7 @@ static VOID EFIAPI Tcp4ServerTransmitCallback(IN EFI_EVENT Event, IN PVOID Conte
     }
 }
 
-static VOID EFIAPI Tcp4ServerReceiveCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4ServerReceiveCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     EFI_TCP4_RECEIVE_DATA* ServerRxData = NULL;

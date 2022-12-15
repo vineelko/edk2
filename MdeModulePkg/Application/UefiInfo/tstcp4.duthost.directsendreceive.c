@@ -117,13 +117,13 @@ typedef struct _BM_TCP4_CONTEXT {
 
 } BM_TCP4_CONTEXT, *PBM_TCP4_CONTEXT;
 
-static VOID EFIAPI Tcp4AcceptConnectionWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Tcp4AcceptConnectionWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
 }
 
-static VOID EFIAPI Tcp4ClientConnectCallback(IN EFI_EVENT Event, IN PVOID _Context)
+static VOID EFIAPI Tcp4ClientConnectCallback(IN EFI_EVENT Event, IN VOID* _Context)
 {
     PBM_TCP4_CONTEXT Context = _Context;
     PBM_TCP4_CLIENT Client = &Context->Client;
@@ -167,7 +167,7 @@ Exit:
 //
 
 static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -179,7 +179,7 @@ static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
 }
 
 static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -190,7 +190,7 @@ static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Tcp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID _Context)
+static VOID EFIAPI Tcp4ClientTransmitCallback(IN EFI_EVENT Event, IN VOID* _Context)
 {
     PBM_TCP4_CONTEXT Context = _Context;
     PBM_TCP4_CLIENT Client = &Context->Client;
@@ -207,7 +207,7 @@ static VOID EFIAPI Tcp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID _Cont
     gBS->SignalEvent(Context->WaitForClientTransmitServerReceive);
 }
 
-static VOID EFIAPI Tcp4ClientReceiveCallback(IN EFI_EVENT Event, IN PVOID _Context)
+static VOID EFIAPI Tcp4ClientReceiveCallback(IN EFI_EVENT Event, IN VOID* _Context)
 {
     PBM_TCP4_CONTEXT Context = _Context;
     EFI_TCP4_RECEIVE_DATA* ClientRxData = NULL;

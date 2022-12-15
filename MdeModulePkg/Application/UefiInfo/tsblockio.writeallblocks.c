@@ -38,7 +38,7 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
     EFI_STATUS Status = EFI_SUCCESS;
     UINTN HandleCount = 0;
     BOOLEAN IsUSBDriveInVM = FALSE;
-    PVOID Data = NULL;
+    VOID* Data = NULL;
     UINT64 DataSize = 0;
     UINT64 MaxDataSize = 0;
     UINT64 TotalDiskSize = 0;
@@ -70,7 +70,7 @@ BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Sess
 
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIoProtocolGuid,
-                                     (PVOID*)&BlockIoIf);
+                                     (VOID**)&BlockIoIf);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;

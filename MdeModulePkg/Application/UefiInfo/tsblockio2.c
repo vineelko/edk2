@@ -32,7 +32,7 @@ Environment:
 static volatile UINT32 AsyncOperationCount = 0;
 static EFI_EVENT WaitForAsyncOperation = NULL;
 
-static VOID EFIAPI BlockIo2AsyncWaitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI BlockIo2AsyncWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -43,7 +43,7 @@ static VOID EFIAPI BlockIo2AsyncWaitCallback(IN EFI_EVENT Event, IN PVOID Contex
     //
 }
 
-static VOID EFIAPI BlockIo2AsyncOperationCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI BlockIo2AsyncOperationCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -58,7 +58,7 @@ static EFI_STATUS UefiInfoBlockIo2(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf,
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
-    PVOID Data = NULL;
+    VOID* Data = NULL;
     UINTN DataSize = 0;
     EFI_TIME StartTime = {0};
     EFI_TIME StopTime = {0};
@@ -397,7 +397,7 @@ static EFI_STATUS BlockIo2SyncAsync128KReadWriteTest(IN PBM_PROTOCOL_INFO Protoc
 
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIoProtocolGuid,
-                                     (PVOID*)&BlockIoIf);
+                                     (VOID**)&BlockIoIf);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;
@@ -407,7 +407,7 @@ static EFI_STATUS BlockIo2SyncAsync128KReadWriteTest(IN PBM_PROTOCOL_INFO Protoc
         // protocol
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIo2ProtocolGuid,
-                                     (PVOID*)&BlockIo2If);
+                                     (VOID**)&BlockIo2If);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;

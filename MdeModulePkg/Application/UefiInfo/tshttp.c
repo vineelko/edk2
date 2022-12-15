@@ -73,7 +73,7 @@ typedef struct _HTTP_CONTEXT {
 } HTTP_CONTEXT, *PHTTP_CONTEXT;
 
 typedef struct _HTTP_REQUEST {
-    PWSTR Url;
+    CHAR16* Url;
 
     BOOLEAN CallbackTriggered;
 
@@ -160,7 +160,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context);
 EFI_STATUS EFIAPI HttpCreate(OUT HTTP_CONTEXT** Context);
 EFI_STATUS EFIAPI HttpConfigure(IN OUT PHTTP_CONTEXT Context, IN BOOLEAN ResetFirst);
 EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
-                                   IN PWSTR Url,
+                                   IN CHAR16* Url,
                                    IN EFI_HTTP_METHOD Method,
                                    IN EFI_HTTP_HEADER* Headers,
                                    IN UINTN HeaderCount,
@@ -279,7 +279,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
                                             &gEfiHttpProtocolGuid,
                                             &Context->HttpSvcBindingProtocol,
                                             &Context->HttpHandle,
-                                            (PVOID*)&Context->Http);
+                                            (VOID**)&Context->Http);
         if (!EFI_ERROR(Status)) {
             Context->ParentHandle = DeviceHandles[Index];
             break;
@@ -557,7 +557,7 @@ Exit:
 }
 
 static EFI_STATUS HttpCreateRequestObject(IN OUT PHTTP_CONTEXT Context,
-                                          IN PWSTR Url,
+                                          IN CHAR16* Url,
                                           IN EFI_HTTP_METHOD Method,
                                           IN EFI_HTTP_HEADER* Headers,
                                           IN UINTN HeaderCount,
@@ -690,7 +690,7 @@ Exit:
 }
 
 EFI_STATUS EFIAPI HttpIssueRequest(IN PHTTP_CONTEXT Context,
-                                   IN PWSTR Url,
+                                   IN CHAR16* Url,
                                    IN EFI_HTTP_METHOD Method,
                                    IN EFI_HTTP_HEADER* Headers,
                                    IN UINTN HeaderCount,

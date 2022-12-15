@@ -17,7 +17,7 @@
 #define ALIGN_RANGE_UP(_range, _alignment) \
     ALIGN_RANGE_DOWN((_range) + (_alignment) - 1, _alignment)
 
-#define Add2Ptr(_Ptr, _Value) ((PVOID)((UINT8*)(_Ptr) + (_Value)))
+#define Add2Ptr(_Ptr, _Value) ((VOID*)((UINT8*)(_Ptr) + (_Value)))
 
 //
 // Structs
@@ -43,7 +43,7 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
     UINTN DescriptorSize;
     UINT32 DescriptorVersion;
     UINTN MapKey;
-    PVOID MemoryMapBuffer;
+    VOID* MemoryMapBuffer;
     UINTN MemoryMapSize;
     UINTN PagesNeeded;
 

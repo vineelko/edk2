@@ -76,7 +76,7 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
         goto Exit;
     }
 
-    Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (PVOID*)&ToTextPath);
+    Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (VOID**)&ToTextPath);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Unable to located EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_GUID "
                   "protocol failed : %a(0x%x)",

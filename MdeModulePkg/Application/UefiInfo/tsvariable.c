@@ -77,7 +77,7 @@ static EFI_STATUS GetMaxVariableSize(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
         UINT64 MaximumVariableStorageSize = 0;
         UINT64 RemainingVariableStorageSize = 0;
         UINT64 MaximumVariableSize = 0;
-        Status = gRT->QueryVariableInfo(VariableAttributesMap[i].Value,
+        Status = gRT->QueryVariableInfo((UINT32)VariableAttributesMap[i].Value,
                                         &MaximumVariableStorageSize,
                                         &RemainingVariableStorageSize,
                                         &MaximumVariableSize);

@@ -133,7 +133,7 @@ Exit:
 //
 
 static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -145,7 +145,7 @@ static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
 }
 
 static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -156,7 +156,7 @@ static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Udp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Udp4ClientTransmitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_UDP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     PBM_UDP4_SOCKET Client = &LoopbackContext->Client;
@@ -178,7 +178,7 @@ static VOID EFIAPI Udp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID Conte
     }
 }
 
-static VOID EFIAPI Udp4ClientReceiveCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Udp4ClientReceiveCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_UDP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     EFI_UDP4_RECEIVE_DATA* ClientRxData = NULL;
@@ -226,7 +226,7 @@ static VOID EFIAPI Udp4ClientReceiveCallback(IN EFI_EVENT Event, IN PVOID Contex
     }
 }
 
-static VOID EFIAPI Udp4ServerTransmitCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Udp4ServerTransmitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_UDP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     PBM_UDP4_SOCKET Client = &LoopbackContext->Client;
@@ -248,7 +248,7 @@ static VOID EFIAPI Udp4ServerTransmitCallback(IN EFI_EVENT Event, IN PVOID Conte
     }
 }
 
-static VOID EFIAPI Udp4ServerReceiveCallback(IN EFI_EVENT Event, IN PVOID Context)
+static VOID EFIAPI Udp4ServerReceiveCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     PBM_UDP4_LOOPBACK_CONTEXT LoopbackContext = Context;
     EFI_UDP4_RECEIVE_DATA* ServerRxData = NULL;

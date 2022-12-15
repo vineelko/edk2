@@ -1058,7 +1058,7 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
 
     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid,
                                  NULL,
-                                 (PVOID*)&DevicePathToTextIf);
+                                 (VOID**)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Unable to locate DevicePathToTextIf protocol 0x%x", Status);
         goto Exit;
@@ -1089,7 +1089,7 @@ EFI_STATUS EFIAPI FileGetSfsVolumes(OUT EFI_FILE_PROTOCOL*** SfsVolumes,
         for (UINTN Index = 0; Index < HandleCount; Index++) {
             Status = gBS->HandleProtocol(Handles[Index],
                                          &gEfiBlockIoProtocolGuid,
-                                         (PVOID*)&BlockIoIf);
+                                         (VOID**)&BlockIoIf);
             if (EFI_ERROR(Status)) {
                 Status = EFI_SUCCESS;
                 continue;
@@ -1275,7 +1275,7 @@ EFI_STATUS EFIAPI FileLocateAndOpen(IN CHAR16* FileName,
 
     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid,
                                  NULL,
-                                 (PVOID*)&DevicePathToTextIf);
+                                 (VOID**)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x",
                   Status);
@@ -1739,11 +1739,11 @@ static EFI_STATUS FileCreateDevicePathFromString(IN CHAR16* FileName,
     FilePathDevicePath->SubType = MEDIA_FILEPATH_DP;
     FilePathDevicePath->Length[0] = (UINT8)DevicePathNodeSize;
     FilePathDevicePath->Length[1] = (UINT8)(DevicePathNodeSize >> 8);
-    CopyMem((PUINT8)FilePathDevicePath + sizeof(EFI_DEVICE_PATH),
+    CopyMem((UINT8*)FilePathDevicePath + sizeof(EFI_DEVICE_PATH),
             FileName,
             sizeof(CHAR16) * (StrnLenS(FileName, MAX_FILE_NAME_LEN) + 1));
 
-    DevicePathEndNode = (EFI_DEVICE_PATH*)((PUINT8)FilePathDevicePath + DevicePathNodeSize);
+    DevicePathEndNode = (EFI_DEVICE_PATH*)((UINT8*)FilePathDevicePath + DevicePathNodeSize);
     DevicePathEndNode->Type = END_DEVICE_PATH_TYPE;
     DevicePathEndNode->SubType = END_ENTIRE_DEVICE_PATH_SUBTYPE;
     DevicePathEndNode->Length[0] = sizeof(EFI_DEVICE_PATH);
@@ -1780,7 +1780,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
 
     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid,
                                  NULL,
-                                 (PVOID*)&DevicePathToTextIf);
+                                 (VOID**)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x",
                   Status);
@@ -1789,7 +1789,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
 
     Status = gBS->LocateProtocol(&gEfiDevicePathUtilitiesProtocolGuid,
                                  NULL,
-                                 (PVOID*)&DevicePathUtilitiesIf);
+                                 (VOID**)&DevicePathUtilitiesIf);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("LocateProtocol() for DevicePathUtilities protocol failed with status 0x%x",
                   Status);

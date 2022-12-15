@@ -22,17 +22,15 @@ Launch build environment:
     - edksetup.bat Rebuild
     - edksetup.bat VS2019
 
-XCopy cbmr app from Windows sources to EDK2:
-    1. Copy D:\o6\src\onecore\base\boot\environ\app\cbmr\app\*.* to D:\repos\edk2\MdeModulePkg\Application\cbmr_app\
-    2. Copy D:\o6\src\onecore\base\boot\environ\app\cbmr\common\*.* to D:\repos\edk2\MdeModulePkg\Application\cbmr_app\
-    3. Edit D:\repos\edk2\MdeModulePkg\MdeModulePkg.dsc and add below line under [Components] sections
-            a. MdeModulePkg/Application/cbmr_app/uefibuild/cbmrapp.inf
+Location of UEFI Info Tool code in EDK2:
+    - Edit D:\repos\edk2\MdeModulePkg\MdeModulePkg.dsc and add below line under [Components] sections
+            a. MdeModulePkg/Application/uefiinfo/uefiinfo.inf
 
 Run build:
     1. D:\repos\edk2> build -a X64 -p MdeModulePkg\MdeModulePkg.dsc
 
-CBMR App:
-    1. After successful build you should have cbmr_app.efi in D:\repos\edk2\Build\MdeModule\DEBUG_VS2019\X64\
+UEFI Info App:
+    1. After successful build you should have uefiinfo.efi in D:\repos\edk2\Build\MdeModule\DEBUG_VS2019\X64\
 
 git push vineel_edk2 HEAD:user/vineelko/uefiinfo_port
 

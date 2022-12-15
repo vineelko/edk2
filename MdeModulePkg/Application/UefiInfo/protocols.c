@@ -325,7 +325,7 @@ ProtocolOpenServiceBinding(IN EFI_HANDLE DeviceHandle,
 
     Status = gBS->OpenProtocol(DeviceHandle,
                                ServiceBindingProtocolGuid,
-                               (PVOID*)&LocalSericeBindingProtocol,
+                               (VOID**)&LocalSericeBindingProtocol,
                                gImageHandle,
                                NULL,
                                EFI_OPEN_PROTOCOL_GET_PROTOCOL);
@@ -343,12 +343,12 @@ Exit:
 EFI_STATUS
 ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* ServiceBindingProtocol,
                                         IN EFI_GUID* ProtocolGuid,
-                                        OUT PVOID* Protocol,
+                                        OUT VOID** Protocol,
                                         OUT EFI_HANDLE* ProtocolHandle)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE ChildHandle = NULL;
-    PVOID RetProtocol = NULL;
+    VOID* RetProtocol = NULL;
 
     if (ServiceBindingProtocol == NULL) {
         DBG_ERROR("ServiceBindingProtocol is null");
@@ -371,7 +371,7 @@ ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* Service
 
     Status = gBS->OpenProtocol(ChildHandle,
                                ProtocolGuid,
-                               (PVOID*)&RetProtocol,
+                               (VOID**)&RetProtocol,
                                gImageHandle,
                                NULL,
                                EFI_OPEN_PROTOCOL_GET_PROTOCOL);
@@ -471,7 +471,7 @@ static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
     if (ProtocolInfo->ServiceBindingProtocolName == NULL) {
         Status = gBS->LocateProtocol(ProtocolInfo->ProtocolGuid,
                                      NULL,
-                                     (PVOID*)&ProtocolInfo->Protocol);
+                                     (VOID**)&ProtocolInfo->Protocol);
         ProtocolInfo->ProtocolStatus = Status;
         if (EFI_ERROR(Status)) {
             // DBG_ERROR("ProtocolName = %a ProtocolStatus = %a(0x%x)",

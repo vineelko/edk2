@@ -57,6 +57,7 @@
   tsrng.c
   tsfilesystem.c
   tssmbios.c
+  tssystemtable.c
   tstcp4.c
   tstcp4.duthost.directperf.c
   tstcp4.duthost.directsendreceive.c

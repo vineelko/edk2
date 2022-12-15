@@ -43,7 +43,7 @@ static EFI_STATUS UefiInfoBlockIo(IN EFI_BLOCK_IO_PROTOCOL* BlockIoIf)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
-    PVOID Data = NULL;
+    VOID* Data = NULL;
     UINTN DataSize = 0;
     UINTN MaxDataSize = 0;
     EFI_EVENT TimerEvent = NULL;
@@ -209,7 +209,7 @@ static EFI_STATUS BlockIoLargestBlockReadWriteTest(IN PBM_PROTOCOL_INFO Protocol
 
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIoProtocolGuid,
-                                     (PVOID*)&BlockIoIf);
+                                     (VOID**)&BlockIoIf);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;
@@ -283,7 +283,7 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
 
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIoProtocolGuid,
-                                     (PVOID*)&BlockIoIf);
+                                     (VOID**)&BlockIoIf);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;
@@ -293,7 +293,7 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
         // protocol
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIo2ProtocolGuid,
-                                     (PVOID*)&BlockIo2If);
+                                     (VOID**)&BlockIo2If);
         BlockIoMedia = EFI_ERROR(Status) ? BlockIoIf->Media : BlockIo2If->Media;
         if (!BlockIoMedia->RemovableMedia && !BlockIoMedia->LogicalPartition) {
             DevicePathIf = DevicePathFromHandle(BlockIoHandles[i]);
@@ -370,7 +370,7 @@ static EFI_STATUS BlockIoAPITest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
         Status = gBS->HandleProtocol(BlockIoHandles[i],
                                      &gEfiBlockIoProtocolGuid,
-                                     (PVOID*)&BlockIoIf);
+                                     (VOID**)&BlockIoIf);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;

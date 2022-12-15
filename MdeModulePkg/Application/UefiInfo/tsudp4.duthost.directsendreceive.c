@@ -91,7 +91,7 @@ typedef struct _BM_UDP4_CONTEXT {
 //
 
 static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -103,7 +103,7 @@ static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
 }
 
 static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN PVOID Context)
+                                                               IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -114,7 +114,7 @@ static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Udp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID _Context)
+static VOID EFIAPI Udp4ClientTransmitCallback(IN EFI_EVENT Event, IN VOID* _Context)
 {
     PBM_UDP4_CONTEXT Context = _Context;
     PBM_UDP4_SOCKET Client = &Context->Client;
@@ -131,7 +131,7 @@ static VOID EFIAPI Udp4ClientTransmitCallback(IN EFI_EVENT Event, IN PVOID _Cont
     gBS->SignalEvent(Context->WaitForClientTransmitServerReceive);
 }
 
-static VOID EFIAPI Udp4ClientReceiveCallback(IN EFI_EVENT Event, IN PVOID _Context)
+static VOID EFIAPI Udp4ClientReceiveCallback(IN EFI_EVENT Event, IN VOID* _Context)
 {
     PBM_UDP4_CONTEXT Context = _Context;
     EFI_UDP4_RECEIVE_DATA* ClientRxData = NULL;
