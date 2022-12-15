@@ -66,6 +66,7 @@ extern BM_TEST_SUITE UITestSuite;
 extern BM_TEST_SUITE WifiTestSuite;
 extern BM_TEST_SUITE HttpTestSuite;
 // extern BM_TEST_SUITE WindbgTestSuite;
+extern BM_TEST_SUITE Dns4TestSuite;
 
 PBM_TEST_SUITE TestSuites[] = {
 
@@ -108,6 +109,7 @@ PBM_TEST_SUITE TestSuites[] = {
     &WifiTestSuite,
     &HttpTestSuite,
     // &WindbgTestSuite,
+    &Dns4TestSuite,
 };
 
 VOID TestSuitePopulateAppInfoNode(IN PBM_SESSION Session);

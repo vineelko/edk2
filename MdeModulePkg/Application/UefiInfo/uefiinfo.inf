@@ -42,6 +42,7 @@
   tsdevicepath.c
   tsdhcp4.c
   tsdhcp6.c
+  tsdns4.c
   tsfont.c
   tsgraphicsoutput.c
   tsgraphicsoutput.rgb.c

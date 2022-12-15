@@ -34,7 +34,7 @@ Run build:
 CBMR App:
     1. After successful build you should have cbmr_app.efi in D:\repos\edk2\Build\MdeModule\DEBUG_VS2019\X64\
 
-
+git push vineel_edk2 HEAD:user/vineelko/uefiinfo_port
 
 
 pip install -r pip-requirements.txt --upgrade
