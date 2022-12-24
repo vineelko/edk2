@@ -178,15 +178,10 @@ VOID HexDump(IN VOID* Buffer, IN UINTN Length)
     UINTN LineLength = 0;
 
     //
-    // Skip any non printable characters. Also sanitize (<,>,&,',") to make XML
-    // parsing sane!
+    // Skip any non printable characters.
     //
 
-#define PRINTABLE(x)                                                                         \
-    (((x) < 0x20 || (x) >= 0x7F) || (x) == '<' || (x) == '>' || (x) == '&' || (x) == '\'' || \
-             (x) == '"' ?                                                                    \
-         '.' :                                                                               \
-         x)
+#define PRINTABLE(x) (((x) < 0x20 || (x) >= 0x7F) ? '.' : x)
     while (Remaining > 0) {
         ByteIndex = 0;
         LineLength = MIN(16, Remaining);
@@ -608,4 +603,18 @@ IsRunningInVM(VOID)
 
 Exit:
     return IsRunningInVM;
+}
+
+GUID_NAME* FindGuidNameEntry(IN GUID_NAME* Table, IN EFI_GUID* Guid)
+{
+    GUID_NAME* Ptr = Table;
+    while (Ptr->Name != NULL) {
+        if (CompareMem(Guid, Ptr->Guid, sizeof(EFI_GUID)) == 0) {
+            return Ptr;
+        }
+
+        Ptr++;
+    }
+
+    return Ptr;
 }

@@ -32,6 +32,9 @@ Run build:
 UEFI Info App:
     1. After successful build you should have uefiinfo.efi in D:\repos\edk2\Build\MdeModule\DEBUG_VS2019\X64\
 
+
+D:\repos\edk2_2\MdeModulePkg\Application\UefiInfo>build -a X64 -m MdeModulePkg\Application\UefiInfo\uefiinfo.inf
+
 git push vineel_edk2 HEAD:user/vineelko/uefiinfo_port
 
 

@@ -8,8 +8,7 @@ Module Name:
 
 Abstract:
 
-    This header includes the minimum set of efi headers needed and the efiflash
-    dependencies.
+    This header includes the minimum set of efi headers needed.
 
 Author:
 
@@ -42,6 +41,7 @@ Environment:
 #include <Guid/FileSystemVolumeLabelInfo.h>
 #include <Guid/GlobalVariable.h>
 #include <Protocol/BlockIo.h>
+#include <Protocol/BlockIo2.h>
 #include <Protocol/DebugPort.h>
 #include <Protocol/DevicePathUtilities.h>
 #include <Protocol/DevicePathToText.h>
@@ -84,5 +84,10 @@ typedef struct _ENUM_TO_STRING {
     UINTN Value;
     CHAR8* String;
 } ENUM_TO_STRING;
+
+typedef struct _GUID_NAME {
+    EFI_GUID *Guid;
+    CHAR8* Name;
+} GUID_NAME;
 
 #endif // _COMMON_H_

@@ -69,4 +69,5 @@ GetLoadedImageFileSummary(OUT CHAR8** FilePath,
                           OUT CHAR8** ModifiedTime,
                           OUT CHAR8** SHA256Hash);
 
+GUID_NAME* FindGuidNameEntry(IN GUID_NAME* Table, IN EFI_GUID* Guid);
 #endif // _UTILS_H_
