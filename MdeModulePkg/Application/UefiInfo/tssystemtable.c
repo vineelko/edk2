@@ -157,6 +157,10 @@ static CHAR8* ParseGuidInDevicePath(IN CHAR16* DevicePath)
             Status = StrToGuid(Ptr, &Guid);
             if (!EFI_ERROR(Status)) {
                 GUID_NAME* Entry = FindGuidNameEntry(EfiAllGuidNames, &Guid);
+                if (Entry->Name == NULL) {
+                    return "<unable to convert guid to name>";
+                }
+
                 return Entry->Name;
             }
         }
@@ -216,6 +220,7 @@ static EFI_STATUS EfiDumpAllHandles(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_S
     EFI_OPEN_PROTOCOL_INFORMATION_ENTRY* ProtocolInfoEntries = NULL;
     UINTN ProtocolInfoEntriesCount = 0;
     EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* ToTextPath = NULL;
+    EFI_DEVICE_PATH_PROTOCOL* DevicePathProto = NULL;
     CHAR16* DevicePath = NULL;
 
     UNREFERENCED_PARAMETER(ProtocolArray);
@@ -248,6 +253,16 @@ static EFI_STATUS EfiDumpAllHandles(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_S
             DevicePath = ToTextPath->ConvertDevicePathToText(LoadedImage->FilePath, FALSE, FALSE);
             if (DevicePath != NULL) {
                 DBG_INFO_U(L"     Path : %s %a", DevicePath, ParseGuidInDevicePath(DevicePath));
+                FreePool(DevicePath);
+                DevicePath = NULL;
+            }
+        }
+
+        Status = gBS->HandleProtocol(Handles[i], &gEfiDevicePathProtocolGuid, &DevicePathProto);
+        if (!EFI_ERROR(Status)) {
+            DevicePath = ToTextPath->ConvertDevicePathToText(DevicePathProto, FALSE, FALSE);
+            if (DevicePath != NULL) {
+                DBG_INFO_U(L"     Device Path : %s %a", DevicePath, ParseGuidInDevicePath(DevicePath));
                 FreePool(DevicePath);
                 DevicePath = NULL;
             }
