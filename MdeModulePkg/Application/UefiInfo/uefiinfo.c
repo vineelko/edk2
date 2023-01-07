@@ -40,6 +40,7 @@ VOID ShowAppInfo(IN PBM_SESSION Session)
              (gSystemTable->Hdr.Revision & 0xFFFF) % 10);
     DBG_INFO_U(L"FirmwareVendor : %s", gSystemTable->FirmwareVendor);
     DBG_INFO("CMD Line: %a", Session->CommandLine);
+    DBG_INFO("-----------------------------------------------------");
     DBG_INFO(" ");
 }
 

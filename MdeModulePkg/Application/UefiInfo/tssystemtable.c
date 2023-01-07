@@ -299,7 +299,7 @@ static EFI_STATUS EfiDumpMSDMTables(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_S
     EntryPtr = (UINT64*)(XSDTHeader + 1); // Skip header
     for (UINTN i = 0; i < NumEntries; i++) {
         EFI_ACPI_SDT_HEADER* Header = (EFI_ACPI_SDT_HEADER*)(EntryPtr[i]);
-        if (XSDTHeader->Signature == SIGNATURE_32('M', 'S', 'D', 'M')) {
+        if (Header->Signature == SIGNATURE_32('M', 'S', 'D', 'M')) {
             EFI_ACPI_MSDM* MsdmTable = (EFI_ACPI_MSDM*)Header;
             CHAR8 Buffer[128];
             DBG_INFO("Signature         : MSDM");
@@ -311,14 +311,15 @@ static EFI_STATUS EfiDumpMSDMTables(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_S
             AsciiStrnCpyS(Buffer, _countof(Buffer), (CHAR8*)MsdmTable->Header.OemTableId, 8);
             DBG_INFO("Oem Table ID      : %a", Buffer);
             DBG_INFO("Oem Revision      : %d", MsdmTable->Header.OemRevision);
-            DBG_INFO("Creator ID        : %x", MsdmTable->Header.CreatorId);
+            AsciiStrnCpyS(Buffer, _countof(Buffer), (CHAR8*)&MsdmTable->Header.CreatorId, 4);
+            DBG_INFO("Creator ID        : %a", Buffer);
             DBG_INFO("Creator Revision  : %d", MsdmTable->Header.CreatorRevision);
-            DBG_INFO("Version       : %d", MsdmTable->Version);
-            DBG_INFO("Reserved      : %d", MsdmTable->Reserved);
-            DBG_INFO("Data Type     : %d", MsdmTable->DataType);
-            DBG_INFO("Data Reserved : %d", MsdmTable->DataReserved);
-            DBG_INFO("Data Length   : %d", MsdmTable->DataLength);
-            AsciiStrnCpyS(Buffer, _countof(Buffer), (CHAR8*)MsdmTable->Data, 30);
+            DBG_INFO("Version           : %d", MsdmTable->Version);
+            DBG_INFO("Reserved          : %d", MsdmTable->Reserved);
+            DBG_INFO("Data Type         : %d", MsdmTable->DataType);
+            DBG_INFO("Data Reserved     : %d", MsdmTable->DataReserved);
+            DBG_INFO("Data Length       : %d", MsdmTable->DataLength);
+            AsciiStrnCpyS(Buffer, _countof(Buffer), (CHAR8*)MsdmTable->Data, 29);
             DBG_INFO("Product Key       : %a", Buffer);
             Found = TRUE;
             break;
