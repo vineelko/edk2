@@ -22,6 +22,7 @@ Environment:
 
 #include "utils.h"
 #include "common.h"
+#include "guids.h"
 
 // #include <mincrypl.h>
 #include <strsafe.h>
@@ -605,11 +606,11 @@ Exit:
     return IsRunningInVM;
 }
 
-GUID_NAME* FindGuidNameEntry(IN GUID_NAME* Table, IN EFI_GUID* Guid)
+GUID_NAME* FindGuidNameEntry(IN EFI_GUID* Guid)
 {
-    GUID_NAME* Ptr = Table;
+    GUID_NAME* Ptr = EfiAllGuidNames;
     while (Ptr->Name != NULL) {
-        if (CompareMem(Guid, Ptr->Guid, sizeof(EFI_GUID)) == 0) {
+        if (CompareGuid(Guid, Ptr->Guid) == TRUE) {
             return Ptr;
         }
 

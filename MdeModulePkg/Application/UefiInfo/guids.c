@@ -1,11 +1,9 @@
 #include "common.h"
 
 // clang-format off
-EFI_GUID gUefiInfoAcpi10TableGuid                                         = {0xeb9d2d30, 0x2d88, 0x11d3, 0x9a, 0x16, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d};
 EFI_GUID gUefiInfoACPIOSFRMfgStringVariableGuid                           = {0x72234213, 0x0fd7, 0x48a1, 0xa5, 0x9f, 0xb4, 0x1b, 0xc1, 0x07, 0xfb, 0xcd};
 EFI_GUID gUefiInfoACPIOSFRModelStringVariableGuid                         = {0xca1bcad9, 0xe021, 0x4547, 0xa1, 0xb0, 0x5b, 0x22, 0xc7, 0xf6, 0x87, 0xf4};
 EFI_GUID gUefiInfoACPIOSFRRefDataBlockVariableGuid                        = {0x72234213, 0x0fd7, 0x48a1, 0xa5, 0x9f, 0xb4, 0x1b, 0xc1, 0x07, 0xfb, 0xcd};
-EFI_GUID gUefiInfoAcpiTableGuid                                           = {0xeb9d2d30, 0x2d88, 0x11d3, 0x9a, 0x16, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d};
 EFI_GUID gUefiInfoAdapterInfoPlatformSecurityGuid                         = {0x6be272c7, 0x1320, 0x4ccd, 0x90, 0x17, 0xd4, 0x61, 0x2c, 0x01, 0x2b, 0x25};
 EFI_GUID gUefiInfoAmtReadyToBootGuid                                      = {0x40b09b5a, 0xf0ef, 0x4627, 0x93, 0xd5, 0x27, 0xf0, 0x4b, 0x75, 0x4d, 0x05};
 EFI_GUID gUefiInfoAndroidFastbootPlatformProtocolGuid                     = {0x524685a0, 0x89a0, 0x11e3, 0x9d, 0x4d, 0xbf, 0xa9, 0xf6, 0xa4, 0x03, 0x08};
@@ -62,13 +60,11 @@ EFI_GUID gUefiInfoEdkiiWorkingBlockSignatureGuid                          = {0x9
 EFI_GUID gUefiInfoEfiAbsolutePointerProtocolGuid                          = {0x8d59d32b, 0xc655, 0x4ae9, 0x9b, 0x15, 0xf2, 0x59, 0x04, 0x99, 0x2a, 0x43};
 EFI_GUID gUefiInfoEfiAcpi10TableGuid                                      = {0xeb9d2d30, 0x2d88, 0x11d3, 0x9a, 0x16, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d};
 EFI_GUID gUefiInfoEfiAcpi20TableGuid                                      = {0x8868e871, 0xe4f1, 0x11d3, 0xbc, 0x22, 0x00, 0x80, 0xc7, 0x3c, 0x88, 0x81};
-EFI_GUID gUefiInfoEfiAcpi_20TableGuid                                     = {0x8868e871, 0xe4f1, 0x11d3, 0xbc, 0x22, 0x00, 0x80, 0xc7, 0x3c, 0x88, 0x81};
 EFI_GUID gUefiInfoEfiAcpiDescriptionGuid                                  = {0x3c699197, 0x093c, 0x4c69, 0xb0, 0x6b, 0x12, 0x8a, 0xe3, 0x48, 0x1d, 0xc9};
 EFI_GUID gUefiInfoEfiAcpiS3ContextGuid                                    = {0x0ef98d3a, 0x3e33, 0x497a, 0xa4, 0x01, 0x77, 0xbe, 0x3e, 0xb7, 0x4f, 0x38};
 EFI_GUID gUefiInfoEfiAcpiS3SaveProtocolGuid                               = {0x125f2de1, 0xfb85, 0x440c, 0xa5, 0x4c, 0x4d, 0x99, 0x35, 0x8a, 0x8d, 0x38};
 EFI_GUID gUefiInfoEfiAcpiSdtProtocolGuid                                  = {0xeb97088e, 0xcfdf, 0x49c6, 0xbe, 0x4b, 0xd9, 0x06, 0xa5, 0xb2, 0x0e, 0x86};
 EFI_GUID gUefiInfoEfiAcpiSupportProtocolGuid                              = {0xdbff9d55, 0x89b7, 0x46da, 0xbd, 0xdf, 0x67, 0x7d, 0x3d, 0xc0, 0x24, 0x1d};
-EFI_GUID gUefiInfoEfiAcpiTableGuid                                        = {0x8868e871, 0xe4f1, 0x11d3, 0xbc, 0x22, 0x00, 0x80, 0xc7, 0x3c, 0x88, 0x81};
 EFI_GUID gUefiInfoEfiAcpiTableProtocolGuid                                = {0xffe06bdd, 0x6107, 0x46a6, 0x7b, 0xb2, 0x5a, 0x9c, 0x7e, 0xc5, 0x27, 0x5c};
 EFI_GUID gUefiInfoEfiAcpiTableStorageGuid                                 = {0x7e374e25, 0x8e01, 0x4fee, 0x87, 0xf2, 0x39, 0x0c, 0x23, 0xc6, 0x06, 0xcd};
 EFI_GUID gUefiInfoEfiAcpiVariableCompatiblityGuid                         = {0xc020489e, 0x6db2, 0x4ef2, 0x9a, 0xa5, 0xca, 0x06, 0xfc, 0x11, 0xd3, 0x6a};
@@ -221,7 +217,6 @@ EFI_GUID gUefiInfoEfiEndOfDxeEventGroupGuid                               = {0x0
 EFI_GUID gUefiInfoEfiEndOfPeiSignalPpiGuid                                = {0x605ea650, 0xc65c, 0x42e1, 0xba, 0x80, 0x91, 0xa5, 0x2a, 0xb6, 0x18, 0xc6};
 EFI_GUID gUefiInfoEfiEraseBlockProtocolGuid                               = {0x95a9a93e, 0xa86e, 0x4926, 0xaa, 0xef, 0x99, 0x18, 0xe7, 0x72, 0xd9, 0x87};
 EFI_GUID gUefiInfoEfiEsrtOperationProtocolGuid                            = {0x4549ab47, 0x6e60, 0x4293, 0xb9, 0x1d, 0x31, 0xb6, 0x10, 0xad, 0x80, 0x56};
-EFI_GUID gUefiInfoEfiEsrtTableGuid                                        = {0xb122a263, 0x3661, 0x4f68, 0x99, 0x29, 0x78, 0xf8, 0xb0, 0xd6, 0x21, 0x80};
 EFI_GUID gUefiInfoEfiEventDxeDispatchGuid                                 = {0x7081e22f, 0xcac6, 0x4053, 0x94, 0x68, 0x67, 0x57, 0x82, 0xcf, 0x88, 0xe5};
 EFI_GUID gUefiInfoEfiEventExitBootServicesGuid                            = {0x27abf055, 0xb1b8, 0x4c26, 0x80, 0x48, 0x74, 0x8f, 0x37, 0xba, 0xa2, 0xdf};
 EFI_GUID gUefiInfoEfiEventLegacyBootGuid                                  = {0x2a571201, 0x4966, 0x47f6, 0x8b, 0x86, 0xf3, 0x1e, 0x41, 0xf3, 0x2f, 0x10};
@@ -465,7 +460,6 @@ EFI_GUID gUefiInfoEfiMmioDeviceProtocolGuid                               = {0x2
 EFI_GUID gUefiInfoEfiMonotonicCounterArchProtocolGuid                     = {0x1da97072, 0xbddc, 0x4b30, 0x99, 0xf1, 0x72, 0xa0, 0xb5, 0x6f, 0xff, 0x2a};
 EFI_GUID gUefiInfoEfiMpServiceProtocolGuid                                = {0x3fdda605, 0xa76e, 0x4f46, 0xad, 0x29, 0x12, 0xf4, 0x53, 0x1b, 0x3d, 0x08};
 EFI_GUID gUefiInfoEfiMpServicesProtocolGuid                               = {0xf33261e7, 0x23cb, 0x11d5, 0xbd, 0x5c, 0x00, 0x80, 0xc7, 0x3c, 0x88, 0x81};
-EFI_GUID gUefiInfoEfiMpsTableGuid                                         = {0xeb9d2d2f, 0x2d88, 0x11d3, 0x9a, 0x16, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d};
 EFI_GUID gUefiInfoEfiMsNetworkDelayProtocolGuid                           = {0xff7d36aa, 0x96a5, 0x46c4, 0xb1, 0x66, 0xfe, 0x18, 0xd2, 0x93, 0x26, 0x06};
 EFI_GUID gUefiInfoEfiMtftp4ProtocolGuid                                   = {0x78247c57, 0x63db, 0x4708, 0x99, 0xc2, 0xa8, 0xb4, 0xa9, 0xa6, 0x1f, 0x6b};
 EFI_GUID gUefiInfoEfiMtftp4ServiceBindingProtocolGuid                     = {0x2fe800be, 0x8f01, 0x4aa6, 0x94, 0x6b, 0xd7, 0x13, 0x88, 0xe1, 0x83, 0x3f};
@@ -965,7 +959,6 @@ EFI_GUID gUefiInfoShellLevel3HiiGuid                                      = {0x4
 EFI_GUID gUefiInfoShellMapGuid                                            = {0x51271e13, 0x7de3, 0x43af, 0x8b, 0xc2, 0x71, 0xad, 0x3b, 0x82, 0x43, 0x25};
 EFI_GUID gUefiInfoShellNetwork1HiiGuid                                    = {0xf3d301bb, 0xf4a5, 0x45a8, 0xb0, 0xb7, 0xfa, 0x99, 0x9c, 0x62, 0x37, 0xae};
 EFI_GUID gUefiInfoShellVariableGuid                                       = {0x158def5a, 0xf656, 0x419c, 0xb0, 0x27, 0x7a, 0x31, 0x92, 0xc0, 0x79, 0xd2};
-EFI_GUID gUefiInfoSmbiosTableGuid                                         = {0xeb9d2d31, 0x2d88, 0x11d3, 0x9a, 0x16, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d};
 EFI_GUID gUefiInfoSmmCommunicateHeaderGuid                                = {0xf328e36c, 0x23b6, 0x4a95, 0x85, 0x4b, 0x32, 0xe1, 0x95, 0x34, 0xcd, 0x75};
 EFI_GUID gUefiInfoSmmPerformanceExProtocolGuid                            = {0x931fc048, 0xc71d, 0x4455, 0x89, 0x30, 0x47, 0x06, 0x30, 0xe3, 0x0e, 0xe5};
 EFI_GUID gUefiInfoSmmPerformanceProtocolGuid                              = {0xf866226a, 0xeaa5, 0x4f5a, 0xa9, 0x0a, 0x6c, 0xfb, 0xa5, 0x7c, 0x58, 0x8e};
@@ -1071,12 +1064,19 @@ EFI_GUID gUefiInfoEfiHvDxeGuid        = {0xCA585647, 0x54A9, 0x4879, 0xA8, 0xCD,
 EFI_GUID gUefiInfoNetvscDxeGuid       = {0xD2C1389F, 0xE54F, 0x4B33, 0xA4, 0xB3, 0x23, 0x1B, 0x37, 0x3C, 0xA3, 0x7F}; // NetvscDxe
 
 
+EFI_GUID gUefiInfoEfiDxeServicesTable                   = {0x05ad34ba, 0x6f02, 0x4214, 0x95, 0x2e, 0x4d, 0xa0, 0x39, 0x8e, 0x2b, 0xb9}; // DXE_SERVICES_TABLE
+EFI_GUID gUefiInfoEfiEdkiiPiSmmCommunicationRegionTable = {0x4e28ca50, 0xd582, 0x44ac, 0xa1, 0x1f, 0xe3, 0xd5, 0x65, 0x26, 0xdb, 0x34}; // EDKII_PI_SMM_COMMUNICATION_REGION_TABLE
+EFI_GUID gUefiInfoEfiEdkiiPiSmmMemoryAttributesTable    = {0x6b9fd3f7, 0x16df, 0x45e8, 0xbd, 0x39, 0xb9, 0x4a, 0x66, 0x54, 0x1a, 0x5d}; // EDKII_PI_SMM_MEMORY_ATTRIBUTES_TABLE
+EFI_GUID gUefiInfoEfiEfiCcFinalEventsTable              = {0xdd4a4648, 0x2de7, 0x4665, 0x96, 0x4d, 0x21, 0xd9, 0xef, 0x5f, 0xb4, 0x46}; // EFI_CC_FINAL_EVENTS_TABLE
+EFI_GUID gUefiInfoEfiEfiRtPropertiesTable               = {0xeb66918a, 0x7eef, 0x402a, 0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9}; // EFI_RT_PROPERTIES_TABLE
+EFI_GUID gUefiInfoEfiEfiTcg2FinalEventsTable            = {0x1e2ed096, 0x30e2, 0x4254, 0xbd, 0x89, 0x86, 0x3b, 0xbe, 0xf8, 0x23, 0x25}; // EFI_TCG2_FINAL_EVENTS_TABLE
+EFI_GUID gUefiInfoEfiEfiConformanceProfilesTable        = {0x36122546, 0xf7e7, 0x4c8f, 0xbd, 0x9b, 0xeb, 0x85, 0x25, 0xb5, 0x0c, 0x0b}; // EFI_CONFORMANCE_PROFILES_TABLE
+
+
 GUID_NAME EfiAllGuidNames[] = {
-    {&gUefiInfoAcpi10TableGuid,                                    "ACPI10_TABLE"},
     {&gUefiInfoACPIOSFRMfgStringVariableGuid,                      "ACPIOSFRMFG_STRING_VARIABLE"},
     {&gUefiInfoACPIOSFRModelStringVariableGuid,                    "ACPIOSFRMODEL_STRING_VARIABLE"},
     {&gUefiInfoACPIOSFRRefDataBlockVariableGuid,                   "ACPIOSFRREF_DATA_BLOCK_VARIABLE"},
-    {&gUefiInfoAcpiTableGuid,                                      "ACPI_TABLE"},
     {&gUefiInfoAdapterInfoPlatformSecurityGuid,                    "ADAPTER_INFO_PLATFORM_SECURITY"},
     {&gUefiInfoAmtReadyToBootGuid,                                 "AMT_READY_TO_BOOT"},
     {&gUefiInfoAndroidFastbootPlatformProtocolGuid,                "ANDROID_FASTBOOT_PLATFORM_PROTOCOL"},
@@ -1133,13 +1133,11 @@ GUID_NAME EfiAllGuidNames[] = {
     {&gUefiInfoEfiAbsolutePointerProtocolGuid,                     "EFI_ABSOLUTE_POINTER_PROTOCOL"},
     {&gUefiInfoEfiAcpi10TableGuid,                                 "EFI_ACPI10_TABLE"},
     {&gUefiInfoEfiAcpi20TableGuid,                                 "EFI_ACPI20_TABLE"},
-    {&gUefiInfoEfiAcpi_20TableGuid,                                "EFI_ACPI_20_TABLE"},
     {&gUefiInfoEfiAcpiDescriptionGuid,                             "EFI_ACPI_DESCRIPTION"},
     {&gUefiInfoEfiAcpiS3ContextGuid,                               "EFI_ACPI_S3_CONTEXT"},
     {&gUefiInfoEfiAcpiS3SaveProtocolGuid,                          "EFI_ACPI_S3_SAVE_PROTOCOL"},
     {&gUefiInfoEfiAcpiSdtProtocolGuid,                             "EFI_ACPI_SDT_PROTOCOL"},
     {&gUefiInfoEfiAcpiSupportProtocolGuid,                         "EFI_ACPI_SUPPORT_PROTOCOL"},
-    {&gUefiInfoEfiAcpiTableGuid,                                   "EFI_ACPI_TABLE"},
     {&gUefiInfoEfiAcpiTableProtocolGuid,                           "EFI_ACPI_TABLE_PROTOCOL"},
     {&gUefiInfoEfiAcpiTableStorageGuid,                            "EFI_ACPI_TABLE_STORAGE"},
     {&gUefiInfoEfiAcpiVariableCompatiblityGuid,                    "EFI_ACPI_VARIABLE_COMPATIBLITY"},
@@ -1294,7 +1292,6 @@ GUID_NAME EfiAllGuidNames[] = {
     {&gUefiInfoEfiEndOfPeiSignalPpiGuid,                           "EFI_END_OF_PEI_SIGNAL_PPI"},
     {&gUefiInfoEfiEraseBlockProtocolGuid,                          "EFI_ERASE_BLOCK_PROTOCOL"},
     {&gUefiInfoEfiEsrtOperationProtocolGuid,                       "EFI_ESRT_OPERATION_PROTOCOL"},
-    {&gUefiInfoEfiEsrtTableGuid,                                   "EFI_ESRT_TABLE"},
     {&gUefiInfoEfiEventDxeDispatchGuid,                            "EFI_EVENT_DXE_DISPATCH"},
     {&gUefiInfoEfiEventExitBootServicesGuid,                       "EFI_EVENT_EXIT_BOOT_SERVICES"},
     {&gUefiInfoEfiEventLegacyBootGuid,                             "EFI_EVENT_LEGACY_BOOT"},
@@ -1545,7 +1542,6 @@ GUID_NAME EfiAllGuidNames[] = {
     {&gUefiInfoEfiMonotonicCounterArchProtocolGuid,                "EFI_MONOTONIC_COUNTER_ARCH_PROTOCOL"},
     {&gUefiInfoEfiMpServiceProtocolGuid,                           "EFI_MP_SERVICE_PROTOCOL"},
     {&gUefiInfoEfiMpServicesProtocolGuid,                          "EFI_MP_SERVICES_PROTOCOL"},
-    {&gUefiInfoEfiMpsTableGuid,                                    "EFI_MPS_TABLE"},
     {&gUefiInfoEfiMsNetworkDelayProtocolGuid,                      "EFI_MS_NETWORK_DELAY_PROTOCOL"},
     {&gUefiInfoEfiMtftp4ProtocolGuid,                              "EFI_MTFTP4_PROTOCOL"},
     {&gUefiInfoEfiMtftp4ServiceBindingProtocolGuid,                "EFI_MTFTP4_SERVICE_BINDING_PROTOCOL"},
@@ -2049,7 +2045,6 @@ GUID_NAME EfiAllGuidNames[] = {
     {&gUefiInfoShellMapGuid,                                       "SHELL_MAP"},
     {&gUefiInfoShellNetwork1HiiGuid,                               "SHELL_NETWORK1_HII"},
     {&gUefiInfoShellVariableGuid,                                  "SHELL_VARIABLE"},
-    {&gUefiInfoSmbiosTableGuid,                                    "SMBIOS_TABLE"},
     {&gUefiInfoSmmCommunicateHeaderGuid,                           "SMM_COMMUNICATE_HEADER"},
     {&gUefiInfoSmmPerformanceExProtocolGuid,                       "SMM_PERFORMANCE_EX_PROTOCOL"},
     {&gUefiInfoSmmPerformanceProtocolGuid,                         "SMM_PERFORMANCE_PROTOCOL"},
@@ -2155,6 +2150,13 @@ GUID_NAME EfiAllGuidNames[] = {
     {&gUefiInfoEfiHvDxeGuid, "EfiHvDxe"},
     {&gUefiInfoNetvscDxeGuid, "NetvscDxe"},
 
+    {&gUefiInfoEfiDxeServicesTable, "DXE_SERVICES_TABLE"},
+    {&gUefiInfoEfiEdkiiPiSmmCommunicationRegionTable, "EDKII_PI_SMM_COMMUNICATION_REGION_TABLE"},
+    {&gUefiInfoEfiEdkiiPiSmmMemoryAttributesTable, "EDKII_PI_SMM_MEMORY_ATTRIBUTES_TABLE"},
+    {&gUefiInfoEfiEfiCcFinalEventsTable, "EFI_CC_FINAL_EVENTS_TABLE"},
+    {&gUefiInfoEfiEfiRtPropertiesTable, "EFI_RT_PROPERTIES_TABLE"},
+    {&gUefiInfoEfiEfiTcg2FinalEventsTable, "EFI_TCG2_FINAL_EVENTS_TABLE"},
+    {&gUefiInfoEfiEfiConformanceProfilesTable, "EFI_CONFORMANCE_PROFILES_TABLE"},
     {NULL, NULL},
 };
 
