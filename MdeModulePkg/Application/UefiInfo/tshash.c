@@ -109,6 +109,8 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
     // Validate Hash 1 support
     //
 
+    ProtocolGetInfo(&ProtocolArray[EFI_HASH_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_HASH_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_HASH_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
@@ -177,6 +179,8 @@ static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION S
     //
     // Validate Hash 2 support
     //
+
+    ProtocolGetInfo(&ProtocolArray[EFI_HASH2_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_HASH2_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
@@ -251,6 +255,8 @@ static EFI_STATUS Hash2Twice(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
     EFI_HASH2_OUTPUT Output;
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_HASH2_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_HASH2_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
@@ -349,6 +355,8 @@ static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     EFI_EVENT TimerEvent = NULL;
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_HASH_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_HASH_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

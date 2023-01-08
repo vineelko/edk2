@@ -47,6 +47,8 @@ static EFI_STATUS FontEnumerateInstalledFonts(IN PBM_PROTOCOL_INFO ProtocolArray
     EFI_HII_FONT_PROTOCOL* FontProtocol = NULL;
     PBM_FONT_NODE RetFontList = NULL;
 
+    ProtocolGetInfo(&ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
@@ -289,6 +291,9 @@ static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     // Get hold of Font and Graphics protocols
     //
 
+    ProtocolGetInfo(&ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX]);
+    ProtocolGetInfo(&ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_HII_FONT_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
@@ -347,6 +352,9 @@ static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
     PBM_FONT_NODE FontList = NULL;
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_HII_FONT_PROTOCOL_INDEX]);
+    ProtocolGetInfo(&ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX]);
 
     //
     // Get hold of Font and Graphics protocols

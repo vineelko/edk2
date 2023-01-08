@@ -127,6 +127,8 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     UNREFERENCED_PARAMETER(Session);
 
+    ProtocolGetInfo(&ProtocolArray[EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL Protocol not available : %a(0x%x)",
@@ -263,6 +265,9 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
         DBG_INFO(" uefiinfo.efi -t wificonnect,ssid=riya-2.4,pwd=xxxxx");
         goto Exit;
     }
+
+    ProtocolGetInfo(&ProtocolArray[EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL_INDEX]);
+    ProtocolGetInfo(&ProtocolArray[EFI_SUPPLICANT_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

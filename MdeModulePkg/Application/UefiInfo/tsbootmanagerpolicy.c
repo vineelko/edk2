@@ -41,6 +41,7 @@ static EFI_STATUS ValidateConnectDeviceClassTest(IN PBM_PROTOCOL_INFO ProtocolAr
         goto Exit;
     }
 
+    ProtocolGetInfo(&ProtocolArray[EFI_BOOT_MANAGER_POLICY_PROTOCOL_INDEX]);
     BootManager = ProtocolArray[EFI_BOOT_MANAGER_POLICY_PROTOCOL_INDEX].Protocol;
     Status = BootManager->ConnectDeviceClass(BootManager, &gEfiBootManagerPolicyConnectAllGuid);
     if (EFI_ERROR(Status)) {

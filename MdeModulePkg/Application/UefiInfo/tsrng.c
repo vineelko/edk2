@@ -40,6 +40,8 @@ static EFI_STATUS RngProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
 
     ZeroMem(RngData, _countof(RngData));
 
+    ProtocolGetInfo(&ProtocolArray[EFI_RNG_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_RNG_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_RNG_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);

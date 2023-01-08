@@ -54,6 +54,8 @@ static EFI_STATUS DevicePathProbeApi(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
         goto Exit;
     }
 
+    ProtocolGetInfo(&ProtocolArray[EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_INDEX]);
+    ProtocolGetInfo(&ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX]);
     FromTextPath = ProtocolArray[EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_INDEX].Protocol;
     ToTextPath = ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX].Protocol;
 

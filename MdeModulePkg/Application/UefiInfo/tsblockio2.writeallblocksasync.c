@@ -239,6 +239,7 @@ BlockIo2WriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
 
     UNREFERENCED_PARAMETER(Session);
 
+    ProtocolGetInfo(&ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX]);
     DevicePathToTextIf = ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX].Protocol;
     // BLOCK IO handles could be available for multiple devices. Enumerate all of them
     Status = gBS->LocateHandleBuffer(ByProtocol,

@@ -24,6 +24,7 @@ Environment:
 #include "session.h"
 #include "protocols.h"
 #include "testsuites.h"
+#include "network_common.h"
 
 EFI_BOOT_SERVICES* gBS;
 EFI_SYSTEM_TABLE* gSystemTable;
@@ -148,15 +149,7 @@ Main(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable)
 
     ShowAppInfo(Session);
 
-    //
-    // Probe all protocols for their existence
-    //
-
-    Status = ProtocolProbeAll();
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("ProtocolProbeAll() failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
+    NetworkCommonInitStack();
 
     //
     // Start execution of test suites

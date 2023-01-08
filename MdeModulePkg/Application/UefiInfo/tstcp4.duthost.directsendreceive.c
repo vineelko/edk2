@@ -424,6 +424,8 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     UINT32 Timeout[4] = {4, 8, 16, 32};
     PBM_PROTOCOL_INFO ProtocolArray = gProtocolArray;
 
+    ProtocolGetInfo(&ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_DHCP4_PROTOCOL Protocol not available : %a(0x%x)", E(Status), Status);
@@ -651,6 +653,8 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     gProtocolArray = ProtocolArray;
     gHostArguments = Session->Arguments;
+
+    ProtocolGetInfo(&ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_TCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

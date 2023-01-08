@@ -442,22 +442,7 @@ Exit:
     return Status;
 }
 
-EFI_STATUS
-EFIAPI
-ProtocolProbeAll(VOID)
-{
-    EFI_STATUS Status = EFI_SUCCESS;
-
-    NetworkCommonInitStack();
-
-    for (UINTN Index = 0; Index < EFI_MAX_PROTOCOL_INDEX; Index++) {
-        ProtocolGetInfo(&ProtocolArray[Index]);
-    }
-
-    return Status;
-}
-
-static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
+EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* DeviceHandles = NULL;

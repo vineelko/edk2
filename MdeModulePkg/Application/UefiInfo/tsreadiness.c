@@ -63,12 +63,21 @@ static VOID ReadinessExPrintProtocolInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
     }
 }
 
+static VOID ProtocolProbeAll(VOID)
+{
+    for (UINTN Index = 0; Index < EFI_MAX_PROTOCOL_INDEX; Index++) {
+        ProtocolGetInfo(&ProtocolArray[Index]);
+    }
+}
+
 static EFI_STATUS ReadinessProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PBM_PROTOCOL_INFO SortedProtoArray[EFI_MAX_PROTOCOL_INDEX];
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolProbeAll();
 
     for (UINTN Index = 0; Index < EFI_MAX_PROTOCOL_INDEX; Index++) {
         SortedProtoArray[Index] = &ProtocolArray[Index];

@@ -50,6 +50,8 @@ static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     DBG_INFO("Graphics GraphicsOutputProbe");
 
+    ProtocolGetInfo(&ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL Protocol not available : %a(0x%x)",

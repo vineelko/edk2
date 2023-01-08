@@ -48,14 +48,14 @@ EFI_STATUS EFIAPI NetworkCommonInitStack()
                                                NULL);
         if (EFI_ERROR(Status)) {
             DBG_ERROR(
-                "network_init_network_stack: Unable to install of gsMsNetworkDelayProtocol 0x%x",
+                "NetworkCommonInitStack: Unable to install of gsMsNetworkDelayProtocol 0x%x",
                 Status);
             goto Exit;
         }
 
     } else if (EFI_ERROR(Status)) {
         DBG_ERROR(
-            "network_init_network_stack: Unable to locate gsMsNetworkDelayProtocol with status 0x%x",
+            "NetworkCommonInitStack: Unable to locate gsMsNetworkDelayProtocol with status 0x%x",
             Status);
         goto Exit;
     }

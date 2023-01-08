@@ -318,6 +318,8 @@ typedef struct _BM_PROTOCOL_INFO {
     EFI_STATUS ServiceBindingProtocolStatus;
 } BM_PROTOCOL_INFO, *PBM_PROTOCOL_INFO;
 
+EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo);
+
 EFI_STATUS
 ProtocolOpenServiceBinding(IN EFI_HANDLE DeviceHandle,
                            IN EFI_GUID* ServiceBindingProtocolGuid,
@@ -328,4 +330,6 @@ ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* Service
                                         IN EFI_GUID* ProtocolGuid,
                                         OUT VOID** Protocol,
                                         OUT EFI_HANDLE* ProtocolHandle);
+
+extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 #endif // _PROTOCOLS_H_

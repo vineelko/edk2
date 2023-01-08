@@ -116,6 +116,8 @@ GraphicsOutputRGB(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 
     UNREFERENCED_PARAMETER(Session);
 
+    ProtocolGetInfo(&ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX]);
+
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
         DBG_ERROR("EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL Protocol not available : %a(0x%x)",

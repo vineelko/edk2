@@ -49,6 +49,7 @@ static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
         goto Exit;
     }
 
+    ProtocolGetInfo(&ProtocolArray[EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_INDEX]);
     ConOutProtocol = ProtocolArray[EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_INDEX].Protocol;
 
     ConOutMode = ConOutProtocol->Mode;
