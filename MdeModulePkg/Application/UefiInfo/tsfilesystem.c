@@ -25,7 +25,7 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 
-static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS FileInfo(IN PBM_SESSION Session)
 {
     EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* ToTextPath = NULL;
     EFI_FILE_INFO* FileInfo = NULL;
@@ -36,8 +36,6 @@ static EFI_STATUS FileInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Se
     EFI_STATUS Status = EFI_SUCCESS;
     CHAR16* BinaryFilePath = NULL;
     UINTN FileInfoSize = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

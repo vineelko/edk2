@@ -27,7 +27,7 @@ Environment:
 #include "testsuites.h"
 #include "boot_options.h"
 
-static EFI_STATUS EnumerateBootOrder(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS EnumerateBootOrder(IN PBM_SESSION Session)
 {
     UINT8* BootOptions = NULL;
     UINT32 BootOptionsLength = 0;
@@ -35,8 +35,6 @@ static EFI_STATUS EnumerateBootOrder(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
     UINT32 Offset = 0;
     EFI_STATUS Status = EFI_SUCCESS;
     sUEFI_BOOT_OPTION* Option = NULL;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

@@ -11,11 +11,9 @@
 //
 // Constants/Macros
 //
-#define ALIGN_RANGE_DOWN(_range, _alignment) \
-    ((_range) & ~((UINT64)(_alignment) - 1))
+#define ALIGN_RANGE_DOWN(_range, _alignment) ((_range) & ~((UINT64)(_alignment)-1))
 
-#define ALIGN_RANGE_UP(_range, _alignment) \
-    ALIGN_RANGE_DOWN((_range) + (_alignment) - 1, _alignment)
+#define ALIGN_RANGE_UP(_range, _alignment) ALIGN_RANGE_DOWN((_range) + (_alignment)-1, _alignment)
 
 #define Add2Ptr(_Ptr, _Value) ((VOID*)((UINT8*)(_Ptr) + (_Value)))
 
@@ -65,8 +63,7 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
                                   &DescriptorSize,
                                   &DescriptorVersion);
     if (EfiStatus != EFI_BUFFER_TOO_SMALL) {
-        DBG_ERROR("GetMemoryMap failed with error 0x%x (expected EFI_BUFFER_TOO_SMALL)",
-                  EfiStatus);
+        DBG_ERROR("GetMemoryMap failed with error 0x%x (expected EFI_BUFFER_TOO_SMALL)", EfiStatus);
         if (!EFI_ERROR(EfiStatus)) {
             EfiStatus = EFI_ABORTED;
         }

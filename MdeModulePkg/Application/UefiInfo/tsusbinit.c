@@ -26,15 +26,13 @@ Environment:
 #include "efiusbinitprotocol.h"
 #include "testsuites.h"
 
-static EFI_STATUS UsbInitProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS UsbInitProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PBM_PROTOCOL_INFO UsbInitProtocolInfo = &ProtocolArray[EFI_USB_INIT_PROTOCOL_INDEX];
     EFI_USB_INIT_PROTOCOL* UsbInitProtocol = UsbInitProtocolInfo->Protocol;
     USB_CORE_INFO UsbCoreInfo = {0};
     UINT8 USBPort = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

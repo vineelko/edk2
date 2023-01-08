@@ -1277,8 +1277,7 @@ EFI_STATUS EFIAPI FileLocateAndOpen(IN CHAR16* FileName,
                                  NULL,
                                  (VOID**)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x",
-                  Status);
+        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x", Status);
         goto Exit;
     }
 
@@ -1782,8 +1781,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
                                  NULL,
                                  (VOID**)&DevicePathToTextIf);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x",
-                  Status);
+        DBG_ERROR("LocateProtocol() for DevicePathToText protocol failed with status 0x%x", Status);
         return Status;
     }
 

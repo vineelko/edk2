@@ -21,7 +21,17 @@
 //
 
 static EFI_BOOT_MANAGER_POLICY_PROTOCOL* gsBootMgrPolicy = NULL;
-EFI_GUID gEfiMsNetworkDelayProtocolGuid                     = {0xff7d36aa, 0x96a5, 0x46c4, 0xb1, 0x66, 0xfe, 0x18, 0xd2, 0x93, 0x26, 0x06}; // EFI_MS_NETWORK_DELAY_PROTOCOL_GUID
+EFI_GUID gEfiMsNetworkDelayProtocolGuid = {0xff7d36aa,
+                                           0x96a5,
+                                           0x46c4,
+                                           0xb1,
+                                           0x66,
+                                           0xfe,
+                                           0x18,
+                                           0xd2,
+                                           0x93,
+                                           0x26,
+                                           0x06}; // EFI_MS_NETWORK_DELAY_PROTOCOL_GUID
 
 //
 // Prototypes
@@ -47,9 +57,8 @@ EFI_STATUS EFIAPI NetworkCommonInitStack()
                                                EFI_NATIVE_INTERFACE,
                                                NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR(
-                "NetworkCommonInitStack: Unable to install of gsMsNetworkDelayProtocol 0x%x",
-                Status);
+            DBG_ERROR("NetworkCommonInitStack: Unable to install of gsMsNetworkDelayProtocol 0x%x",
+                      Status);
             goto Exit;
         }
 
@@ -132,10 +141,8 @@ BOOLEAN EFIAPI NetworkCommonIsEthernetHandle(IN EFI_HANDLE DeviceHandle)
     BOOLEAN FoundEthernetNicHandle = TRUE;
     for (UINTN j = 0; j < ProtocolBufferCount; j++) {
         if (CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gEfiEapProtocolGuid) == TRUE ||
-            CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gEfiWiFiProtocolGuid) ==
-                TRUE ||
-            CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gEfiWiFi2ProtocolGuid) ==
-                TRUE) {
+            CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gEfiWiFiProtocolGuid) == TRUE ||
+            CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gEfiWiFi2ProtocolGuid) == TRUE) {
             FoundEthernetNicHandle = FALSE;
             break;
         }

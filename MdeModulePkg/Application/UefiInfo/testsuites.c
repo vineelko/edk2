@@ -181,7 +181,7 @@ Return Value:
                     }
 
                     if (Test->DutTestFn != NULL) {
-                        Status = Test->DutTestFn(ProtocolArray, Session);
+                        Status = Test->DutTestFn(Session);
                     }
 
                     goto Exit;

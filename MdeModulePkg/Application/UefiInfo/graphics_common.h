@@ -75,11 +75,7 @@ EFI_STATUS GfxClearScreen(IN PGFX_FRAMEBUFFER FrameBuffer, IN UINT32 RGB);
 // Color utility functions
 //
 
-VOID GfxInitRectangle(IN PGFX_RECT Rect,
-                      IN UINTN X,
-                      IN UINTN Y,
-                      IN UINTN Width,
-                      IN UINTN Height);
+VOID GfxInitRectangle(IN PGFX_RECT Rect, IN UINTN X, IN UINTN Y, IN UINTN Width, IN UINTN Height);
 
 VOID GfxSetColor(IN EFI_GRAPHICS_OUTPUT_BLT_PIXEL* Pixel, IN UINT32 ARGB);
 
@@ -117,9 +113,7 @@ GfxGetClipRectangle(IN PGFX_RECT Source, IN PGFX_RECT Destination);
 #define RASTER_ATTRIBUTE_INVERT   0x00000004
 
 EFI_STATUS
-GfxGetFontGlyph(IN PGFX_FONT_INFO FontInfo,
-                IN CHAR16 Char,
-                IN OUT EFI_IMAGE_OUTPUT** CharImageOut);
+GfxGetFontGlyph(IN PGFX_FONT_INFO FontInfo, IN CHAR16 Char, IN OUT EFI_IMAGE_OUTPUT** CharImageOut);
 
 EFI_STATUS
 GfxRasterCharacter(IN GFX_FRAMEBUFFER* FrameBuffer,

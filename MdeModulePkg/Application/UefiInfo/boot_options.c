@@ -26,10 +26,9 @@
 //
 // Prototypes
 //
-static EFI_STATUS EFIAPI
-EnumerateBootOptionsInternal(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
-                             OUT UINT32* BootOptionsBufferLength,
-                             OUT UINT32* NumOptions);
+static EFI_STATUS EFIAPI EnumerateBootOptionsInternal(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
+                                                      OUT UINT32* BootOptionsBufferLength,
+                                                      OUT UINT32* NumOptions);
 
 //
 // Interfaces
@@ -86,8 +85,7 @@ EFI_STATUS EFIAPI EFIAPI BootOptionsSetOneTimeBootSequence(IN UINT16 BootOption)
                             &BootOption);
 }
 
-EFI_STATUS EFIAPI BootOptionsSetBootEntryOptionalData(IN UINT16 BootOption,
-                                                      IN CHAR16* CommandLine)
+EFI_STATUS EFIAPI BootOptionsSetBootEntryOptionalData(IN UINT16 BootOption, IN CHAR16* CommandLine)
 /*++
 
 Routine Description:
@@ -420,10 +418,9 @@ Exit:
 // Local functions
 //
 
-static EFI_STATUS EFIAPI
-EnumerateBootOptionsInternal(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
-                             OUT UINT32* BootOptionsBufferLength,
-                             OUT UINT32* NumOptions)
+static EFI_STATUS EFIAPI EnumerateBootOptionsInternal(IN OUT sUEFI_BOOT_OPTION* BootOptionsBuffer,
+                                                      OUT UINT32* BootOptionsBufferLength,
+                                                      OUT UINT32* NumOptions)
 {
     EFI_STATUS EfiStatus = EFI_SUCCESS;
     EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* DevicePathToTextIf = NULL;

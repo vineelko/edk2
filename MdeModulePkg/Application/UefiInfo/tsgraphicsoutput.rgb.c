@@ -104,7 +104,7 @@ static EFI_STATUS GfxDrawRectangle(IN EFI_GRAPHICS_OUTPUT_BLT_PIXEL* FrameBuffer
 // }
 
 EFI_STATUS
-GraphicsOutputRGB(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+GraphicsOutputRGB(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_GRAPHICS_OUTPUT_PROTOCOL* GraphicsProtocol = NULL;
@@ -185,8 +185,8 @@ GraphicsOutputRGB(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
 
     FrameBufferSize = GraphicsModeInfo->HorizontalResolution *
                       GraphicsModeInfo->VerticalResolution * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL);
-    FrameBufferContent = (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)
-                             (UINTN)GraphicsMode->FrameBufferBase; // AllocateZeroPool(FrameBufferSize);
+    FrameBufferContent = (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)(UINTN)
+                             GraphicsMode->FrameBufferBase; // AllocateZeroPool(FrameBufferSize);
     // if (FrameBufferContent == NULL) {
     //     DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %d",
     //     GraphicsMode->FrameBufferSize); Status = EFI_OUT_OF_RESOURCES; goto Exit;

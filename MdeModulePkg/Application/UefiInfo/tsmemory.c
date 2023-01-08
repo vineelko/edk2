@@ -26,12 +26,10 @@ Environment:
 #include "testsuites.h"
 #include "memory_map.h"
 
-static EFI_STATUS DumpMemoryMap(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS DumpMemoryMap(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     MEMORYMAP_CONTEXT* MemoryMapContext = NULL;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

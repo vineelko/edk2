@@ -54,7 +54,7 @@ static ENUM_TO_STRING UsbDeviceInfoId[] = {
     {EfiUsbDeviceInfoProductName, STRINGIFY(EfiUsbDeviceInfoProductName)},
 };
 
-static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS UsbfnIoProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_USBFN_IO_PROTOCOL* UsbFnIoProtocol = NULL;
@@ -66,11 +66,11 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     UINT16 Vid = 0;
     UINT16 Pid = 0;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
-
     UNREFERENCED_PARAMETER(Session);
 
     ZeroMem(Buffer, _countof(Buffer));
+
+    ProtocolGetInfo(&ProtocolArray[EFI_USBFN_IO_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_USBFN_IO_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
@@ -106,8 +106,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSIO
     //
 
     DBG_INFO("Max packet size:");
-    for (UINTN EndPointType = UsbEndpointControl; EndPointType <= UsbEndpointBulk;
-         EndPointType++) {
+    for (UINTN EndPointType = UsbEndpointControl; EndPointType <= UsbEndpointBulk; EndPointType++) {
         DBG_INFO("    End point type %a:", UsbEndPointType[EndPointType].String);
         for (UINTN Speed = UsbBusSpeedLow; Speed <= UsbBusSpeedSuper; Speed++) {
             MaxPacketSize = 0;

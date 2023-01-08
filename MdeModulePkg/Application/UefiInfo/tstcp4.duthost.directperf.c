@@ -40,7 +40,6 @@ Environment:
 #define DHCP_OPTION_PARAMETER_REQUEST_LIST 55
 #define DHCP_RETRIES                       4
 
-static PBM_PROTOCOL_INFO gProtocolArray;
 static CHAR8* gHostArguments;
 
 static ENUM_TO_STRING Dhcp4StateMap[] = {
@@ -446,7 +445,6 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     EFI_DHCP4_PROTOCOL* Dhcp4 = NULL;
     EFI_STATUS Status = EFI_SUCCESS;
     UINT32 Timeout[4] = {4, 8, 16, 32};
-    PBM_PROTOCOL_INFO ProtocolArray = gProtocolArray;
 
     ProtocolGetInfo(&ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX]);
 
@@ -663,7 +661,7 @@ static VOID Tcp4FreeContext(IN PBM_TCP4_CONTEXT Context)
 //
 
 EFI_STATUS
-Tcp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+Tcp4DirectDutHostPerfTest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     BM_TCP4_CONTEXT Context;
@@ -672,7 +670,6 @@ Tcp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Ses
 
     UNREFERENCED_PARAMETER(Session);
 
-    gProtocolArray = ProtocolArray;
     gHostArguments = Session->Arguments;
 
     ProtocolGetInfo(&ProtocolArray[EFI_TCP4_PROTOCOL_INDEX]);

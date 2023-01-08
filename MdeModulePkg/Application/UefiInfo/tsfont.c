@@ -34,11 +34,9 @@ typedef struct _BM_FONT_NODE {
 
 static EFI_STATUS FontFreeFonts(PBM_FONT_NODE FontList);
 
-static EFI_STATUS FontEnumerateInstalledFonts(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                              PBM_FONT_NODE* FontList);
+static EFI_STATUS FontEnumerateInstalledFonts(PBM_FONT_NODE* FontList);
 
-static EFI_STATUS FontEnumerateInstalledFonts(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                              PBM_FONT_NODE* FontList)
+static EFI_STATUS FontEnumerateInstalledFonts(PBM_FONT_NODE* FontList)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_FONT_HANDLE FontHandle = NULL;
@@ -236,7 +234,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS FontListFontsProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS FontListFontsProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PBM_FONT_NODE FontList = NULL;
@@ -244,7 +242,7 @@ static EFI_STATUS FontListFontsProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_
 
     UNREFERENCED_PARAMETER(Session);
 
-    Status = FontEnumerateInstalledFonts(ProtocolArray, &FontList);
+    Status = FontEnumerateInstalledFonts(&FontList);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("FontEnumerateInstalledFonts() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
@@ -277,8 +275,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                        IN PBM_SESSION Session)
+static EFI_STATUS FontRasterStringProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HII_FONT_PROTOCOL* FontProtocol = NULL;
@@ -312,7 +309,7 @@ static EFI_STATUS FontRasterStringProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     GraphicsProtocol = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].Protocol;
 
-    Status = FontEnumerateInstalledFonts(ProtocolArray, &FontList);
+    Status = FontEnumerateInstalledFonts(&FontList);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("FontEnumerateInstalledFonts() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
@@ -343,8 +340,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                           IN PBM_SESSION Session)
+static EFI_STATUS FontRasterCharacterProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HII_FONT_PROTOCOL* FontProtocol = NULL;
@@ -378,7 +374,7 @@ static EFI_STATUS FontRasterCharacterProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
 
     GraphicsProtocol = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].Protocol;
 
-    Status = FontEnumerateInstalledFonts(ProtocolArray, &FontList);
+    Status = FontEnumerateInstalledFonts(&FontList);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("FontEnumerateInstalledFonts() failed : %a(0x%x)", E(Status), Status);
         goto Exit;

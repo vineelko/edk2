@@ -86,7 +86,7 @@ typedef struct _ENUM_TO_STRING {
 } ENUM_TO_STRING;
 
 typedef struct _GUID_NAME {
-    EFI_GUID *Guid;
+    EFI_GUID* Guid;
     CHAR8* Name;
 } GUID_NAME;
 

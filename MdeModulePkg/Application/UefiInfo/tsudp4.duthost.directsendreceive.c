@@ -40,7 +40,6 @@ Environment:
 #define DHCP_OPTION_PARAMETER_REQUEST_LIST 55
 #define DHCP_RETRIES                       4
 
-static PBM_PROTOCOL_INFO gProtocolArray;
 static CHAR8* gHostArguments;
 
 static ENUM_TO_STRING Dhcp4StateMap[] = {
@@ -90,8 +89,7 @@ typedef struct _BM_UDP4_CONTEXT {
 // Client/Server transmit/receive methods
 //
 
-static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -102,8 +100,7 @@ static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -343,7 +340,8 @@ static EFI_STATUS Udp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     EFI_DHCP4_PROTOCOL* Dhcp4 = NULL;
     EFI_STATUS Status = EFI_SUCCESS;
     UINT32 Timeout[4] = {4, 8, 16, 32};
-    PBM_PROTOCOL_INFO ProtocolArray = gProtocolArray;
+
+    ProtocolGetInfo(&ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
@@ -397,9 +395,7 @@ static EFI_STATUS Udp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     if (RetMode.State == Dhcp4Init) {
         Status = Dhcp4->Start(Dhcp4, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server",
-                      E(Status),
-                      Status);
+            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server", E(Status), Status);
             goto Exit;
         }
     } else {
@@ -521,17 +517,16 @@ static VOID Udp4FreeContext(IN PBM_UDP4_CONTEXT Context)
 //
 
 EFI_STATUS
-Udp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+Udp4DirectDutHostSendReceiveTest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     BM_UDP4_CONTEXT Context;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
-
     UNREFERENCED_PARAMETER(Session);
 
-    gProtocolArray = ProtocolArray;
     gHostArguments = Session->Arguments;
+
+    ProtocolGetInfo(&ProtocolArray[EFI_UDP4_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_UDP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

@@ -132,8 +132,7 @@ Exit:
 // Client/Server transmit/receive methods
 //
 
-static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -144,8 +143,7 @@ static VOID EFIAPI Udp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Udp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -655,8 +653,7 @@ static VOID Udp4FreeLoopbackContext(IN PBM_UDP4_LOOPBACK_CONTEXT LoopbackContext
 // UDP4 Loopback test Main function
 //
 
-static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                IN PBM_SESSION Session)
+static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     BM_UDP4_LOOPBACK_CONTEXT LoopbackContext;
@@ -673,8 +670,6 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
                  &gEfiUdp4ServiceBindingProtocolGuid,
                  t("EFI_UDP4_SERVICE_BINDING_PROTOCOL")),
     };
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -730,11 +725,9 @@ Exit:
     return Status;
 }
 
-extern EFI_STATUS Udp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                   IN PBM_SESSION Session);
+extern EFI_STATUS Udp4DirectDutHostSendReceiveTest(IN PBM_SESSION Session);
 
-extern EFI_STATUS Udp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                            IN PBM_SESSION Session);
+extern EFI_STATUS Udp4DirectDutHostPerfTest(IN PBM_SESSION Session);
 
 static BM_TEST DutTests[] = {
     {

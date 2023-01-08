@@ -35,8 +35,7 @@ static ENUM_TO_STRING PixelFormatMap[] = {
     {PixelFormatMax, STRINGIFY(PixelFormatMax)},
 };
 
-static EFI_STATUS GraphicsOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                      IN PBM_SESSION Session)
+static EFI_STATUS GraphicsOutputProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_GRAPHICS_OUTPUT_PROTOCOL* GraphicsProtocol = NULL;
@@ -189,7 +188,7 @@ Exit:
     return Status;
 }
 
-extern EFI_STATUS GraphicsOutputRGB(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session);
+extern EFI_STATUS GraphicsOutputRGB(IN PBM_SESSION Session);
 
 static BM_TEST DutTests[] = {
     {

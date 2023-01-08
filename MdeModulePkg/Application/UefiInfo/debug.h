@@ -11,12 +11,8 @@ typedef enum _DEBUG_FLAGS {
 } DEBUG_FLAGS;
 
 EFI_STATUS EFIAPI DebugInit();
-VOID EFIAPI DebugPrintFormatted(IN DEBUG_FLAGS DebugFlag,
-                                IN CHAR8* Fmt,
-                                ...);
-VOID EFIAPI DebugPrintFormattedU(IN DEBUG_FLAGS DebugFlag,
-                                 IN CHAR16* FmtW,
-                                 ...);
+VOID EFIAPI DebugPrintFormatted(IN DEBUG_FLAGS DebugFlag, IN CHAR8* Fmt, ...);
+VOID EFIAPI DebugPrintFormattedU(IN DEBUG_FLAGS DebugFlag, IN CHAR16* FmtW, ...);
 VOID EFIAPI DebugClose();
 
 // clang-format off

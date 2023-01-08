@@ -4,7 +4,6 @@
 #include "common.h"
 #include "safe_arithmetic.h"
 
-
 //
 // Variables
 //

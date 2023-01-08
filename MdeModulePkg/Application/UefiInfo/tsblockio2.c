@@ -361,8 +361,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS BlockIo2SyncAsync128KReadWriteTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                     IN PBM_SESSION Session)
+static EFI_STATUS BlockIo2SyncAsync128KReadWriteTest(IN PBM_SESSION Session)
 {
     CHAR16* DevicePath = NULL;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
@@ -448,8 +447,7 @@ Exit:
     return Status;
 }
 
-extern EFI_STATUS BlockIo2WriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                            IN PBM_SESSION Session);
+extern EFI_STATUS BlockIo2WriteToAllSectors(IN PBM_SESSION Session);
 
 static BM_TEST DutTests[] = {
     {

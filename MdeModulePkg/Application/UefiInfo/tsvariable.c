@@ -65,11 +65,9 @@ static ENUM_TO_STRING VariableAttributesMap[] = {
 
 // clang-format on
 
-static EFI_STATUS GetMaxVariableSize(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS GetMaxVariableSize(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

@@ -510,7 +510,7 @@ static VOID PrintBoxCharacters()
     DBG_INFO(" ");
 }
 
-EFI_STATUS UI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+EFI_STATUS UI(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_GRAPHICS_OUTPUT_PROTOCOL* GraphicsProtocol = NULL;
@@ -524,6 +524,8 @@ EFI_STATUS UI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
     //
     // Get hold of Graphics protocol
     //
+
+    ProtocolGetInfo(&ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_GRAPHICS_OUTPUT_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

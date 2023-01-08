@@ -31,7 +31,7 @@ typedef struct _BM_CONSOLE_RESOLUTION {
     UINTN Rows;
 } BM_CONSOLE_RESOLUTION, *PBM_CONSOLE_RESOLUTION;
 
-static EFI_STATUS ConsoleOutputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS ConsoleOutputProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOutProtocol = NULL;

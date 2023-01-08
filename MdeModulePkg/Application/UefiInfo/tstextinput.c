@@ -27,7 +27,7 @@ Environment:
 
 #include "utils.h"
 
-static EFI_STATUS TextInputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS TextInputProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL* TextInputProtocol = NULL;
@@ -35,6 +35,8 @@ static EFI_STATUS TextInputProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     UINTN Index = 0;
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

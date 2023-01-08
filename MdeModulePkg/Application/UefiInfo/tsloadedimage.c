@@ -25,14 +25,12 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 
-static EFI_STATUS LoadedImageProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS LoadedImageProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_LOADED_IMAGE* LoadedImage = NULL;
     EFI_DEVICE_PATH_PROTOCOL* DevicePathProtocol;
     EFI_HANDLE LoadedImageHandle = NULL;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

@@ -177,8 +177,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS BlockIoLargestBlockReadWriteTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                   IN PBM_SESSION Session)
+static EFI_STATUS BlockIoLargestBlockReadWriteTest(IN PBM_SESSION Session)
 {
     CHAR16* DevicePath = NULL;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
@@ -252,7 +251,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS BlockIoProbeInfo(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS BlockIoProbeInfo(IN PBM_SESSION Session)
 {
     CHAR16* DevicePath = NULL;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
@@ -343,7 +342,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS BlockIoAPITest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS BlockIoAPITest(IN PBM_SESSION Session)
 {
     EFI_HANDLE* BlockIoHandles = NULL;
     EFI_BLOCK_IO_PROTOCOL* BlockIoIf = NULL;
@@ -351,8 +350,6 @@ static EFI_STATUS BlockIoAPITest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     EFI_BLOCK_IO_MEDIA* Media = NULL;
     EFI_STATUS Status = EFI_SUCCESS;
     BOOLEAN TestPassed = TRUE;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -439,7 +436,7 @@ Exit:
 }
 
 EFI_STATUS
-BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session);
+BlockIoWriteToAllSectors(IN PBM_SESSION Session);
 
 static BM_TEST DutTests[] = {
     {

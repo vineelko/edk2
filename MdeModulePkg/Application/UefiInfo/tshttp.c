@@ -1244,7 +1244,7 @@ Exit:
 // HTTP/HTTPS test suite
 //
 
-static EFI_STATUS HttpGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpGetRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1253,8 +1253,6 @@ static EFI_STATUS HttpGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     CHAR16* Url = T("http://httpbin.org/ip");
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1319,7 +1317,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpsGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpsGetRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1328,8 +1326,6 @@ static EFI_STATUS HttpsGetRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
     CHAR16* Url = T("https://httpbin.org/ip");
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1400,7 +1396,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpHeadRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1409,8 +1405,6 @@ static EFI_STATUS HttpHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
     CHAR16* Url = T("http://httpbin.org/ip");
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1475,7 +1469,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpsHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpsHeadRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1484,8 +1478,6 @@ static EFI_STATUS HttpsHeadRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     CHAR16* Url = T("https://httpbin.org/ip");
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1556,7 +1548,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpPostRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1566,8 +1558,6 @@ static EFI_STATUS HttpPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
-
     UNREFERENCED_PARAMETER(Session);
 
     Status = HttpCreate(&HttpContext);
@@ -1631,7 +1621,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpsPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpsPostRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1640,8 +1630,6 @@ static EFI_STATUS HttpsPostRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     CHAR16* Url = T("https://httpbin.org/post");
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1712,7 +1700,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PHTTP_CONTEXT HttpContext = NULL;
@@ -1727,8 +1715,6 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PBM_PROTOCOL_INFO ProtocolArray, IN 
 
 #define REQUEST_JSON \
     t("{ \"Products\" : \"PN=Client.OS.RS2.amd64&V=10.0.22518.1000\", \"DeviceAttributes\" : \"MediaVersion=10.0.22518.1000;MediaBranch=rs_prerelease;OSSkuId=4;App=Setup360;AppVer=10.0;DUScan=1;DUInternal=0\" }")
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

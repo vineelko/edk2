@@ -284,8 +284,7 @@ Exit:
 // Client/Server transmit/receive methods
 //
 
-static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -296,8 +295,7 @@ static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -873,8 +871,7 @@ static VOID Tcp4FreeLoopbackContext(IN PBM_TCP4_LOOPBACK_CONTEXT LoopbackContext
 // TCP4 Loopback test Main function
 //
 
-static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                IN PBM_SESSION Session)
+static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     BM_TCP4_LOOPBACK_CONTEXT LoopbackContext;
@@ -892,8 +889,6 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_PROTOCOL_INFO ProtocolArr
                  &gEfiTcp4ServiceBindingProtocolGuid,
                  t("EFI_TCP4_SERVICE_BINDING_PROTOCOL")),
     };
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1028,11 +1023,9 @@ Exit:
     return Status;
 }
 
-extern EFI_STATUS Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                   IN PBM_SESSION Session);
+extern EFI_STATUS Tcp4DirectDutHostSendReceiveTest(IN PBM_SESSION Session);
 
-extern EFI_STATUS Tcp4DirectDutHostPerfTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                            IN PBM_SESSION Session);
+extern EFI_STATUS Tcp4DirectDutHostPerfTest(IN PBM_SESSION Session);
 
 static BM_TEST DutTests[] = {
     {

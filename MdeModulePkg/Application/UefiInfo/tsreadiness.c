@@ -70,7 +70,7 @@ static VOID ProtocolProbeAll(VOID)
     }
 }
 
-static EFI_STATUS ReadinessProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS ReadinessProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     PBM_PROTOCOL_INFO SortedProtoArray[EFI_MAX_PROTOCOL_INDEX];

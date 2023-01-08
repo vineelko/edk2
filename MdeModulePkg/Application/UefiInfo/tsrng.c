@@ -27,7 +27,7 @@ Environment:
 
 #include "utils.h"
 
-static EFI_STATUS RngProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS RngProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_RNG_PROTOCOL* RngProtocol = NULL;

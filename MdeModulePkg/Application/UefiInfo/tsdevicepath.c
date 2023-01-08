@@ -25,7 +25,7 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 
-static EFI_STATUS DevicePathProbeApi(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS DevicePathProbeApi(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     CHAR16 Path[1024];

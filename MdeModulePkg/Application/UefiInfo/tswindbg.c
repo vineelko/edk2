@@ -34,14 +34,13 @@ Environment:
         }                                                  \
     }
 
-static EFI_STATUS WindbgUnload(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS WindbgUnload(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* Handles = NULL;
     UINTN HandleCount = 0;
     UINTN i = 0;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
     UNREFERENCED_PARAMETER(Session);
 
     Status = gBS->LocateHandleBuffer(ByProtocol,

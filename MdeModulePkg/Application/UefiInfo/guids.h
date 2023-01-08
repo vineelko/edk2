@@ -2,6 +2,7 @@
 #define _GUIDS_H_
 
 #include "common.h"
+// clang-format off
 
 extern EFI_GUID gUefiInfoACPIOSFRMfgStringVariableGuid;
 extern EFI_GUID gUefiInfoACPIOSFRModelStringVariableGuid;
@@ -1080,4 +1081,5 @@ extern EFI_GUID gUefiInfoEfiEfiConformanceProfilesTable;
 
 extern GUID_NAME EfiAllGuidNames[];
 
+// clang-format on
 #endif

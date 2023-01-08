@@ -38,7 +38,7 @@ static UINTN SmbiosStructureLength(IN EFI_SMBIOS_TABLE_HEADER* SmbiosTableHeader
     return SmbiosTableHeader->Length + TableLength;
 }
 
-static EFI_STATUS SmbiosDumpTables(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS SmbiosDumpTables(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SMBIOS_PROTOCOL* SmbiosProtocol = NULL;

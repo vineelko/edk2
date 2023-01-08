@@ -82,9 +82,7 @@ Exit:
     return Status;
 }
 
-VOID EFIAPI DebugPrintFormatted(IN DEBUG_FLAGS DebugFlag,
-                                IN CHAR8* Fmt,
-                                ...)
+VOID EFIAPI DebugPrintFormatted(IN DEBUG_FLAGS DebugFlag, IN CHAR8* Fmt, ...)
 {
     CHAR8 Buffer[512];
     VA_LIST ArgList;
@@ -100,9 +98,7 @@ VOID EFIAPI DebugPrintFormatted(IN DEBUG_FLAGS DebugFlag,
     }
 }
 
-VOID EFIAPI DebugPrintFormattedU(IN DEBUG_FLAGS DebugFlag,
-                                 IN CHAR16* FmtW,
-                                 ...)
+VOID EFIAPI DebugPrintFormattedU(IN DEBUG_FLAGS DebugFlag, IN CHAR16* FmtW, ...)
 {
     CHAR16 BufferWide[512];
     VA_LIST ArgList;

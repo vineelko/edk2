@@ -28,51 +28,60 @@ Environment:
 #include "utils.h"
 #include "strsafe.h"
 
-#define OUI_IEEE_80211I  0xAC0F00
+#define OUI_IEEE_80211I 0xAC0F00
 
 typedef enum {
-  Ieee80211PairwiseCipherSuiteUseGroupCipherSuite = 0,
-  Ieee80211PairwiseCipherSuiteWEP40               = 1,
-  Ieee80211PairwiseCipherSuiteTKIP                = 2,
-  Ieee80211PairwiseCipherSuiteCCMP                = 4,
-  Ieee80211PairwiseCipherSuiteWEP104              = 5,
-  Ieee80211PairwiseCipherSuiteBIP                 = 6,
-  Ieee80211PairwiseCipherSuiteGCMP                = 8,
-  Ieee80211PairwiseCipherSuiteGCMP256             = 9,
-  // ...
+    Ieee80211PairwiseCipherSuiteUseGroupCipherSuite = 0,
+    Ieee80211PairwiseCipherSuiteWEP40 = 1,
+    Ieee80211PairwiseCipherSuiteTKIP = 2,
+    Ieee80211PairwiseCipherSuiteCCMP = 4,
+    Ieee80211PairwiseCipherSuiteWEP104 = 5,
+    Ieee80211PairwiseCipherSuiteBIP = 6,
+    Ieee80211PairwiseCipherSuiteGCMP = 8,
+    Ieee80211PairwiseCipherSuiteGCMP256 = 9,
+    // ...
 } IEEE_80211_PAIRWISE_CIPHER_SUITE;
 
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_USE_GROUP  (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteUseGroupCipherSuite << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_WEP40      (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteWEP40 << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_TKIP       (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteTKIP << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_CCMP       (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteCCMP << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_WEP104     (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteWEP104 << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_BIP        (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteBIP << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_GCMP       (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteGCMP << 24))
-#define IEEE_80211_PAIRWISE_CIPHER_SUITE_GCMP256    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteGCMP256 << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_USE_GROUP \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteUseGroupCipherSuite << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_WEP40 \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteWEP40 << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_TKIP \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteTKIP << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_CCMP \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteCCMP << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_WEP104 \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteWEP104 << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_BIP \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteBIP << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_GCMP \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteGCMP << 24))
+#define IEEE_80211_PAIRWISE_CIPHER_SUITE_GCMP256 \
+    (OUI_IEEE_80211I | (Ieee80211PairwiseCipherSuiteGCMP256 << 24))
 
 typedef enum {
-  Ieee80211AkmSuite8021XOrPMKSA       = 1,
-  Ieee80211AkmSuitePSK                = 2,
-  Ieee80211AkmSuite8021XOrPMKSASHA256 = 5,
-  Ieee80211AkmSuitePSKSHA256          = 6,
-  Ieee80211AkmSuiteSAE                = 8,
-  Ieee80211AkmSuite8021XSuiteB        = 11,
-  Ieee80211AkmSuite8021XSuiteB192     = 12,
-  Ieee80211AkmSuiteOWE                = 18,
-  // ...
+    Ieee80211AkmSuite8021XOrPMKSA = 1,
+    Ieee80211AkmSuitePSK = 2,
+    Ieee80211AkmSuite8021XOrPMKSASHA256 = 5,
+    Ieee80211AkmSuitePSKSHA256 = 6,
+    Ieee80211AkmSuiteSAE = 8,
+    Ieee80211AkmSuite8021XSuiteB = 11,
+    Ieee80211AkmSuite8021XSuiteB192 = 12,
+    Ieee80211AkmSuiteOWE = 18,
+    // ...
 } IEEE_80211_AKM_SUITE;
 
-#define IEEE_80211_AKM_SUITE_8021X_OR_PMKSA         (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XOrPMKSA << 24))
-#define IEEE_80211_AKM_SUITE_PSK                    (OUI_IEEE_80211I | (Ieee80211AkmSuitePSK << 24))
-#define IEEE_80211_AKM_SUITE_8021X_OR_PMKSA_SHA256  (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XOrPMKSASHA256 << 24))
-#define IEEE_80211_AKM_SUITE_PSK_SHA256             (OUI_IEEE_80211I | (Ieee80211AkmSuitePSKSHA256 << 24))
-#define IEEE_80211_AKM_SUITE_SAE                    (OUI_IEEE_80211I | (Ieee80211AkmSuiteSAE << 24))
-#define IEEE_80211_AKM_SUITE_8021X_SUITE_B          (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XSuiteB << 24))
-#define IEEE_80211_AKM_SUITE_8021X_SUITE_B192       (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XSuiteB192 << 24))
-#define IEEE_80211_AKM_SUITE_OWE                    (OUI_IEEE_80211I | (Ieee80211AkmSuiteOWE << 24))
-
-
+#define IEEE_80211_AKM_SUITE_8021X_OR_PMKSA \
+    (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XOrPMKSA << 24))
+#define IEEE_80211_AKM_SUITE_PSK (OUI_IEEE_80211I | (Ieee80211AkmSuitePSK << 24))
+#define IEEE_80211_AKM_SUITE_8021X_OR_PMKSA_SHA256 \
+    (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XOrPMKSASHA256 << 24))
+#define IEEE_80211_AKM_SUITE_PSK_SHA256    (OUI_IEEE_80211I | (Ieee80211AkmSuitePSKSHA256 << 24))
+#define IEEE_80211_AKM_SUITE_SAE           (OUI_IEEE_80211I | (Ieee80211AkmSuiteSAE << 24))
+#define IEEE_80211_AKM_SUITE_8021X_SUITE_B (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XSuiteB << 24))
+#define IEEE_80211_AKM_SUITE_8021X_SUITE_B192 \
+    (OUI_IEEE_80211I | (Ieee80211AkmSuite8021XSuiteB192 << 24))
+#define IEEE_80211_AKM_SUITE_OWE (OUI_IEEE_80211I | (Ieee80211AkmSuiteOWE << 24))
 
 static EFI_EVENT WaitForNetworkOperation = NULL;
 
@@ -116,7 +125,7 @@ static INTN EFIAPI NetworkDescriptionCompareFunc(IN CONST VOID* NetWorkDescripti
            ((EFI_80211_NETWORK_DESCRIPTION*)NetWorkDescription1)->NetworkQuality;
 }
 
-static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS WifiNetworkList(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL* ConMgr2Protocol = NULL;
@@ -165,9 +174,7 @@ static EFI_STATUS WifiNetworkList(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SES
 
     Status = ConMgr2Protocol->GetNetworks(ConMgr2Protocol, &GetNetworksToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)",
-                  E(Status),
-                  Status);
+        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -241,7 +248,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS WifiConnect(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_WIRELESS_MAC_CONNECTION_II_PROTOCOL* ConMgr2Protocol = NULL;
@@ -313,9 +320,7 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
 
     Status = ConMgr2Protocol->GetNetworks(ConMgr2Protocol, &GetNetworksToken);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)",
-                  E(Status),
-                  Status);
+        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -404,10 +409,9 @@ static EFI_STATUS WifiConnect(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
                               &NetworkConnectToken,
                               &NetworkConnectToken.Event);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR(
-            "Unable to create network connect token's event. CreateEvent() failed : %a(0x%x)",
-            E(Status),
-            Status);
+        DBG_ERROR("Unable to create network connect token's event. CreateEvent() failed : %a(0x%x)",
+                  E(Status),
+                  Status);
         goto Exit;
     }
 
@@ -501,7 +505,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS WifiIpInfoDump(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* Handles = NULL;
@@ -512,8 +516,6 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
     UINTN Size = 0;
     CHAR8 MacString[32 * 2];
     EFI_IPv4_ADDRESS* DnsInfo = NULL;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -627,18 +629,14 @@ static EFI_STATUS WifiIpInfoDump(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
         if (Status == EFI_BUFFER_TOO_SMALL) {
             DnsInfo = AllocateZeroPool(Size);
         } else if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %a(0x%x)",
-                      E(Status),
-                      Status);
+            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 
         Status = Ip4Config2->GetData(Ip4Config2, Ip4Config2DataTypeDnsServer, &Size, DnsInfo);
 
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %a(0x%x)",
-                      E(Status),
-                      Status);
+            DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
 

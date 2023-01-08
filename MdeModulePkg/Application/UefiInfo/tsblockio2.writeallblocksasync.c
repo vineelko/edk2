@@ -224,7 +224,7 @@ Exit:
 }
 
 EFI_STATUS
-BlockIo2WriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+BlockIo2WriteToAllSectors(IN PBM_SESSION Session)
 {
     CHAR16* DevicePath = NULL;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;

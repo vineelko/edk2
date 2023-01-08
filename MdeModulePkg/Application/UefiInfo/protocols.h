@@ -3,10 +3,6 @@
 
 #include "common.h"
 
-EFI_STATUS
-EFIAPI
-ProtocolProbeAll(VOID);
-
 #define PROTO(ProtocolGUID, ProtocolGUIDStr)                                                 \
     {                                                                                        \
         ProtocolGUID, {0}, (CHAR8*)ProtocolGUIDStr, NULL, NULL, NULL, EFI_INVALID_PARAMETER, \

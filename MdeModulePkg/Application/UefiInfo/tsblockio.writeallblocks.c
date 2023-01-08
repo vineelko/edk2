@@ -27,7 +27,7 @@ Environment:
 #include "utils.h"
 
 EFI_STATUS
-BlockIoWriteToAllSectors(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+BlockIoWriteToAllSectors(IN PBM_SESSION Session)
 {
     CHAR16* DevicePath = NULL;
     EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;

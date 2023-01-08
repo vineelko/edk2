@@ -61,7 +61,7 @@ static VOID ReadinessPrintProtocolInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
     }
 }
 
-static EFI_STATUS CbmrReadiness(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS CbmrReadiness(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
 
@@ -169,14 +169,13 @@ static EFI_STATUS CbmrReadiness(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSI
 // loaded driver easy without rebooting the machine
 //
 
-static EFI_STATUS CbmrUnload(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS CbmrUnload(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* Handles = NULL;
     UINTN HandleCount = 0;
     UINTN i = 0;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
     UNREFERENCED_PARAMETER(Session);
 
     Status = gBS->LocateHandleBuffer(ByProtocol,
@@ -205,7 +204,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS CbmrWriteSI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS CbmrWriteSI(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_FILE_PROTOCOL* SiWimFile = NULL;
@@ -216,7 +215,6 @@ static EFI_STATUS CbmrWriteSI(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION
     CHAR16* SiWimFileName = L"si.wim";
     CHAR16* SiVariableName = L"SoftwareInventory";
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
     UNREFERENCED_PARAMETER(Session);
 
     DBG_INFO_U(L"Locating %s", SiWimFileName);

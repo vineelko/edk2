@@ -9,8 +9,7 @@ EFI_STATUS
 EFIAPI
 DispatchTestSuites(IN PBM_SESSION Session);
 
-typedef EFI_STATUS (*BM_DUT_TEST_FN)(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                     IN PBM_SESSION Session);
+typedef EFI_STATUS (*BM_DUT_TEST_FN)(IN PBM_SESSION Session);
 
 typedef struct _BM_TEST {
     //

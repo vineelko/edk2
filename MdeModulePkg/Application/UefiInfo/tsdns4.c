@@ -28,7 +28,7 @@ Environment:
 #include "utils.h"
 #include "iputils.h"
 
-static EFI_STATUS Dns4Configure(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS Dns4Configure(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_DNS4_PROTOCOL* Protocol = NULL;

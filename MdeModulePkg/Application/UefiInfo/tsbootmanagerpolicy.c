@@ -25,8 +25,7 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 
-static EFI_STATUS ValidateConnectDeviceClassTest(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                                 IN PBM_SESSION Session)
+static EFI_STATUS ValidateConnectDeviceClassTest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_BOOT_MANAGER_POLICY_PROTOCOL* BootManager = NULL;

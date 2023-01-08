@@ -25,7 +25,7 @@ Environment:
 #include "protocols.h"
 #include "testsuites.h"
 
-static EFI_STATUS TimestampProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS TimestampProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_TIMESTAMP_PROTOCOL* TimestampProtocol = NULL;

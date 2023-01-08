@@ -39,7 +39,6 @@ Environment:
 #define DHCP_OPTION_PARAMETER_REQUEST_LIST 55
 #define DHCP_RETRIES                       4
 
-static PBM_PROTOCOL_INFO gProtocolArray;
 static CHAR8* gHostArguments;
 
 static ENUM_TO_STRING Dhcp4StateMap[] = {
@@ -166,8 +165,7 @@ Exit:
 // Client/Server transmit/receive methods
 //
 
-static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -178,8 +176,7 @@ static VOID EFIAPI Tcp4ClientTransmitServerReceiveWaitCallback(IN EFI_EVENT Even
     //
 }
 
-static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event,
-                                                               IN VOID* Context)
+static VOID EFIAPI Tcp4ServerTransmitClientReceiveWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
 {
     UNREFERENCED_PARAMETER(Event);
     UNREFERENCED_PARAMETER(Context);
@@ -422,7 +419,6 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     EFI_DHCP4_PROTOCOL* Dhcp4 = NULL;
     EFI_STATUS Status = EFI_SUCCESS;
     UINT32 Timeout[4] = {4, 8, 16, 32};
-    PBM_PROTOCOL_INFO ProtocolArray = gProtocolArray;
 
     ProtocolGetInfo(&ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX]);
 
@@ -478,9 +474,7 @@ static EFI_STATUS Tcp4GetClientMode(IN OUT EFI_DHCP4_MODE_DATA* Mode)
     if (RetMode.State == Dhcp4Init) {
         Status = Dhcp4->Start(Dhcp4, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server",
-                      E(Status),
-                      Status);
+            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server", E(Status), Status);
             goto Exit;
         }
     } else {
@@ -642,7 +636,7 @@ static VOID Tcp4FreeContext(IN PBM_TCP4_CONTEXT Context)
 //
 
 EFI_STATUS
-Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+Tcp4DirectDutHostSendReceiveTest(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     BM_TCP4_CONTEXT Context;
@@ -651,10 +645,9 @@ Tcp4DirectDutHostSendReceiveTest(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESS
 
     UNREFERENCED_PARAMETER(Session);
 
-    gProtocolArray = ProtocolArray;
     gHostArguments = Session->Arguments;
 
-    ProtocolGetInfo(&ProtocolArray[EFI_DHCP4_PROTOCOL_INDEX]);
+    ProtocolGetInfo(&ProtocolArray[EFI_TCP4_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_TCP4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {

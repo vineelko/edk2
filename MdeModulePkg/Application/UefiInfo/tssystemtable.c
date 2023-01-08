@@ -30,12 +30,11 @@ Environment:
 #include <IndustryStandard\Acpi20.h>
 #include <Protocol\AcpiSystemDescriptionTable.h>
 
-static EFI_STATUS EfiDumpSystemTable(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS EfiDumpSystemTable(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SYSTEM_TABLE* SystemTable = gSystemTable;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
     UNREFERENCED_PARAMETER(Session);
 
     DBG_INFO_U(L"FirmwareVendor = %s", SystemTable->FirmwareVendor);
@@ -129,7 +128,7 @@ static VOID PrintAttributes(UINTN Attributes)
     DBG_INFO_RAW("\r\n");
 }
 
-static EFI_STATUS EfiDumpAllHandles(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS EfiDumpAllHandles(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* Handles = NULL;
@@ -142,7 +141,6 @@ static EFI_STATUS EfiDumpAllHandles(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_S
     EFI_DEVICE_PATH_PROTOCOL* DevicePathProto = NULL;
     CHAR16* DevicePath = NULL;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
     UNREFERENCED_PARAMETER(Session);
 
     Status = gBS->LocateProtocol(&gEfiDevicePathToTextProtocolGuid, NULL, (VOID**)&ToTextPath);
@@ -251,7 +249,7 @@ typedef struct {
 } EFI_ACPI_MSDM;
 #pragma pack()
 
-static EFI_STATUS EfiDumpMSDMTables(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS EfiDumpMSDMTables(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SYSTEM_TABLE* SystemTable = gSystemTable;
@@ -261,7 +259,6 @@ static EFI_STATUS EfiDumpMSDMTables(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_S
     UINTN NumEntries = 0;
     BOOLEAN Found = FALSE;
 
-    UNREFERENCED_PARAMETER(ProtocolArray);
     UNREFERENCED_PARAMETER(Session);
 
     DBG_INFO_U(L"FirmwareVendor = %s", SystemTable->FirmwareVendor);

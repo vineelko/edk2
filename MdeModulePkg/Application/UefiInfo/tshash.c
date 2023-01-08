@@ -79,9 +79,7 @@ static HASH_ALGORITHM HashAlgorithmsMap[] = {
 
 #define HASH_INPUT_SIZE 512
 
-static EFI_STATUS HashEquals(IN UINT8* Input,
-                             IN UINT8* Expected,
-                             IN UINTN Size)
+static EFI_STATUS HashEquals(IN UINT8* Input, IN UINT8* Expected, IN UINTN Size)
 {
     for (UINTN i = 0; i < Size; i++) {
         if (Input[i] != Expected[i]) {
@@ -92,7 +90,7 @@ static EFI_STATUS HashEquals(IN UINT8* Input,
     return EFI_SUCCESS;
 }
 
-static EFI_STATUS HashProbe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS HashProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HASH_PROTOCOL* HashProtocol = NULL;
@@ -247,7 +245,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS Hash2Twice(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS Hash2Twice(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HASH2_PROTOCOL* Hash2Protocol = NULL;
@@ -343,7 +341,7 @@ static VOID EFIAPI TimerCallback(IN EFI_EVENT Event, IN VOID* BlockIo2RWContext)
     TimerTriggered = TRUE;
 }
 
-static EFI_STATUS Hash1Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS Hash1Performance(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HASH_PROTOCOL* HashProtocol = NULL;
@@ -467,7 +465,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS Hash2Performance(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HASH2_PROTOCOL* Hash2Protocol = NULL;
@@ -478,6 +476,8 @@ static EFI_STATUS Hash2Performance(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SE
     EFI_EVENT TimerEvent = NULL;
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_HASH2_PROTOCOL_INDEX]);
 
     Status = ProtocolArray[EFI_HASH2_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
@@ -581,8 +581,7 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
-                                          IN PBM_SESSION Session)
+static EFI_STATUS HashSoftwarePerformance(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     VOID* Data = NULL;
@@ -593,8 +592,6 @@ static EFI_STATUS HashSoftwarePerformance(IN PBM_PROTOCOL_INFO ProtocolArray,
     CRYPT_DER_BLOB Blobs[1] = {0};
     ULONG HashSize = 0;
     NTSTATUS NtStatus;
-
-    UNREFERENCED_PARAMETER(ProtocolArray);
 
     UNREFERENCED_PARAMETER(Session);
 

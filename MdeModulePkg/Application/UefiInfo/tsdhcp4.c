@@ -66,7 +66,7 @@ static VOID DumpDhcpPacket(EFI_DHCP4_PACKET* Packet)
     DBG_INFO("BootFileName: %a", Packet->Dhcp4.Header.BootFileName);
 }
 
-static EFI_STATUS Dhcp4Probe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session)
+static EFI_STATUS Dhcp4Probe(IN PBM_SESSION Session)
 {
     UINT8 OptionBuffer[sizeof(EFI_DHCP4_PACKET_OPTION) + 1]; // +1 for Data[1]
     EFI_DHCP4_CONFIG_DATA Config;
@@ -133,9 +133,7 @@ static EFI_STATUS Dhcp4Probe(IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION 
     if (Mode.State == Dhcp4Init) {
         Status = Dhcp4->Start(Dhcp4, NULL);
         if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server",
-                      E(Status),
-                      Status);
+            DBG_ERROR("GetModeData() failed : %a(0x%x) Possibly no dhcp server", E(Status), Status);
             goto Exit;
         }
     } else {

@@ -309,8 +309,6 @@ BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX] = {
     // clang-format on
 };
 
-static EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo);
-
 EFI_STATUS
 ProtocolOpenServiceBinding(IN EFI_HANDLE DeviceHandle,
                            IN EFI_GUID* ServiceBindingProtocolGuid,
@@ -511,10 +509,8 @@ EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
             ProtocolInfo->ProtocolStatus = Status;
             if (EFI_ERROR(Status)) {
                 // DBG_ERROR(
-                //     "ProtocolName = %a ProtocolOpenServiceBindingChildProtocol() failed Status = %a(0x%x)",
-                //     ProtocolInfo->ProtocolName,
-                //     E(Status),
-                //     Status);
+                //     "ProtocolName = %a ProtocolOpenServiceBindingChildProtocol() failed Status =
+                //     %a(0x%x)", ProtocolInfo->ProtocolName, E(Status), Status);
                 continue;
             }
 #if 0
