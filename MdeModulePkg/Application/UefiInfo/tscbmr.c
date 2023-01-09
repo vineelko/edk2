@@ -375,7 +375,7 @@ static BM_TEST DutTests[] = {
     },
     {
         .Name = t("cbmrdumpsi"),
-        .Description = t("Write software inventory UEFI variable to si_dump.wim file"),
+        .Description = t("Write software inventory UEFI variable contents to si_dump.wim file"),
         .DutTestFn = CbmrDumpSI,
     },
 };
