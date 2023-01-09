@@ -115,8 +115,8 @@ typedef struct _BM_TCP4_LOOPBACK_CONTEXT {
 // Protocol instance creation utility functions
 //
 
-static EFI_STATUS ProtocolGetTcp4ClientServer(IN OUT PBM_PROTOCOL_INFO Client,
-                                              IN OUT PBM_PROTOCOL_INFO Server)
+static EFI_STATUS ProtocolGetTcp4ClientServer(IN OUT PPROTOCOL_INFO Client,
+                                              IN OUT PPROTOCOL_INFO Server)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* DeviceHandles = NULL;
@@ -879,7 +879,7 @@ static EFI_STATUS Tcp4pLoopbackClientServerTest(IN PBM_SESSION Session)
     PBM_TCP4_SERVER Server = &LoopbackContext.Server;
     UINTN Index = 0;
 
-    BM_PROTOCOL_INFO TcpClientServer[2] = {
+    PROTOCOL_INFO TcpClientServer[2] = {
         SB_PROTO(&gEfiTcp4ProtocolGuid,
                  t("EFI_TCP4_PROTOCOL"),
                  &gEfiTcp4ServiceBindingProtocolGuid,

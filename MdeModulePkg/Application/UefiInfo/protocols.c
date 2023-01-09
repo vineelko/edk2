@@ -31,7 +31,7 @@ Environment:
 // platform. As per UEFI Spec 2.8
 //
 
-BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX] = {
+PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX] = {
     // clang-format off
     //
     // BOOT MANAGER PROTOCOLS - Chapter 3
@@ -391,7 +391,7 @@ Exit:
 }
 
 EFI_STATUS
-ProtocolServiceBindingClose(IN EFI_HANDLE DeviceHandle,
+ProtocolServiceBindingClose(IN EFI_HANDLE ServiceBindingProtocolHandle,
                             IN EFI_GUID* ServiceBindingProtocolGuid,
                             IN EFI_SERVICE_BINDING_PROTOCOL* ServiceBindingProtocol,
                             IN EFI_GUID* ProtocolGuid,
@@ -428,8 +428,11 @@ ProtocolServiceBindingClose(IN EFI_HANDLE DeviceHandle,
     // Next, Close service binding protocol on device handle
     //
 
-    if (DeviceHandle != NULL && ServiceBindingProtocol != NULL) {
-        Status = gBS->CloseProtocol(DeviceHandle, ServiceBindingProtocolGuid, gImageHandle, NULL);
+    if (ServiceBindingProtocolHandle != NULL && ServiceBindingProtocol != NULL) {
+        Status = gBS->CloseProtocol(ServiceBindingProtocolHandle,
+                                    ServiceBindingProtocolGuid,
+                                    gImageHandle,
+                                    NULL);
         if (EFI_ERROR(Status)) {
             DBG_ERROR("CloseProtocol() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
@@ -440,11 +443,10 @@ Exit:
     return Status;
 }
 
-EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
+EFI_STATUS ProtocolGetInfo(IN PPROTOCOL_INFO ProtocolInfo)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* DeviceHandles = NULL;
-    EFI_HANDLE ChildHandle = NULL;
     UINTN DeviceHandleCount = 0;
 
     if (ProtocolInfo->ProtocolGuid == NULL) {
@@ -479,12 +481,13 @@ EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
         }
 
         for (UINTN Index = 0; Index < DeviceHandleCount; Index++) {
-            ChildHandle = NULL;
+            ProtocolInfo->ServiceBindingHandle = DeviceHandles[Index];
+
             //
             // Open service binding
             //
 
-            Status = ProtocolOpenServiceBinding(DeviceHandles[Index],
+            Status = ProtocolOpenServiceBinding(ProtocolInfo->ServiceBindingHandle,
                                                 ProtocolInfo->ServiceBindingProtocolGuid,
                                                 &ProtocolInfo->ServiceBindingProtocol);
 
@@ -505,7 +508,7 @@ EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
             Status = ProtocolOpenServiceBindingChildProtocol(ProtocolInfo->ServiceBindingProtocol,
                                                              ProtocolInfo->ProtocolGuid,
                                                              &ProtocolInfo->Protocol,
-                                                             &ChildHandle);
+                                                             &ProtocolInfo->ChildHandle);
             ProtocolInfo->ProtocolStatus = Status;
             if (EFI_ERROR(Status)) {
                 // DBG_ERROR(
@@ -514,12 +517,12 @@ EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
                 continue;
             }
 #if 0
-            (VOID) ProtocolServiceBindingClose(DeviceHandles[Index],
+            (VOID) ProtocolServiceBindingClose(ProtocolInfo->ServiceBindingHandle,
                                                  ProtocolInfo->ServiceBindingProtocolGuid,
                                                  ProtocolInfo->ServiceBindingProtocol,
                                                  ProtocolInfo->ProtocolGuid,
                                                  ProtocolInfo->Protocol,
-                                                 ChildHandle);
+                                                 ProtocolInfo->ChildHandle);
 #endif
             break;
         }

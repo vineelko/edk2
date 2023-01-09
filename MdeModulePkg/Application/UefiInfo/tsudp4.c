@@ -73,8 +73,8 @@ typedef struct _BM_UDP4_LOOPBACK_CONTEXT {
 // Protocol instance creation utility functions
 //
 
-static EFI_STATUS ProtocolGetUdp4ClientServer(IN OUT PBM_PROTOCOL_INFO Client,
-                                              IN OUT PBM_PROTOCOL_INFO Server)
+static EFI_STATUS ProtocolGetUdp4ClientServer(IN OUT PPROTOCOL_INFO Client,
+                                              IN OUT PPROTOCOL_INFO Server)
 {
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* DeviceHandles = NULL;
@@ -660,7 +660,7 @@ static EFI_STATUS Udp4pLoopbackClientServerTest(IN PBM_SESSION Session)
     PBM_UDP4_SOCKET Client = &LoopbackContext.Client;
     PBM_UDP4_SOCKET Server = &LoopbackContext.Server;
 
-    BM_PROTOCOL_INFO UdpClientServer[2] = {
+    PROTOCOL_INFO UdpClientServer[2] = {
         SB_PROTO(&gEfiUdp4ProtocolGuid,
                  t("EFI_UDP4_PROTOCOL"),
                  &gEfiUdp4ServiceBindingProtocolGuid,

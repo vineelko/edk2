@@ -409,7 +409,7 @@ Exit:
 static
 EFI_STATUS
 FontListFontPackageProbe (
-    IN PBM_PROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session
+    IN PPROTOCOL_INFO ProtocolArray, IN PBM_SESSION Session
     )
 {
     EFI_STATUS Status = EFI_SUCCESS;

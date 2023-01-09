@@ -29,11 +29,11 @@ Environment:
 
 static INTN EFIAPI ProtoInfoComparator(IN CONST VOID* Left, IN CONST VOID* Right)
 {
-    PBM_PROTOCOL_INFO ProtocolInfo1;
-    PBM_PROTOCOL_INFO ProtocolInfo2;
+    PPROTOCOL_INFO ProtocolInfo1;
+    PPROTOCOL_INFO ProtocolInfo2;
 
-    ProtocolInfo1 = *(PBM_PROTOCOL_INFO*)Left;
-    ProtocolInfo2 = *(PBM_PROTOCOL_INFO*)Right;
+    ProtocolInfo1 = *(PPROTOCOL_INFO*)Left;
+    ProtocolInfo2 = *(PPROTOCOL_INFO*)Right;
 
     if (ProtocolInfo1->ProtocolGuid == NULL || ProtocolInfo2->ProtocolGuid == NULL) {
         return 0;
@@ -42,7 +42,7 @@ static INTN EFIAPI ProtoInfoComparator(IN CONST VOID* Left, IN CONST VOID* Right
     return AsciiStrCmp(ProtocolInfo1->ProtocolName, ProtocolInfo2->ProtocolName);
 }
 
-static VOID ReadinessExPrintProtocolInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
+static VOID ReadinessExPrintProtocolInfo(IN PPROTOCOL_INFO ProtocolInfo)
 {
     if (ProtocolInfo->ProtocolGuid == NULL) {
         return;
@@ -73,7 +73,7 @@ static VOID ProtocolProbeAll(VOID)
 static EFI_STATUS ReadinessProbe(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    PBM_PROTOCOL_INFO SortedProtoArray[EFI_MAX_PROTOCOL_INDEX];
+    PPROTOCOL_INFO SortedProtoArray[EFI_MAX_PROTOCOL_INDEX];
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -89,7 +89,7 @@ static EFI_STATUS ReadinessProbe(IN PBM_SESSION Session)
 
     PerformQuickSort(SortedProtoArray,
                      EFI_MAX_PROTOCOL_INDEX,
-                     sizeof(PBM_PROTOCOL_INFO),
+                     sizeof(PPROTOCOL_INFO),
                      ProtoInfoComparator);
 
     for (UINTN Index = 0; Index < EFI_MAX_PROTOCOL_INDEX; Index++) {

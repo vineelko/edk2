@@ -294,7 +294,7 @@ enum BM_PROTOCOL_INDEX {
     EFI_MAX_PROTOCOL_INDEX,
 };
 
-typedef struct _BM_PROTOCOL_INFO {
+typedef struct _PROTOCOL_INFO {
     //
     //  In Parameters
     //
@@ -312,9 +312,11 @@ typedef struct _BM_PROTOCOL_INFO {
     EFI_SERVICE_BINDING_PROTOCOL* ServiceBindingProtocol;
     EFI_STATUS ProtocolStatus;
     EFI_STATUS ServiceBindingProtocolStatus;
-} BM_PROTOCOL_INFO, *PBM_PROTOCOL_INFO;
+    EFI_HANDLE ServiceBindingHandle;
+    EFI_HANDLE ChildHandle;
+} PROTOCOL_INFO, *PPROTOCOL_INFO;
 
-EFI_STATUS ProtocolGetInfo(IN PBM_PROTOCOL_INFO ProtocolInfo);
+EFI_STATUS ProtocolGetInfo(IN PPROTOCOL_INFO ProtocolInfo);
 
 EFI_STATUS
 ProtocolOpenServiceBinding(IN EFI_HANDLE DeviceHandle,
@@ -327,5 +329,5 @@ ProtocolOpenServiceBindingChildProtocol(IN EFI_SERVICE_BINDING_PROTOCOL* Service
                                         OUT VOID** Protocol,
                                         OUT EFI_HANDLE* ProtocolHandle);
 
-extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
+extern PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 #endif // _PROTOCOLS_H_

@@ -40,7 +40,7 @@ Environment:
         0xCA787F2E, 0x4D68, 0x4883, 0xB9, 0x9E, 0x7F, 0xB1, 0x2E, 0xB3, 0x49, 0xCD \
     }
 
-static VOID ReadinessPrintProtocolInfo(IN PBM_PROTOCOL_INFO ProtocolInfo)
+static VOID ReadinessPrintProtocolInfo(IN PPROTOCOL_INFO ProtocolInfo)
 {
     if (ProtocolInfo->ProtocolGuid == NULL) {
         return;
@@ -264,6 +264,99 @@ Exit:
     return Status;
 }
 
+static EFI_STATUS CbmrDumpSI(IN PBM_SESSION Session)
+{
+    EFI_STATUS Status = EFI_SUCCESS;
+    EFI_FILE_PROTOCOL* WimFile = NULL;
+    CHAR16* SiWimFileName = L"si_dump.wim";
+    CHAR16* SiVariableName = L"SoftwareInventory";
+    UINTN SoftwareInventorySize = 0;
+    VOID* SoftwareInventory = NULL;
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* SimpleFileSystem = NULL;
+    EFI_FILE_PROTOCOL* Root = NULL;
+    EFI_LOADED_IMAGE* LoadedImage = NULL;
+
+    UNREFERENCED_PARAMETER(Session);
+
+    Status = gRT->GetVariable(SiVariableName,
+                              &(EFI_GUID)EFI_MS_CBMR_VARIABLES_INTERNAL_GUID,
+                              NULL,
+                              &SoftwareInventorySize,
+                              NULL);
+    if (Status == EFI_NOT_FOUND) {
+        DBG_ERROR_U(L"GetVariable() failed. Unable to locate %s variable", SiVariableName);
+        goto Exit;
+    }
+
+    if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
+        goto Exit;
+    }
+
+    SoftwareInventory = AllocateZeroPool(SoftwareInventorySize);
+    if (SoftwareInventory == NULL) {
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %u",
+                  SoftwareInventorySize);
+        Status = EFI_OUT_OF_RESOURCES;
+        goto Exit;
+    }
+
+    Status = gRT->GetVariable(SiVariableName,
+                              &(EFI_GUID)EFI_MS_CBMR_VARIABLES_INTERNAL_GUID,
+                              NULL,
+                              &SoftwareInventorySize,
+                              SoftwareInventory);
+    if (EFI_ERROR(Status)) {
+        goto Exit;
+    }
+
+    //
+    // Save the in memory SI.WIM blob as si.wim
+    //
+
+    Status = gBS->HandleProtocol(gImageHandle, &gEfiLoadedImageProtocolGuid, (void**)&LoadedImage);
+    if (EFI_ERROR(Status)) {
+        goto Exit;
+    }
+
+    // Open SIMPLE_FILE_SYSTEM_PROTOCOL for the volume from which the
+    // current image is loaded
+    Status = gBS->HandleProtocol(LoadedImage->DeviceHandle,
+                                 &gEfiSimpleFileSystemProtocolGuid,
+                                 (void**)&SimpleFileSystem);
+    if (EFI_ERROR(Status)) {
+        goto Exit;
+    }
+
+    Status = SimpleFileSystem->OpenVolume(SimpleFileSystem, &Root);
+    if (EFI_ERROR(Status)) {
+        goto Exit;
+    }
+
+    Status = Root->Open(Root,
+                        &WimFile,
+                        SiWimFileName,
+                        EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE,
+                        0);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("Open() failed 0x%x", Status);
+        goto Exit;
+    }
+
+    Status = FileWrite(WimFile, &SoftwareInventorySize, SoftwareInventory);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("FileWrite() failed 0x%x", Status);
+        goto Exit;
+    }
+
+    DBG_INFO_U(L"Successfully stored Software Inventory UEFI variable contents to %s",
+               SiWimFileName);
+
+Exit:
+    FileClose(WimFile);
+
+    return Status;
+}
+
 static BM_TEST DutTests[] = {
     {
         .Name = t("cbmrunload"),
@@ -277,8 +370,13 @@ static BM_TEST DutTests[] = {
     },
     {
         .Name = t("cbmrwritesi"),
-        .Description = t("Write software inventory UEFI variable from si.wim"),
+        .Description = t("Write software inventory UEFI variable from si.wim file"),
         .DutTestFn = CbmrWriteSI,
+    },
+    {
+        .Name = t("cbmrdumpsi"),
+        .Description = t("Write software inventory UEFI variable to si_dump.wim file"),
+        .DutTestFn = CbmrDumpSI,
     },
 };
 

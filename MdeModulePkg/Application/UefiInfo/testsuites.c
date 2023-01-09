@@ -26,7 +26,7 @@ Environment:
 #include "utils.h"
 #include "strsafe.h"
 
-extern BM_PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
+extern PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 
 //
 // List of UEFI tests that are registered to test/uefiinfo one or more protocol
