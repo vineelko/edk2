@@ -68,6 +68,51 @@ GetTime(IN EFI_TIME* Time)
     return Status;
 }
 
+static VOID EFIAPI TimerWaitCallback(IN EFI_EVENT Event, IN VOID* Context)
+{
+    UNREFERENCED_PARAMETER(Event);
+    UNREFERENCED_PARAMETER(Context);
+
+    //
+    // Wait callbacks are triggered on every tick until the event is signaled.
+    // So don't put anything here. Keep them empty!
+    //
+}
+
+//
+// NOTE: Below function will fail with EFI_UNSUPPORTED if current TPL is not
+// TPL_APPLICATION. So do not call EfiSleep() in callbacks!
+//
+EFI_STATUS EFIAPI EfiSleep(IN UINTN DurationInNS)
+{
+    EFI_STATUS Status = EFI_SUCCESS;
+    EFI_EVENT TimerEvent = NULL;
+    UINTN Index = 0;
+
+    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_WAIT,
+                              TPL_CALLBACK,
+                              TimerWaitCallback,
+                              NULL,
+                              &TimerEvent);
+    if (EFI_ERROR(Status)) {
+        goto Exit;
+    }
+
+    Status = gBS->SetTimer(TimerEvent, TimerRelative, DurationInNS);
+    if (EFI_ERROR(Status)) {
+        goto Exit;
+    }
+
+    Status = gBS->WaitForEvent(1, &TimerEvent, &Index);
+
+Exit:
+    if (TimerEvent != NULL) {
+        gBS->CloseEvent(TimerEvent);
+    }
+
+    return Status;
+}
+
 //
 //  Size related functions
 //

@@ -9,7 +9,9 @@
 
 #define SEC_TO_DAYS(Sec) ((Sec) / 60 / 60 / 24)
 
+#define MICROSECONDS       1000000ULL
 #define NANOSECONDS        1000000000ULL
+#define SEC_TO_US(Sec)     (MICROSECONDS * Sec)
 #define SEC_TO_100_NS(Sec) ((NANOSECONDS * Sec) / 100)
 
 //
@@ -25,6 +27,9 @@ TimeDiff(IN EFI_TIME* StartTime,
 
 EFI_STATUS
 GetTime(IN EFI_TIME* Time);
+
+EFI_STATUS EFIAPI EfiSleep(IN UINTN DurationInNS);
+
 //
 //  Size related functions
 //
