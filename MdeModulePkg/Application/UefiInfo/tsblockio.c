@@ -345,6 +345,99 @@ Exit:
     return Status;
 }
 
+static EFI_STATUS BlockIoProbeSFSInfo(IN PBM_SESSION Session)
+{
+    CHAR16* DevicePath = NULL;
+    EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
+    EFI_BLOCK_IO_PROTOCOL* BlockIoIf = NULL;
+    EFI_BLOCK_IO2_PROTOCOL* BlockIo2If = NULL;
+    EFI_DEVICE_PATH_PROTOCOL* DevicePathIf = NULL;
+    EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* DevicePathToTextIf = NULL;
+    EFI_HANDLE* BlockIoHandles = NULL;
+    EFI_STATUS Status = EFI_SUCCESS;
+    UINTN HandleCount = 0;
+
+    UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX]);
+    DevicePathToTextIf = ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX].Protocol;
+    Status = gBS->LocateHandleBuffer(ByProtocol,
+                                     &gEfiSimpleFileSystemProtocolGuid,
+                                     NULL,
+                                     &HandleCount,
+                                     &BlockIoHandles);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
+        goto Exit;
+    }
+
+    for (UINTN i = 0; i < HandleCount; i++) {
+        BlockIoIf = NULL;
+        BlockIo2If = NULL;
+
+        Status = gBS->HandleProtocol(BlockIoHandles[i],
+                                     &gEfiBlockIoProtocolGuid,
+                                     (VOID**)&BlockIoIf);
+        if (EFI_ERROR(Status)) {
+            Status = EFI_SUCCESS;
+            continue;
+        }
+
+        Status = gBS->HandleProtocol(BlockIoHandles[i],
+                                     &gEfiBlockIo2ProtocolGuid,
+                                     (VOID**)&BlockIo2If);
+
+        BlockIoMedia = EFI_ERROR(Status) ? BlockIoIf->Media : BlockIo2If->Media;
+        DevicePathIf = DevicePathFromHandle(BlockIoHandles[i]);
+        if (DevicePathIf != NULL) {
+            DevicePath = DevicePathToTextIf->ConvertDevicePathToText(DevicePathIf, FALSE, FALSE);
+            DBG_INFO_U(L"DevicePath                           : %s", DevicePath);
+            FreePool(DevicePath);
+        }
+
+        DBG_INFO("Block IO 2                           : %a",
+                 BlockIo2If ? "Supported" : "Not Supported");
+        DBG_INFO("MediaId                              : 0x%08x", BlockIoMedia->MediaId);
+        DBG_INFO("RemovableMedia                       : %a",
+                 BlockIoMedia->RemovableMedia == TRUE ? "Yes" : "No");
+        DBG_INFO("MediaPresent                         : %a",
+                 BlockIoMedia->MediaPresent == TRUE ? "Yes" : "No");
+        DBG_INFO("LogicalPartition                     : %a",
+                 BlockIoMedia->LogicalPartition == TRUE ? "Yes" : "No");
+        DBG_INFO("ReadOnly                             : %a",
+                 BlockIoMedia->ReadOnly == TRUE ? "Yes" : "No");
+        DBG_INFO("WriteCaching                         : %a",
+                 BlockIoMedia->WriteCaching == TRUE ? "Yes" : "No");
+        DBG_INFO("BlockSize                            : %u", BlockIoMedia->BlockSize);
+        DBG_INFO("IoAlign                              : %u", BlockIoMedia->IoAlign);
+        DBG_INFO("LastBlock                            : 0x%016llx", BlockIoMedia->LastBlock);
+
+        if (BlockIoIf->Revision >= EFI_BLOCK_IO_PROTOCOL_REVISION2) {
+            DBG_INFO("LowestAlignedLba                     : 0x%016llx",
+                     BlockIoMedia->LowestAlignedLba);
+            DBG_INFO("LogicalBlocksPerPhysicalBlock        : %u",
+                     BlockIoMedia->LogicalBlocksPerPhysicalBlock);
+        }
+
+        if (BlockIoIf->Revision >= EFI_BLOCK_IO_PROTOCOL_REVISION3) {
+            DBG_INFO("OptimalTransferLengthGranularity     : %u",
+                     BlockIoMedia->OptimalTransferLengthGranularity);
+        }
+
+        DBG_INFO("Size                                 : %lld %a",
+                 PrettySize(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize),
+                 PrettySizeStr(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize));
+        DBG_INFO("-------------------------------------------");
+    }
+
+Exit:
+
+    FreePool(BlockIoHandles);
+
+    return Status;
+}
+
+
 static EFI_STATUS BlockIoAPITest(IN PBM_SESSION Session)
 {
     EFI_HANDLE* BlockIoHandles = NULL;
@@ -446,6 +539,11 @@ static BM_TEST DutTests[] = {
         .Name = t("blockioinfo"),
         .Description = t("Block IO Info"),
         .DutTestFn = BlockIoProbeInfo,
+    },
+    {
+        .Name = t("blockiosfsinfo"),
+        .Description = t("Block IO devices supporting Simple File System"),
+        .DutTestFn = BlockIoProbeSFSInfo,
     },
     {
         .Name = t("blockioapi"),
