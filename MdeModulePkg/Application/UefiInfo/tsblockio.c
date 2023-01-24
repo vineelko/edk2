@@ -335,6 +335,7 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_SESSION Session)
         DBG_INFO("Size                                 : %lld %a",
                  PrettySize(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize),
                  PrettySizeStr(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize));
+        DBG_INFO("-------------------------------------------");
     }
 
 Exit:
