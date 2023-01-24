@@ -296,43 +296,45 @@ static EFI_STATUS BlockIoProbeInfo(IN PBM_SESSION Session)
                                      &gEfiBlockIo2ProtocolGuid,
                                      (VOID**)&BlockIo2If);
         BlockIoMedia = EFI_ERROR(Status) ? BlockIoIf->Media : BlockIo2If->Media;
-        if (!BlockIoMedia->RemovableMedia && !BlockIoMedia->LogicalPartition) {
-            DevicePathIf = DevicePathFromHandle(BlockIoHandles[i]);
-            if (DevicePathIf != NULL) {
-                DevicePath = DevicePathToTextIf->ConvertDevicePathToText(DevicePathIf,
-                                                                         FALSE,
-                                                                         FALSE);
-                DBG_INFO_U(L"DevicePath                           : %a", DevicePath);
-                FreePool(DevicePath);
-            }
-
-            DBG_INFO("Block IO 2                           : %a",
-                     BlockIo2If ? "Supported" : "Not Supported");
-            DBG_INFO("MediaId                              : 0x%08x", BlockIoMedia->MediaId);
-            DBG_INFO("ReadOnly                             : %u", BlockIoMedia->ReadOnly);
-            DBG_INFO("WriteCaching                         : %u", BlockIoMedia->WriteCaching);
-            DBG_INFO("BlockSize                            : %u", BlockIoMedia->BlockSize);
-            DBG_INFO("IoAlign                              : %u", BlockIoMedia->IoAlign);
-            DBG_INFO("LastBlock                            : 0x%016llx", BlockIoMedia->LastBlock);
-
-            if (BlockIoIf->Revision >= EFI_BLOCK_IO_PROTOCOL_REVISION2) {
-                DBG_INFO("LowestAlignedLba                     : 0x%016llx",
-                         BlockIoMedia->LowestAlignedLba);
-                DBG_INFO("LogicalBlocksPerPhysicalBlock        : %u",
-                         BlockIoMedia->LogicalBlocksPerPhysicalBlock);
-            }
-
-            if (BlockIoIf->Revision >= EFI_BLOCK_IO_PROTOCOL_REVISION3) {
-                DBG_INFO("OptimalTransferLengthGranularity     : %u",
-                         BlockIoMedia->OptimalTransferLengthGranularity);
-            }
-
-            DBG_INFO("Size                                 : %lld %a",
-                     PrettySize(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize),
-                     PrettySizeStr(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize));
-
-            DBG_INFO("");
+        DevicePathIf = DevicePathFromHandle(BlockIoHandles[i]);
+        if (DevicePathIf != NULL) {
+            DevicePath = DevicePathToTextIf->ConvertDevicePathToText(DevicePathIf, FALSE, FALSE);
+            DBG_INFO_U(L"DevicePath                           : %s", DevicePath);
+            FreePool(DevicePath);
         }
+
+        DBG_INFO("Block IO 2                           : %a",
+                 BlockIo2If ? "Supported" : "Not Supported");
+        DBG_INFO("MediaId                              : 0x%08x", BlockIoMedia->MediaId);
+        DBG_INFO("RemovableMedia                       : %a",
+                 BlockIoMedia->RemovableMedia == TRUE ? "Yes" : "No");
+        DBG_INFO("MediaPresent                         : %a",
+                 BlockIoMedia->MediaPresent == TRUE ? "Yes" : "No");
+        DBG_INFO("LogicalPartition                     : %a",
+                 BlockIoMedia->LogicalPartition == TRUE ? "Yes" : "No");
+        DBG_INFO("ReadOnly                             : %a",
+                 BlockIoMedia->ReadOnly == TRUE ? "Yes" : "No");
+        DBG_INFO("WriteCaching                         : %a",
+                 BlockIoMedia->WriteCaching == TRUE ? "Yes" : "No");
+        DBG_INFO("BlockSize                            : %u", BlockIoMedia->BlockSize);
+        DBG_INFO("IoAlign                              : %u", BlockIoMedia->IoAlign);
+        DBG_INFO("LastBlock                            : 0x%016llx", BlockIoMedia->LastBlock);
+
+        if (BlockIoIf->Revision >= EFI_BLOCK_IO_PROTOCOL_REVISION2) {
+            DBG_INFO("LowestAlignedLba                     : 0x%016llx",
+                     BlockIoMedia->LowestAlignedLba);
+            DBG_INFO("LogicalBlocksPerPhysicalBlock        : %u",
+                     BlockIoMedia->LogicalBlocksPerPhysicalBlock);
+        }
+
+        if (BlockIoIf->Revision >= EFI_BLOCK_IO_PROTOCOL_REVISION3) {
+            DBG_INFO("OptimalTransferLengthGranularity     : %u",
+                     BlockIoMedia->OptimalTransferLengthGranularity);
+        }
+
+        DBG_INFO("Size                                 : %lld %a",
+                 PrettySize(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize),
+                 PrettySizeStr(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize));
     }
 
 Exit:

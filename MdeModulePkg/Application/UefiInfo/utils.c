@@ -232,6 +232,8 @@ VOID HexDump(IN VOID* Buffer, IN UINTN Length)
         ByteIndex = 0;
         LineLength = MIN(16, Remaining);
 
+        DBG_INFO_RAW("%016x : ", &Byte[Index]);
+
         for (ByteIndex = 0; ByteIndex < LineLength; ByteIndex++) {
             DBG_INFO_RAW("%02x ", Byte[Index + ByteIndex] & 0xff);
         }
@@ -250,7 +252,7 @@ VOID HexDump(IN VOID* Buffer, IN UINTN Length)
             DBG_INFO_RAW(".");
         }
 
-        DBG_INFO_RAW("|\n");
+        DBG_INFO_RAW("|\r\n");
 
         Remaining -= LineLength;
         Index += LineLength;
