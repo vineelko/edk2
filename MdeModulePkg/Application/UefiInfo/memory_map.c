@@ -35,7 +35,7 @@ static INTN EFIAPI ComparePageNumDesc(IN CONST VOID* Left, IN CONST VOID* Right)
 //
 EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
 {
-    EFI_STATUS EfiStatus = EFI_SUCCESS;
+    EFI_STATUS Status = EFI_SUCCESS;
     MEMORYMAP_CONTEXT* RetMemoryMapContext = NULL;
 
     UINTN DescriptorSize;
@@ -57,15 +57,15 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
     MemoryMapSize = 0;
     PagesNeeded = 0;
 
-    EfiStatus = gBS->GetMemoryMap(&MemoryMapSize,
-                                  MemoryMapBuffer,
-                                  &MapKey,
-                                  &DescriptorSize,
-                                  &DescriptorVersion);
-    if (EfiStatus != EFI_BUFFER_TOO_SMALL) {
-        DBG_ERROR("GetMemoryMap failed with error 0x%x (expected EFI_BUFFER_TOO_SMALL)", EfiStatus);
-        if (!EFI_ERROR(EfiStatus)) {
-            EfiStatus = EFI_ABORTED;
+    Status = gBS->GetMemoryMap(&MemoryMapSize,
+                               MemoryMapBuffer,
+                               &MapKey,
+                               &DescriptorSize,
+                               &DescriptorVersion);
+    if (Status != EFI_BUFFER_TOO_SMALL) {
+        DBG_ERROR("GetMemoryMap failed with error 0x%x (expected EFI_BUFFER_TOO_SMALL)", Status);
+        if (!EFI_ERROR(Status)) {
+            Status = EFI_ABORTED;
         }
         goto Exit;
     }
@@ -76,29 +76,29 @@ EFI_STATUS EFIAPI MemoryMapInit(OUT MEMORYMAP_CONTEXT** MemoryMapContext)
 
     PagesNeeded = ALIGN_RANGE_UP(MemoryMapSize, EFI_PAGE_SIZE) >> EFI_PAGE_SHIFT;
 
-    EfiStatus = gBS->AllocatePages(AllocateAnyPages,
-                                   EfiLoaderData,
-                                   PagesNeeded,
-                                   (EFI_PHYSICAL_ADDRESS*)&MemoryMapBuffer);
+    Status = gBS->AllocatePages(AllocateAnyPages,
+                                EfiLoaderData,
+                                PagesNeeded,
+                                (EFI_PHYSICAL_ADDRESS*)&MemoryMapBuffer);
 
-    if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("AllocatePages failed with error 0x%x", EfiStatus);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("AllocatePages failed with error 0x%x", Status);
         goto Exit;
     }
 
-    EfiStatus = gBS->GetMemoryMap(&MemoryMapSize,
-                                  MemoryMapBuffer,
-                                  &MapKey,
-                                  &DescriptorSize,
-                                  &DescriptorVersion);
-    if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR("2nd GetMemoryMap failed with error 0x%x", EfiStatus);
+    Status = gBS->GetMemoryMap(&MemoryMapSize,
+                               MemoryMapBuffer,
+                               &MapKey,
+                               &DescriptorSize,
+                               &DescriptorVersion);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("2nd GetMemoryMap failed with error 0x%x", Status);
         goto Exit;
     }
 
     RetMemoryMapContext = AllocateZeroPool(sizeof(MEMORYMAP_CONTEXT));
     if (RetMemoryMapContext == NULL) {
-        EfiStatus = EFI_OUT_OF_RESOURCES;
+        Status = EFI_OUT_OF_RESOURCES;
         DBG_ERROR("Failed to allocate MemoryMapContext");
         goto Exit;
     }
@@ -122,7 +122,7 @@ Exit:
         (VOID) gBS->FreePages((EFI_PHYSICAL_ADDRESS)MemoryMapBuffer, PagesNeeded);
     }
 
-    return EfiStatus;
+    return Status;
 }
 
 VOID EFIAPI MemoryMapFree(IN MEMORYMAP_CONTEXT* MemoryMapContext)
@@ -239,7 +239,7 @@ EFI_STATUS EFIAPI MemoryMapGetFreePages(IN MEMORYMAP_CONTEXT* MemoryMapContext,
 
 EFI_STATUS EFIAPI MemoryMapPrintInfo(IN MEMORYMAP_CONTEXT* MemoryMapContext)
 {
-    EFI_STATUS EfiStatus = EFI_SUCCESS;
+    EFI_STATUS Status = EFI_SUCCESS;
 
     EFI_MEMORY_DESCRIPTOR* TempMemoryMap;
     UINTN MemoryMapSize;
@@ -289,7 +289,7 @@ EFI_STATUS EFIAPI MemoryMapPrintInfo(IN MEMORYMAP_CONTEXT* MemoryMapContext)
     TempMemoryMap = (EFI_MEMORY_DESCRIPTOR*)AllocatePool(MemoryMapSize);
     if (TempMemoryMap == NULL) {
         DBG_ERROR("Unable to allocate buffer");
-        EfiStatus = EFI_OUT_OF_RESOURCES;
+        Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
 
@@ -316,9 +316,9 @@ EFI_STATUS EFIAPI MemoryMapPrintInfo(IN MEMORYMAP_CONTEXT* MemoryMapContext)
         }
     }
 
-    EfiStatus = MemoryMapGetLargestRegion(MemoryMapContext, &LargestRegionSizeInBytes);
-    if (EFI_ERROR(EfiStatus)) {
-        DBG_ERROR_RAW("MemoryMapGetLargestRegion failed with error 0x%x\r\n", EfiStatus);
+    Status = MemoryMapGetLargestRegion(MemoryMapContext, &LargestRegionSizeInBytes);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR_RAW("MemoryMapGetLargestRegion failed with error 0x%x\r\n", Status);
     } else {
         DBG_INFO_RAW("\r\nLargest region size in bytes: %llu\r\n", LargestRegionSizeInBytes);
     }
@@ -327,7 +327,7 @@ Exit:
     FreePool(TempMemoryMap);
     TempMemoryMap = NULL;
 
-    return EfiStatus;
+    return Status;
 }
 
 //

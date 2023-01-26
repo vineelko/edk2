@@ -502,7 +502,7 @@ static VOID PrintBoxCharacters()
     CHAR16 Char[2] = {0};
 
     for (UINTN i = 0; i < _countof(BoxCharMap); i++) {
-        DBG_INFO_RAW_U(L" %S: ", BoxCharMap[i].String);
+        DBG_INFO_RAW(" %a: ", BoxCharMap[i].String);
         Char[0] = (CHAR16)BoxCharMap[i].Value;
         gSystemTable->ConOut->OutputString(gSystemTable->ConOut, Char);
     }

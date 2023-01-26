@@ -185,7 +185,7 @@ static EFI_STATUS UsbfnIoProbe(IN PBM_SESSION Session)
             continue;
         }
 
-        DBG_INFO_U(L"%S: %s", UsbDeviceInfoId[InfoId].String, Buffer);
+        DBG_INFO_U(L"%a: %s", UsbDeviceInfoId[InfoId].String, Buffer);
     }
 
     //

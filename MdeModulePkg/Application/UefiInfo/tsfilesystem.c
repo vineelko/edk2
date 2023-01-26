@@ -91,7 +91,7 @@ static EFI_STATUS FileInfo(IN PBM_SESSION Session)
 
     Status = Root->Open(Root, &LoadedImageFile, BinaryFilePath, EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.Open() for %s failed : %S(0x%x)",
+        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.Open() for %s failed : %a(0x%x)",
                     BinaryFilePath,
                     E(Status),
                     Status);
@@ -107,7 +107,7 @@ static EFI_STATUS FileInfo(IN PBM_SESSION Session)
                                       &FileInfoSize,
                                       FileInfo);
     if (EFI_ERROR(Status) && Status != EFI_BUFFER_TOO_SMALL) {
-        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.GetInfo() for %s failed : %S(0x%x)",
+        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.GetInfo() for %s failed : %a(0x%x)",
                     BinaryFilePath,
                     E(Status),
                     Status);
@@ -126,7 +126,7 @@ static EFI_STATUS FileInfo(IN PBM_SESSION Session)
                                       &FileInfoSize,
                                       FileInfo);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.GetInfo() for %s failed : %S(0x%x)",
+        DBG_ERROR_U(L"EFI_FILE_PROTOCOL.GetInfo() for %s failed : %a(0x%x)",
                     BinaryFilePath,
                     E(Status),
                     Status);

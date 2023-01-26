@@ -223,9 +223,12 @@ VOID HexDump(IN VOID* Buffer, IN UINTN Length)
     UINTN ByteIndex = 0;
     UINTN LineLength = 0;
 
-    //
-    // Skip any non printable characters.
-    //
+    if (Buffer == NULL)
+        return;
+
+        //
+        // Skip any non printable characters.
+        //
 
 #define PRINTABLE(x) (((x) < 0x20 || (x) >= 0x7F) ? '.' : x)
     while (Remaining > 0) {
@@ -345,7 +348,7 @@ VOID HexDump(IN VOID* Buffer, IN UINTN Length)
 
 //     Status = Root->Open(Root, &LoadedImageFile, BinaryFilePath, EFI_FILE_MODE_READ, 0);
 //     if (EFI_ERROR(Status)) {
-//         DBG_ERROR_U(L"Open() failed : for %s = %S(0x%x)", BinaryFilePath, E(Status), Status);
+//         DBG_ERROR_U(L"Open() failed : for %s = %s(0x%x)", BinaryFilePath, E(Status), Status);
 //         goto Exit;
 //     }
 

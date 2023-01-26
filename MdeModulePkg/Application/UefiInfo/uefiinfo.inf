@@ -22,7 +22,6 @@
 
 [Sources]
   buffer.c
-  boot_options.c
   guids.c
   file.c
   debug.c

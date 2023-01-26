@@ -2031,7 +2031,7 @@ static EFI_STATUS FileCopyRecursive(IN EFI_FILE_PROTOCOL* SourceDir, IN EFI_FILE
             goto Cleanup;
         }
 
-        DBG_INFO_U(L"Copying %-15a %a",
+        DBG_INFO_U(L"Copying %-15s %s",
                    ((FileInfo->Attribute & EFI_FILE_DIRECTORY) == EFI_FILE_DIRECTORY) ?
                        L"Directory" :
                        L"File",

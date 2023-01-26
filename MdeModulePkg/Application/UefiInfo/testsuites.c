@@ -177,7 +177,8 @@ Return Value:
 
                 if (AsciiStriCmp(Test->Name, Session->TestCase) == 0) {
                     if (Test->Description != NULL) {
-                        DBG_INFO("%a", Test->Description);
+                        DBG_INFO("--TEST: %a--", Test->Description);
+                        DBG_INFO("");
                     }
 
                     if (Test->DutTestFn != NULL) {
