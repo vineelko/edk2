@@ -164,6 +164,21 @@ static EFI_STATUS CbmrReadiness(IN PBM_SESSION Session)
     return Status;
 }
 
+#define EFI_MS_CBMR_RELEASE_PROTOCOL_GUID                  \
+    {                                                      \
+        0x887481f5, 0xfa49, 0x4f65,                        \
+        {                                                  \
+            0xb0, 0x3c, 0x55, 0x1d, 0xb5, 0x3c, 0x8c, 0x23 \
+        }                                                  \
+    }
+#define EFI_MS_CBMR_DEBUG_PROTOCOL_GUID                    \
+    {                                                      \
+        0xcdd7e25c, 0xdbee, 0x423c,                        \
+        {                                                  \
+            0xb2, 0x5f, 0xe3, 0xa3, 0x5c, 0x6b, 0xdd, 0x7b \
+        }                                                  \
+    }
+
 //
 // Unload existing driver. This helps in trying newer version of the side
 // loaded driver easy without rebooting the machine
@@ -174,57 +189,62 @@ static EFI_STATUS CbmrUnload(IN PBM_SESSION Session)
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_HANDLE* Handles = NULL;
     UINTN HandleCount = 0;
-    UINTN i = 0;
+    EFI_GUID CbmrProtocolGuids[2] = {EFI_MS_CBMR_RELEASE_PROTOCOL_GUID,
+                                     EFI_MS_CBMR_DEBUG_PROTOCOL_GUID};
 
     UNREFERENCED_PARAMETER(Session);
 
-    Status = gBS->LocateHandleBuffer(ByProtocol,
-                                     &(EFI_GUID)EFI_MS_CBMR_PROTOCOL_GUID,
-                                     NULL,
-                                     &HandleCount,
-                                     &Handles);
-    if (Status == EFI_NOT_FOUND) {
-        DBG_INFO("No previous instance of cbmr driver is detected");
-        Status = EFI_SUCCESS;
-    } else if (Status == EFI_SUCCESS) {
-        for (UINTN j = 0; j < HandleCount; j++) {
-            Status = gBS->UnloadImage(Handles[i]);
-            if (EFI_ERROR(Status)) {
-                DBG_ERROR("Unload() failed : %a(0x%x)", E(Status), Status);
-                goto Exit;
-            }
+    for (UINTN i = 0; i < _countof(CbmrProtocolGuids); i++) {
+        Status = gBS->LocateHandleBuffer(ByProtocol,
+                                         &CbmrProtocolGuids[i],
+                                         NULL,
+                                         &HandleCount,
+                                         &Handles);
+        if (Status == EFI_NOT_FOUND) {
+            DBG_INFO("No previous instance of cbmr %a driver is detected",
+                     i == 0 ? "release" : "debug");
+            Status = EFI_SUCCESS;
+        } else if (Status == EFI_SUCCESS) {
+            for (UINTN j = 0; j < HandleCount; j++) {
+                Status = gBS->UnloadImage(Handles[j]);
+                if (EFI_ERROR(Status)) {
+                    DBG_ERROR("Unload() of cbmr %a driver failed for handle(%d) : %a(0x%x)",
+                              i == 0 ? "release" : "debug",
+                              j,
+                              E(Status),
+                              Status);
+                    continue;
+                }
 
-            DBG_INFO("Unloaded previous instance of cbmr driver");
+                DBG_INFO("Unloaded previous instance of cbmr %a driver for handle(%d)",
+                         i == 0 ? "release" : "debug",
+                         j);
+            }
+            FreePool(Handles);
         }
     }
-
-Exit:
-    FreePool(Handles);
 
     return Status;
 }
 
-static EFI_STATUS CbmrProbe(IN PBM_SESSION Session)
+static EFI_STATUS CbmrLocate(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    EFI_HANDLE* Handles = NULL;
-    UINTN HandleCount = 0;
+    VOID* CbmrProtocol = NULL;
+    EFI_GUID CbmrProtocolGuids[2] = {EFI_MS_CBMR_RELEASE_PROTOCOL_GUID,
+                                     EFI_MS_CBMR_DEBUG_PROTOCOL_GUID};
 
     UNREFERENCED_PARAMETER(Session);
 
-    Status = gBS->LocateHandleBuffer(ByProtocol,
-                                     &(EFI_GUID)EFI_MS_CBMR_PROTOCOL_GUID,
-                                     NULL,
-                                     &HandleCount,
-                                     &Handles);
-    if (Status == EFI_NOT_FOUND) {
-        DBG_INFO("No previous instance of cbmr driver is detected");
-        Status = EFI_SUCCESS;
-    } else if (Status == EFI_SUCCESS) {
-        DBG_INFO("Found cbmr driver instance");
+    for (UINTN i = 0; i < _countof(CbmrProtocolGuids); i++) {
+        Status = gBS->LocateProtocol(&CbmrProtocolGuids[i], NULL, (VOID**)&CbmrProtocol);
+        if (!EFI_ERROR(Status)) {
+            DBG_INFO("Found cbmr %a driver instance", i == 0 ? "release" : "debug");
+        } else {
+            DBG_INFO("No previous instance of cbmr %a driver is found",
+                     i == 0 ? "release" : "debug");
+        }
     }
-
-    FreePool(Handles);
 
     return Status;
 }
@@ -388,9 +408,9 @@ static BM_TEST DutTests[] = {
         .DutTestFn = CbmrUnload,
     },
     {
-        .Name = t("cbmrprobe"),
-        .Description = t("Probe CBMR driver"),
-        .DutTestFn = CbmrProbe,
+        .Name = t("cbmrlocate"),
+        .Description = t("Locate CBMR protocol"),
+        .DutTestFn = CbmrLocate,
     },
     {
         .Name = t("cbmrreadiness"),
