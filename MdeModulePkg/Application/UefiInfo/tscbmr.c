@@ -224,7 +224,7 @@ static EFI_STATUS CbmrUnload(IN PBM_SESSION Session)
         }
     }
 
-    return Status;
+    return EFI_SUCCESS;
 }
 
 static EFI_STATUS CbmrLocate(IN PBM_SESSION Session)
@@ -246,7 +246,7 @@ static EFI_STATUS CbmrLocate(IN PBM_SESSION Session)
         }
     }
 
-    return Status;
+    return EFI_SUCCESS;
 }
 
 static EFI_STATUS CbmrWriteSI(IN PBM_SESSION Session)
