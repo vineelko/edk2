@@ -204,6 +204,31 @@ Exit:
     return Status;
 }
 
+static EFI_STATUS CbmrProbe(IN PBM_SESSION Session)
+{
+    EFI_STATUS Status = EFI_SUCCESS;
+    EFI_HANDLE* Handles = NULL;
+    UINTN HandleCount = 0;
+
+    UNREFERENCED_PARAMETER(Session);
+
+    Status = gBS->LocateHandleBuffer(ByProtocol,
+                                     &(EFI_GUID)EFI_MS_CBMR_PROTOCOL_GUID,
+                                     NULL,
+                                     &HandleCount,
+                                     &Handles);
+    if (Status == EFI_NOT_FOUND) {
+        DBG_INFO("No previous instance of cbmr driver is detected");
+        Status = EFI_SUCCESS;
+    } else if (Status == EFI_SUCCESS) {
+        DBG_INFO("Found cbmr driver instance");
+    }
+
+    FreePool(Handles);
+
+    return Status;
+}
+
 static EFI_STATUS CbmrWriteSI(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
@@ -294,8 +319,7 @@ static EFI_STATUS CbmrDumpSI(IN PBM_SESSION Session)
 
     SoftwareInventory = AllocateZeroPool(SoftwareInventorySize);
     if (SoftwareInventory == NULL) {
-        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %u",
-                  SoftwareInventorySize);
+        DBG_ERROR("AllocateZeroPool() failed to allocate buffer of size %u", SoftwareInventorySize);
         Status = EFI_OUT_OF_RESOURCES;
         goto Exit;
     }
@@ -362,6 +386,11 @@ static BM_TEST DutTests[] = {
         .Name = t("cbmrunload"),
         .Description = t("Unload CBMR driver"),
         .DutTestFn = CbmrUnload,
+    },
+    {
+        .Name = t("cbmrprobe"),
+        .Description = t("Probe CBMR driver"),
+        .DutTestFn = CbmrProbe,
     },
     {
         .Name = t("cbmrreadiness"),
