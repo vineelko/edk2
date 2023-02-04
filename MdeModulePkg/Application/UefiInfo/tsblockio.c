@@ -437,7 +437,6 @@ Exit:
     return Status;
 }
 
-
 static EFI_STATUS BlockIoAPITest(IN PBM_SESSION Session)
 {
     EFI_HANDLE* BlockIoHandles = NULL;
@@ -534,6 +533,73 @@ Exit:
 EFI_STATUS
 BlockIoWriteToAllSectors(IN PBM_SESSION Session);
 
+static EFI_STATUS BlockIoDiskErase(IN PBM_SESSION Session)
+{
+    CHAR16* DevicePath = NULL;
+    EFI_BLOCK_IO_MEDIA* BlockIoMedia = NULL;
+    EFI_BLOCK_IO_PROTOCOL* BlockIoIf = NULL;
+    EFI_DEVICE_PATH_PROTOCOL* DevicePathIf = NULL;
+    EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* DevicePathToTextIf = NULL;
+    EFI_HANDLE* BlockIoHandles = NULL;
+    EFI_STATUS Status = EFI_SUCCESS;
+    UINTN HandleCount = 0;
+
+    UNREFERENCED_PARAMETER(Session);
+
+    ProtocolGetInfo(&ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX]);
+    DevicePathToTextIf = ProtocolArray[EFI_DEVICE_PATH_TO_TEXT_PROTOCOL_INDEX].Protocol;
+    // BLOCK IO handles could be available for multiple devices. Enumerate all of them
+    Status = gBS->LocateHandleBuffer(ByProtocol,
+                                     &gEfiBlockIoProtocolGuid,
+                                     NULL,
+                                     &HandleCount,
+                                     &BlockIoHandles);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("LocateHandleBuffer() failed : %a(0x%x)", E(Status), Status);
+        goto Exit;
+    }
+
+    for (UINTN i = 0; i < HandleCount; i++) {
+        BlockIoIf = NULL;
+
+        Status = gBS->HandleProtocol(BlockIoHandles[i],
+                                     &gEfiBlockIoProtocolGuid,
+                                     (VOID**)&BlockIoIf);
+        if (EFI_ERROR(Status)) {
+            Status = EFI_SUCCESS;
+            continue;
+        }
+
+        BlockIoMedia = BlockIoIf->Media;
+
+        if (BlockIoMedia->LogicalPartition == TRUE || BlockIoMedia->RemovableMedia == TRUE) {
+            continue;
+        }
+
+        DBG_INFO("Disk       : 0x%08x", BlockIoMedia->MediaId);
+        DevicePathIf = DevicePathFromHandle(BlockIoHandles[i]);
+        if (DevicePathIf != NULL) {
+            DevicePath = DevicePathToTextIf->ConvertDevicePathToText(DevicePathIf, FALSE, FALSE);
+            DBG_INFO_U(L"DevicePath : %s", DevicePath);
+            FreePool(DevicePath);
+        }
+
+        DBG_INFO("MediaId    : 0x%08x", BlockIoMedia->MediaId);
+        DBG_INFO("BlockSize  : %u", BlockIoMedia->BlockSize);
+        DBG_INFO("LastBlock  : 0x%016llx", BlockIoMedia->LastBlock);
+        DBG_INFO("Size       : %lld %a",
+                 PrettySize(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize),
+                 PrettySizeStr(BlockIoMedia->LastBlock * BlockIoMedia->BlockSize));
+        DBG_INFO("-------------------------------------------");
+    }
+
+Exit:
+
+    FreePool(BlockIoHandles);
+
+    return Status;
+}
+
 static BM_TEST DutTests[] = {
     {
         .Name = t("blockioinfo"),
@@ -559,6 +625,11 @@ static BM_TEST DutTests[] = {
         .Name = t("blockiofullwrite"),
         .Description = t("Block IO write to all sectors"),
         .DutTestFn = BlockIoWriteToAllSectors,
+    },
+    {
+        .Name = t("blockiodiskerase"),
+        .Description = t("Erase the partition table on the selected disk"),
+        .DutTestFn = BlockIoDiskErase,
     },
 };
 

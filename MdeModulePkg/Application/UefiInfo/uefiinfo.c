@@ -33,7 +33,7 @@ EFI_HANDLE* gImageHandle;
 
 VOID ShowAppInfo(IN PBM_SESSION Session)
 {
-    DBG_INFO("UEFI Info v1.0 - Dump information about UEFI platform");
+    DBG_INFO("UEFI Info v1.0 - Developed by Vineel");
     DBG_INFO("Copyright (C) 2021-2022 Microsoft Corporation");
     DBG_INFO("UEFI version: %x.%x.%x",
              gSystemTable->Hdr.Revision >> 16,                // Major

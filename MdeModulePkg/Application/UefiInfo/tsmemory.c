@@ -24,21 +24,61 @@ Environment:
 
 #include "protocols.h"
 #include "testsuites.h"
-#include "memory_map.h"
 
 static EFI_STATUS DumpMemoryMap(IN PBM_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    MEMORYMAP_CONTEXT* MemoryMapContext = NULL;
+    UINTN MemoryMapSize = 0;
+    UINTN MapKey = 0;
+    UINTN DescriptorSize = 0;
+    UINT32 DescriptorVersion = 0;
+    EFI_MEMORY_DESCRIPTOR* MemoryMap = NULL;
+
 
     UNREFERENCED_PARAMETER(Session);
 
-    Status = MemoryMapInit(&MemoryMapContext);
-    if (!EFI_ERROR(Status)) {
-        MemoryMapPrintInfo(MemoryMapContext);
-        MemoryMapFree(MemoryMapContext);
+    Status = gBS->GetMemoryMap(&MemoryMapSize,
+                               MemoryMap,
+                               &MapKey,
+                               &DescriptorSize,
+                               &DescriptorVersion);
+    if (Status == EFI_BUFFER_TOO_SMALL) {
+        MemoryMap = AllocateZeroPool(MemoryMapSize);
+    } else {
+        DBG_ERROR("GetMemoryMap() call failed : %a(0x%x)", E(Status), Status);
+        goto Exit;
     }
 
+    Status = gBS->GetMemoryMap(&MemoryMapSize,
+                               MemoryMap,
+                               &MapKey,
+                               &DescriptorSize,
+                               &DescriptorVersion);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("GetMemoryMap() call failed : %a(0x%x)", E(Status), Status);
+    }
+
+    DBG_INFO("%-16a %-16a% -16a %-16a %-16a",
+             "Type",
+             "PhysicalStart",
+             "VirtualStart",
+             "NumberOfPages",
+             "Attribute");
+    DBG_INFO("---------------------------------------------------------------------");
+    for (UINTN i = 0; i < MemoryMapSize / DescriptorSize; i++) {
+        EFI_MEMORY_DESCRIPTOR* Entry = (EFI_MEMORY_DESCRIPTOR*)((UINT8*)MemoryMap +
+                                                                i * DescriptorSize);
+        DBG_INFO("%16x %16x %16x %16x %16x",
+                 Entry->Type,
+                 Entry->PhysicalStart,
+                 Entry->VirtualStart,
+                 Entry->NumberOfPages,
+                 Entry->Attribute);
+    }
+
+Exit:
+
+    FreePool(MemoryMap);
     return Status;
 }
 

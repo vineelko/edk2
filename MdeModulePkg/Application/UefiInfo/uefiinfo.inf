@@ -25,7 +25,6 @@
   guids.c
   file.c
   debug.c
-  memory_map.c
   network_common.c
   protocols.c
   safe_arithmetic.c
