@@ -11,16 +11,16 @@ Get all edk2 sources:
     - git submodule update --init --recursive
 
 Launch build environment:
-    - set PATH=D:\tools\iasl;%PATH%
-    - set PYTHON_HOME=C:\Users\vineelko\AppData\Local\Programs\Python\Python311
-    - set NASM_PREFIX=D:\tools\nasm\
-    - set CLANG_BIN=C:\Program Files\LLVM\bin\
-    - edksetup.bat VS2019
-    - edit Conf\target.txt
-            TARGET_ARCH           = IA32 X64
-            TOOL_CHAIN_TAG        = VS2019
-    - edksetup.bat Rebuild
-    - edksetup.bat VS2019
+set PATH=D:\tools\iasl;%PATH%
+set PYTHON_HOME=C:\Users\vineelko\AppData\Local\Programs\Python\Python311
+set NASM_PREFIX=D:\tools\nasm\
+set CLANG_BIN=C:\Program Files\LLVM\bin\
+edksetup.bat VS2019
+edit Conf\target.txt
+    TARGET_ARCH           = IA32 X64
+    TOOL_CHAIN_TAG        = VS2019
+edksetup.bat Rebuild
+edksetup.bat VS2019
 
 Location of UEFI Info Tool code in EDK2:
     - Edit D:\repos\edk2\MdeModulePkg\MdeModulePkg.dsc and add below line under [Components] sections
