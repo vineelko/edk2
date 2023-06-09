@@ -37,27 +37,28 @@ D:\repos\edk2> build -a X64 -m UefiInfo\UefiInfo.inf
 UEFI Info App:
 After successful build the uefiinfo.efi will be in D:\repos\edk2\Build\UefiInfo\DEBUG_VS2019\X64\
 
-
 git push origin HEAD:uefiinfo
 
-
+----------------------------------------------------------------------------------------------------
 Linux
 sudo apt install build-essential uuid-dev iasl git  nasm  python-is-python3
 make -C BaseTools
 . edksetup.sh
 micro Conf/target.txt
-    TARGET_ARCH           = IA32 X64
+    TARGET_ARCH           = IA32 X64 AARCH64
     TOOL_CHAIN_TAG        = GCC5
 
 build -a X64 -p UefiInfo/UefiInfo.dsc
 
+AARCH64 - https://developer.arm.com/tools-and-software/open-source-software/firmware/edkii-uefi-firmware/building-edkii-uefi-firmware-for-arm-platforms/single-page
+cd ~/repos/toolchain
+$ wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz
+$ tar xf gcc-arm-9.2-2019.12-x86_64-aarch64-none-elf.tar.xz
+export GCC5_AARCH64_PREFIX=~/repos/toolchain/gcc-arm64/bin/aarch64-none-elf-
+~/repos/edk2/Build/UefiInfo/DEBUG_GCC5/AARCH64/uefiinfo.efi
 
 
-
-
-
-
-
+----------------------------------------------------------------------------------------------------
 
 stuart_setup -c .pytool/CISettings.py -p MdeModulePkg -t RELEASE -a X64 TOOL_CHAIN_TAG=VS2019
 stuart_update -c .pytool/CISettings.py -p MdeModulePkg -t RELEASE -a X64 TOOL_CHAIN_TAG=VS2019
