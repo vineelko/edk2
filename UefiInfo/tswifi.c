@@ -4,7 +4,7 @@
 #include "testsuites.h"
 
 #include "utils.h"
-#include "strsafe.h"
+// #include "strsafe.h"
 
 #define OUI_IEEE_80211I 0xAC0F00
 

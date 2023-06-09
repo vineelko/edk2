@@ -1,6 +1,10 @@
 #ifndef _UEFIINFO_ERROR_H_
 #define _UEFIINFO_ERROR_H_
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
 static const CHAR8* ErrorStrings[] = {
     [0] = t("EFI_SUCCESS"),               // 0x0
     [1] = t("EFI_LOAD_ERROR"),            // 0x1
@@ -53,6 +57,9 @@ static const CHAR8* ErrorStrings[] = {
     [105] = t("EFI_CONNECTION_RESET"),   // 0x69
     [106] = t("EFI_CONNECTION_REFUSED"), // 0x6A
 };
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #define MASK (~0x8000000000000000ULL)
 #define E(Status)                                                                 \

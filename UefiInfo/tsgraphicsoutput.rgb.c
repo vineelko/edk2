@@ -89,8 +89,8 @@ GraphicsOutputRGB(IN PUEFIINFO_SESSION Session)
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE* GraphicsMode = NULL;
     EFI_GRAPHICS_OUTPUT_MODE_INFORMATION* GraphicsModeInfo = NULL;
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL* FrameBufferContent = NULL;
-    UINT32 FrameBufferSize = 0;
-    UINT32 CurrentMode = 0;
+    // UINT32 FrameBufferSize = 0;
+    // UINT32 CurrentMode = 0;
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -144,7 +144,7 @@ GraphicsOutputRGB(IN PUEFIINFO_SESSION Session)
     // }
 
     GraphicsModeInfo = GraphicsMode->Info;
-    CurrentMode = GraphicsMode->Mode;
+    // CurrentMode = GraphicsMode->Mode;
     DBG_INFO("Graphics Mode(Current):");
     DBG_INFO("         Current Mode: %d", GraphicsMode->Mode);
     DBG_INFO("         Max Mode: %d", GraphicsMode->MaxMode);
@@ -161,8 +161,8 @@ GraphicsOutputRGB(IN PUEFIINFO_SESSION Session)
              GraphicsModeInfo->PixelInformation.BlueMask);
     DBG_INFO("                Pixels Per Scan Line: %d", GraphicsModeInfo->PixelsPerScanLine);
 
-    FrameBufferSize = GraphicsModeInfo->HorizontalResolution *
-                      GraphicsModeInfo->VerticalResolution * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL);
+    // FrameBufferSize = GraphicsModeInfo->HorizontalResolution *
+    //                   GraphicsModeInfo->VerticalResolution * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL);
     FrameBufferContent = (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)(UINTN)
                              GraphicsMode->FrameBufferBase; // AllocateZeroPool(FrameBufferSize);
     // if (FrameBufferContent == NULL) {

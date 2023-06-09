@@ -2,7 +2,7 @@
 #include "session.h"
 #include "protocols.h"
 #include "utils.h"
-#include "strsafe.h"
+// #include "strsafe.h"
 
 extern PROTOCOL_INFO ProtocolArray[EFI_MAX_PROTOCOL_INDEX];
 

@@ -4,10 +4,10 @@
 #include "testsuites.h"
 #include "network_common.h"
 
-EFI_BOOT_SERVICES* gBS;
+// EFI_BOOT_SERVICES* gBS;
+// EFI_RUNTIME_SERVICES* gRT;
+// EFI_HANDLE* gImageHandle;
 EFI_SYSTEM_TABLE* gSystemTable;
-EFI_RUNTIME_SERVICES* gRT;
-EFI_HANDLE* gImageHandle;
 
 VOID ShowAppInfo(IN PUEFIINFO_SESSION Session)
 {

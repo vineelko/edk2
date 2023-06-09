@@ -422,7 +422,6 @@ static EFI_STATUS BlockIoAPITest(IN PUEFIINFO_SESSION Session)
     UINTN HandleCount = 0;
     EFI_BLOCK_IO_MEDIA* Media = NULL;
     EFI_STATUS Status = EFI_SUCCESS;
-    BOOLEAN TestPassed = TRUE;
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -463,42 +462,36 @@ static EFI_STATUS BlockIoAPITest(IN PUEFIINFO_SESSION Session)
                      EFI_BLOCK_IO_PROTOCOL_REVISION2,
                      EFI_BLOCK_IO_PROTOCOL_REVISION3,
                      BlockIoIf->Revision);
-            TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->RemovableMedia)) {
             DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(RemovableMedia),
                      Media->RemovableMedia);
-            TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->MediaPresent)) {
             DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(MediaPresent),
                      Media->MediaPresent);
-            TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->LogicalPartition)) {
             DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(LogicalPartition),
                      Media->LogicalPartition);
-            TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->ReadOnly)) {
             DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(ReadOnly),
                      Media->ReadOnly);
-            TestPassed = FALSE;
         }
 
         if (!TEST_BOOLEAN(Media->WriteCaching)) {
             DBG_INFO("%a property: Expected (TRUE or FALSE) : Found (0x%x)",
                      PROP(WriteCaching),
                      Media->WriteCaching);
-            TestPassed = FALSE;
         }
     }
 

@@ -24,14 +24,14 @@ static EFI_BOOT_MANAGER_POLICY_PROTOCOL* gsBootMgrPolicy = NULL;
 EFI_GUID gEfiMsNetworkDelayProtocolGuid = {0xff7d36aa,
                                            0x96a5,
                                            0x46c4,
-                                           0xb1,
+                                           {0xb1,
                                            0x66,
                                            0xfe,
                                            0x18,
                                            0xd2,
                                            0x93,
                                            0x26,
-                                           0x06}; // EFI_MS_NETWORK_DELAY_PROTOCOL_GUID
+                                           0x06}}; // EFI_MS_NETWORK_DELAY_PROTOCOL_GUID
 
 //
 // Prototypes

@@ -6,8 +6,8 @@
 #include "utils.h"
 #include "guids.h"
 
-#include <IndustryStandard\Acpi20.h>
-#include <Protocol\AcpiSystemDescriptionTable.h>
+#include <IndustryStandard/Acpi20.h>
+#include <Protocol/AcpiSystemDescriptionTable.h>
 
 static EFI_STATUS EfiDumpSystemTable(IN PUEFIINFO_SESSION Session)
 {
@@ -37,8 +37,8 @@ static CHAR8* ParseGuidInDevicePath(IN CHAR16* DevicePath)
         BOOLEAN Found = TRUE;
         for (UINTN i = 0; DummyGuid[i] && Ptr[i]; i++) {
             if (DummyGuid[i] == L'X') {
-                if (Ptr[i] >= L'A' && Ptr[i] <= L'F' || Ptr[i] >= L'0' && Ptr[i] <= L'9' ||
-                    Ptr[i] >= L'a' && Ptr[i] <= L'f') {
+                if ((Ptr[i] >= L'A' && Ptr[i] <= L'F') || (Ptr[i] >= L'0' && Ptr[i] <= L'9') ||
+                    (Ptr[i] >= L'a' && Ptr[i] <= L'f')) {
                 } else {
                     Found = FALSE;
                     break;
@@ -144,7 +144,7 @@ static EFI_STATUS EfiDumpAllHandles(IN PUEFIINFO_SESSION Session)
 
         DBG_INFO("%3d. Handle : %p", i + 1, Handles[i]);
 
-        Status = gBS->HandleProtocol(Handles[i], &gEfiLoadedImageProtocolGuid, &LoadedImage);
+        Status = gBS->HandleProtocol(Handles[i], &gEfiLoadedImageProtocolGuid, (VOID**)&LoadedImage);
         if (!EFI_ERROR(Status)) {
             DevicePath = ToTextPath->ConvertDevicePathToText(LoadedImage->FilePath, FALSE, FALSE);
             if (DevicePath != NULL) {
@@ -154,7 +154,7 @@ static EFI_STATUS EfiDumpAllHandles(IN PUEFIINFO_SESSION Session)
             }
         }
 
-        Status = gBS->HandleProtocol(Handles[i], &gEfiDevicePathProtocolGuid, &DevicePathProto);
+        Status = gBS->HandleProtocol(Handles[i], &gEfiDevicePathProtocolGuid, (VOID**)&DevicePathProto);
         if (!EFI_ERROR(Status)) {
             DevicePath = ToTextPath->ConvertDevicePathToText(DevicePathProto, FALSE, FALSE);
             if (DevicePath != NULL) {

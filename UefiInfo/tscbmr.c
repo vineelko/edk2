@@ -13,11 +13,13 @@
         }                                                  \
     }
 
-#define EFI_MS_CBMR_VARIABLES_INTERNAL_GUID                                        \
-    {                                                                              \
-        0xCA787F2E, 0x4D68, 0x4883, 0xB9, 0x9E, 0x7F, 0xB1, 0x2E, 0xB3, 0x49, 0xCD \
+#define EFI_MS_CBMR_VARIABLES_INTERNAL_GUID                 \
+    {                                                       \
+        0xCA787F2E, 0x4D68, 0x4883,                         \
+        {                                                   \
+            0xB9, 0x9E, 0x7F, 0xB1, 0x2E, 0xB3, 0x49, 0xCD  \
+        }                                                   \
     }
-
 static VOID ReadinessPrintProtocolInfo(IN PPROTOCOL_INFO ProtocolInfo)
 {
     if (ProtocolInfo->ProtocolGuid == NULL) {

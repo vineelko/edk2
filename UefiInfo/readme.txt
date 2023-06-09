@@ -38,9 +38,26 @@ UEFI Info App:
 After successful build the uefiinfo.efi will be in D:\repos\edk2\Build\UefiInfo\DEBUG_VS2019\X64\
 
 
-
-
 git push origin HEAD:uefiinfo
+
+
+Linux
+sudo apt install build-essential uuid-dev iasl git  nasm  python-is-python3
+make -C BaseTools
+. edksetup.sh
+micro Conf/target.txt
+    TARGET_ARCH           = IA32 X64
+    TOOL_CHAIN_TAG        = GCC5
+
+build -a X64 -p UefiInfo/UefiInfo.dsc
+
+
+
+
+
+
+
+
 
 stuart_setup -c .pytool/CISettings.py -p MdeModulePkg -t RELEASE -a X64 TOOL_CHAIN_TAG=VS2019
 stuart_update -c .pytool/CISettings.py -p MdeModulePkg -t RELEASE -a X64 TOOL_CHAIN_TAG=VS2019

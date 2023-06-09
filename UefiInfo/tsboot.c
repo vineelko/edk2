@@ -103,7 +103,7 @@ static EFI_STATUS EnumerateBootOrder(IN PUEFIINFO_SESSION Session)
         //
         // Get the option attribute
         //
-        Ptr = BootEntryBuffer;
+        Ptr = (UINT8*)BootEntryBuffer;
         Attribute = ReadUnaligned32((UINT32*)Ptr);
         Ptr += sizeof(UINT32);
 

@@ -15,7 +15,7 @@ static EFI_STATUS ConsoleOutputProbe(IN PUEFIINFO_SESSION Session)
     EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* ConOutProtocol = NULL;
     EFI_SIMPLE_TEXT_OUTPUT_MODE* ConOutMode = NULL;
     PUEFIINFO_CONSOLE_RESOLUTION AllConsoleResolutions = NULL;
-    UINT32 CurrentMode = 0;
+    // UINT32 CurrentMode = 0;
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -31,7 +31,7 @@ static EFI_STATUS ConsoleOutputProbe(IN PUEFIINFO_SESSION Session)
     ConOutProtocol = ProtocolArray[EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_INDEX].Protocol;
 
     ConOutMode = ConOutProtocol->Mode;
-    CurrentMode = ConOutMode->Mode;
+    // CurrentMode = ConOutMode->Mode;
     DBG_INFO("Console Mode(Current):");
     DBG_INFO("         Current Mode: %d", ConOutMode->Mode);
     DBG_INFO("         Max Mode: %d", ConOutMode->MaxMode);

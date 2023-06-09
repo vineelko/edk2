@@ -84,7 +84,7 @@ static EFI_STATUS UsbfnIoProbe(IN PUEFIINFO_SESSION Session)
     //
 
     DBG_INFO("Max packet size:");
-    for (UINTN EndPointType = UsbEndpointControl; EndPointType <= UsbEndpointBulk; EndPointType++) {
+    for (UINTN EndPointType = UsbEndpointControl; EndPointType < 2; EndPointType++) {
         DBG_INFO("    End point type %a:", UsbEndPointType[EndPointType].String);
         for (UINTN Speed = UsbBusSpeedLow; Speed <= UsbBusSpeedSuper; Speed++) {
             MaxPacketSize = 0;

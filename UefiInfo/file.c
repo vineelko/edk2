@@ -2,7 +2,7 @@
 // Global includes
 //
 #include "common.h"
-#include <strsafe.h>
+// #include <strsafe.h>
 
 //
 // Local includes
@@ -25,14 +25,14 @@
 EFI_GUID gEfiPartitionRecordGuid = {0xfe2555be,
                                     0xd716,
                                     0x4686,
-                                    0xb9,
+                                    {0xb9,
                                     0xd0,
                                     0x79,
                                     0xdb,
                                     0x59,
                                     0x21,
                                     0xb7,
-                                    0x0d}; // EFI_PARTITION_RECORD_GUID
+                                    0x0d}}; // EFI_PARTITION_RECORD_GUID
 
 //
 // Structs
@@ -1767,7 +1767,7 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
     EFI_DEVICE_PATH_PROTOCOL* PartitionAndFileDevicePath = NULL;
     EFI_DEVICE_PATH_UTILITIES_PROTOCOL* DevicePathUtilitiesIf = NULL;
     EFI_DEVICE_PATH_TO_TEXT_PROTOCOL* DevicePathToTextIf = NULL;
-    CHAR16* CombinedDevicePath = NULL;
+    // CHAR16* CombinedDevicePath = NULL;
 
     if (PartitionHandle == NULL || FileName == NULL) {
         DBG_ERROR("Invalid parameter: PartitionHandle 0x%p, FileName 0x%p, DevicePathProtocol 0x%p",
@@ -1813,11 +1813,11 @@ static EFI_STATUS FileGetDevicePathInternal(IN EFI_HANDLE PartitionHandle,
 
     FreePool(FilePathDevicePath);
 
-    // Print out combined device path
-    CombinedDevicePath = DevicePathToTextIf->ConvertDevicePathToText(PartitionAndFileDevicePath,
-                                                                     FALSE,
-                                                                     FALSE);
-    DBG_VERBOSE_U(L"Combined device path: %s", CombinedDevicePath);
+    // // Print out combined device path
+    // CombinedDevicePath = DevicePathToTextIf->ConvertDevicePathToText(PartitionAndFileDevicePath,
+    //                                                                  FALSE,
+    //                                                                  FALSE);
+    // DBG_VERBOSE_U(L"Combined device path: %s", CombinedDevicePath);
     *DevicePathProtocol = PartitionAndFileDevicePath;
 
     return Status;

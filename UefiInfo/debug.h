@@ -16,7 +16,27 @@ VOID EFIAPI DebugPrintFormattedU(IN DEBUG_FLAGS DebugFlag, IN CHAR16* FmtW, ...)
 VOID EFIAPI DebugClose();
 
 // clang-format off
+#ifdef __GNUC__
+#define DBG_ERROR(Format, ...)            DebugPrintFormatted(DEBUG_ERROR,       (CHAR8 *)Format  "\r\n",  ##__VA_ARGS__)
+#define DBG_WARNING(Format, ...)          DebugPrintFormatted(DEBUG_WARNING,     (CHAR8 *)Format  "\r\n",  ##__VA_ARGS__)
+#define DBG_INFO(Format, ...)             DebugPrintFormatted(DEBUG_INFO,        (CHAR8 *)Format  "\r\n",  ##__VA_ARGS__)
+#define DBG_VERBOSE(Format, ...)          DebugPrintFormatted(DEBUG_VERBOSE,     (CHAR8 *)Format  "\r\n",  ##__VA_ARGS__)
 
+#define DBG_ERROR_U(Format, ...)          DebugPrintFormattedU(DEBUG_ERROR,      (CHAR16 *)Format  L"\r\n", ##__VA_ARGS__)
+#define DBG_WARNING_U(Format, ...)        DebugPrintFormattedU(DEBUG_WARNING,    (CHAR16 *)Format  L"\r\n", ##__VA_ARGS__)
+#define DBG_INFO_U(Format, ...)           DebugPrintFormattedU(DEBUG_INFO,       (CHAR16 *)Format  L"\r\n", ##__VA_ARGS__)
+#define DBG_VERBOSE_U(Format, ...)        DebugPrintFormattedU(DEBUG_VERBOSE,    (CHAR16 *)Format  L"\r\n", ##__VA_ARGS__)
+
+#define DBG_ERROR_RAW(Format, ...)        DebugPrintFormatted(DEBUG_ERROR,       (CHAR8 *)Format,          ##__VA_ARGS__)
+#define DBG_WARNING_RAW(Format, ...)      DebugPrintFormatted(DEBUG_WARNING,     (CHAR8 *)Format,          ##__VA_ARGS__)
+#define DBG_INFO_RAW(Format, ...)         DebugPrintFormatted(DEBUG_INFO,        (CHAR8 *)Format,          ##__VA_ARGS__)
+#define DBG_VERBOSE_RAW(Format, ...)      DebugPrintFormatted(DEBUG_VERBOSE,     (CHAR8 *)Format,          ##__VA_ARGS__)
+
+#define DBG_ERROR_RAW_U(Format, ...)      DebugPrintFormattedU(DEBUG_ERROR,      (CHAR16 *)Format,          ##__VA_ARGS__)
+#define DBG_WARNING_RAW_U(Format, ...)    DebugPrintFormattedU(DEBUG_WARNING,    (CHAR16 *)Format,          ##__VA_ARGS__)
+#define DBG_INFO_RAW_U(Format, ...)       DebugPrintFormattedU(DEBUG_INFO,       (CHAR16 *)Format,          ##__VA_ARGS__)
+#define DBG_VERBOSE_RAW_U(Format, ...)    DebugPrintFormattedU(DEBUG_VERBOSE,    (CHAR16 *)Format,          ##__VA_ARGS__)
+#else
 #define DBG_ERROR(Format, ...)            DebugPrintFormatted(DEBUG_ERROR,       (CHAR8 *)Format  "\r\n",  __VA_ARGS__)
 #define DBG_WARNING(Format, ...)          DebugPrintFormatted(DEBUG_WARNING,     (CHAR8 *)Format  "\r\n",  __VA_ARGS__)
 #define DBG_INFO(Format, ...)             DebugPrintFormatted(DEBUG_INFO,        (CHAR8 *)Format  "\r\n",  __VA_ARGS__)
@@ -36,6 +56,8 @@ VOID EFIAPI DebugClose();
 #define DBG_WARNING_RAW_U(Format, ...)    DebugPrintFormattedU(DEBUG_WARNING,    (CHAR16 *)Format,          __VA_ARGS__)
 #define DBG_INFO_RAW_U(Format, ...)       DebugPrintFormattedU(DEBUG_INFO,       (CHAR16 *)Format,          __VA_ARGS__)
 #define DBG_VERBOSE_RAW_U(Format, ...)    DebugPrintFormattedU(DEBUG_VERBOSE,    (CHAR16 *)Format,          __VA_ARGS__)
+#endif
+
 
 #define DBG_CMD_U(str) gSystemTable->ConOut->OutputString(gSystemTable->ConOut, str L"\r\n");
 #define DBG_CMD_RAW_U(str) gSystemTable->ConOut->OutputString(gSystemTable->ConOut, str);

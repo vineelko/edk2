@@ -512,8 +512,6 @@ Udp4DirectDutHostSendReceiveTest(IN PUEFIINFO_SESSION Session)
         goto Exit;
     }
 
-    Context.Client.Protocol = ProtocolArray[EFI_UDP4_PROTOCOL_INDEX].Protocol;
-
     //
     // Configure UDP instance in active mode - Client
     //

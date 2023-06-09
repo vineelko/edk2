@@ -3,7 +3,7 @@
 #include "guids.h"
 
 // #include <mincrypl.h>
-#include <strsafe.h>
+// #include <strsafe.h>
 
 //
 //  Time related functions
@@ -568,14 +568,10 @@ StringByIndex(IN CHAR8* StartAddrPtr,
     }
 
     while (Index < StringIndex) {
-#pragma prefast(push)
-#pragma prefast(disable : 26018)
-#pragma prefast(disable : 26007)
         if (*StringPtr == 0 && *(StringPtr + 1) == 0) {
             DBG_ERROR("Structure terminator found while searching index %u", Index);
             return NULL;
         }
-#pragma prefast(pop)
 
         StringLength = AsciiStrLen(StringPtr) + 1;
         StringPtr += StringLength;

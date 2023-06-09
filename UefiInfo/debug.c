@@ -4,7 +4,7 @@
 #include "common.h"
 #include "file.h"
 #include "utils.h"
-#include "strsafe.h"
+// #include "strsafe.h"
 
 #include <Protocol/DebugPort.h>
 
@@ -24,8 +24,6 @@ static VOID DebugWriteToSerialPort(IN CHAR8* Buffer, IN UINTN BufferLength);
 static VOID DebugWriteToFile(IN CHAR8* Buffer, IN UINTN BufferLength);
 static VOID DebugWrite(IN CHAR8* Str, IN UINTN BufferLength);
 static EFI_STATUS DebugOpenFile();
-static CHAR8* GetDebugFlagStr(DEBUG_FLAGS DebugFlag);
-static CHAR16* GetDebugFlagStrU(DEBUG_FLAGS DebugFlag);
 
 //
 // Interfaces
@@ -209,6 +207,7 @@ static VOID DebugWrite(IN CHAR8* Str, IN UINTN BufferLength)
     }
 }
 
+#if 0
 static const struct {
     UINTN BitMask;
     CHAR8* FlagName;
@@ -241,3 +240,4 @@ static CHAR16* GetDebugFlagStrU(DEBUG_FLAGS DebugFlag)
 
     return DebugFlags[DebugFlag].FlagNameW;
 }
+#endif

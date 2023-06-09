@@ -57,7 +57,7 @@ typedef struct _UEFIINFO_TCP4_SOCKET {
 } UEFIINFO_TCP4_SOCKET;
 
 typedef struct _UEFIINFO_TCP4_CLIENT {
-    UEFIINFO_TCP4_SOCKET;
+    UEFIINFO_TCP4_SOCKET Socket;
     EFI_TCP4_CONNECTION_TOKEN ConnectToken;
     BOOLEAN Connected;
     BOOLEAN Transmitted;
@@ -129,7 +129,7 @@ static EFI_STATUS Tcp4ConnectToServer(IN PUEFIINFO_TCP4_CONTEXT Context)
         goto Exit;
     }
 
-    Status = Client->Protocol->Connect(Client->Protocol, &Client->ConnectToken);
+    Status = Client->Socket.Protocol->Connect(Client->Socket.Protocol, &Client->ConnectToken);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Connect() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
@@ -190,7 +190,7 @@ static VOID EFIAPI Tcp4ClientReceiveCallback(IN EFI_EVENT Event, IN VOID* _Conte
 
     UNREFERENCED_PARAMETER(Event);
 
-    ClientRxData = Client->ReceiveToken.Packet.RxData;
+    ClientRxData = Client->Socket.ReceiveToken.Packet.RxData;
 
     DBG_INFO("   Triggered client receive callback");
 
@@ -226,8 +226,8 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PUEFIINFO_TCP4_CONTEXT Context)
     EFI_TCP4_RECEIVE_DATA* ClientRxData = NULL;
     PUEFIINFO_TCP4_CLIENT Client = &Context->Client;
 
-    ClientTxData = &Client->TransmitData;
-    ClientRxData = &Client->ReceiveData;
+    ClientTxData = &Client->Socket.TransmitData;
+    ClientRxData = &Client->Socket.ReceiveData;
 
     //
     // Setup client tx buffers
@@ -269,13 +269,13 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PUEFIINFO_TCP4_CONTEXT Context)
                               TPL_CALLBACK,
                               Tcp4ClientTransmitCallback,
                               Context,
-                              &Client->TransmitToken.CompletionToken.Event);
+                              &Client->Socket.TransmitToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    Client->TransmitToken.Packet.TxData = &Client->TransmitData;
+    Client->Socket.TransmitToken.Packet.TxData = &Client->Socket.TransmitData;
 
     //
     // Setup client rx token
@@ -285,13 +285,13 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PUEFIINFO_TCP4_CONTEXT Context)
                               TPL_CALLBACK,
                               Tcp4ClientReceiveCallback,
                               Context,
-                              &Client->ReceiveToken.CompletionToken.Event);
+                              &Client->Socket.ReceiveToken.CompletionToken.Event);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
-    Client->ReceiveToken.Packet.RxData = &Client->ReceiveData;
+    Client->Socket.ReceiveToken.Packet.RxData = &Client->Socket.ReceiveData;
 
     //
     // Setup client transmit, server receive wait event
@@ -331,7 +331,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PUEFIINFO_TCP4_CONTEXT Context)
         // Client transmit
         //
 
-        Status = Client->Protocol->Transmit(Client->Protocol, &Client->TransmitToken);
+        Status = Client->Socket.Protocol->Transmit(Client->Socket.Protocol, &Client->Socket.TransmitToken);
         if (EFI_ERROR(Status)) {
             DBG_ERROR("Transmit() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
@@ -354,7 +354,7 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PUEFIINFO_TCP4_CONTEXT Context)
         // Client receive
         //
 
-        Status = Client->Protocol->Receive(Client->Protocol, &Client->ReceiveToken);
+        Status = Client->Socket.Protocol->Receive(Client->Socket.Protocol, &Client->Socket.ReceiveToken);
         if (EFI_ERROR(Status)) {
             DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
@@ -371,10 +371,10 @@ static EFI_STATUS Tcp4TransmitAndReceiveData(IN PUEFIINFO_TCP4_CONTEXT Context)
         }
 
         if (Client->DataVerified == FALSE ||
-            EFI_ERROR(Client->ReceiveToken.CompletionToken.Status)) {
+            EFI_ERROR(Client->Socket.ReceiveToken.CompletionToken.Status)) {
             DBG_ERROR("   Server transmit ==> Client receive (failed) : %a(0x%x)",
-                      E(Client->ReceiveToken.CompletionToken.Status),
-                      Client->ReceiveToken.CompletionToken.Status);
+                      E(Client->Socket.ReceiveToken.CompletionToken.Status),
+                      Client->Socket.ReceiveToken.CompletionToken.Status);
             Status = EFI_INVALID_PARAMETER;
             break;
         } else {
@@ -546,45 +546,45 @@ static EFI_STATUS Tcp4ConfigureClient(IN PUEFIINFO_TCP4_CONTEXT Context)
         goto Exit;
     }
 
-    Client->ConfigData.TypeOfService = NETWORK_TCP_TYPE_OF_SERVICE;
-    Client->ConfigData.TimeToLive = NETWORK_TCP_TIME_TO_LIVE;
-    Client->ConfigData.AccessPoint.UseDefaultAddress = FALSE;
-    Client->ConfigData.AccessPoint.StationAddress.Addr[0] = Mode.ClientAddress.Addr[0];
-    Client->ConfigData.AccessPoint.StationAddress.Addr[1] = Mode.ClientAddress.Addr[1];
-    Client->ConfigData.AccessPoint.StationAddress.Addr[2] = Mode.ClientAddress.Addr[2];
-    Client->ConfigData.AccessPoint.StationAddress.Addr[3] = Mode.ClientAddress.Addr[3];
-    Client->ConfigData.AccessPoint.SubnetMask.Addr[0] = Mode.SubnetMask.Addr[0];
-    Client->ConfigData.AccessPoint.SubnetMask.Addr[1] = Mode.SubnetMask.Addr[1];
-    Client->ConfigData.AccessPoint.SubnetMask.Addr[2] = Mode.SubnetMask.Addr[2];
-    Client->ConfigData.AccessPoint.SubnetMask.Addr[3] = Mode.SubnetMask.Addr[3];
-    Client->ConfigData.AccessPoint.StationPort = 10002;
+    Client->Socket.ConfigData.TypeOfService = NETWORK_TCP_TYPE_OF_SERVICE;
+    Client->Socket.ConfigData.TimeToLive = NETWORK_TCP_TIME_TO_LIVE;
+    Client->Socket.ConfigData.AccessPoint.UseDefaultAddress = FALSE;
+    Client->Socket.ConfigData.AccessPoint.StationAddress.Addr[0] = Mode.ClientAddress.Addr[0];
+    Client->Socket.ConfigData.AccessPoint.StationAddress.Addr[1] = Mode.ClientAddress.Addr[1];
+    Client->Socket.ConfigData.AccessPoint.StationAddress.Addr[2] = Mode.ClientAddress.Addr[2];
+    Client->Socket.ConfigData.AccessPoint.StationAddress.Addr[3] = Mode.ClientAddress.Addr[3];
+    Client->Socket.ConfigData.AccessPoint.SubnetMask.Addr[0] = Mode.SubnetMask.Addr[0];
+    Client->Socket.ConfigData.AccessPoint.SubnetMask.Addr[1] = Mode.SubnetMask.Addr[1];
+    Client->Socket.ConfigData.AccessPoint.SubnetMask.Addr[2] = Mode.SubnetMask.Addr[2];
+    Client->Socket.ConfigData.AccessPoint.SubnetMask.Addr[3] = Mode.SubnetMask.Addr[3];
+    Client->Socket.ConfigData.AccessPoint.StationPort = 10002;
 
-    Client->ConfigData.AccessPoint.ActiveFlag = TRUE; // Client
+    Client->Socket.ConfigData.AccessPoint.ActiveFlag = TRUE; // Client
 
-    Client->ConfigData.AccessPoint.RemoteAddress.Addr[0] = ServerIPAdress.Addr[0];
-    Client->ConfigData.AccessPoint.RemoteAddress.Addr[1] = ServerIPAdress.Addr[1];
-    Client->ConfigData.AccessPoint.RemoteAddress.Addr[2] = ServerIPAdress.Addr[2];
-    Client->ConfigData.AccessPoint.RemoteAddress.Addr[3] = ServerIPAdress.Addr[3];
-    Client->ConfigData.AccessPoint.RemotePort = ServerPort;
+    Client->Socket.ConfigData.AccessPoint.RemoteAddress.Addr[0] = ServerIPAdress.Addr[0];
+    Client->Socket.ConfigData.AccessPoint.RemoteAddress.Addr[1] = ServerIPAdress.Addr[1];
+    Client->Socket.ConfigData.AccessPoint.RemoteAddress.Addr[2] = ServerIPAdress.Addr[2];
+    Client->Socket.ConfigData.AccessPoint.RemoteAddress.Addr[3] = ServerIPAdress.Addr[3];
+    Client->Socket.ConfigData.AccessPoint.RemotePort = ServerPort;
 
-    Client->Options.ReceiveBufferSize = NETWORK_TCP_CONTROL_OPTION_RECEIVE_BUFFER_SIZE;
-    Client->Options.SendBufferSize = NETWORK_TCP_CONTROL_OPTION_SEND_BUFFER_SIZE;
-    Client->Options.MaxSynBackLog = NETWORK_TCP_CONTROL_OPTION_MAX_SYN_BACK_LOG;
-    Client->Options.ConnectionTimeout = NETWORK_TCP_CONTROL_OPTION_CONNECTION_TIMEOUT;
-    Client->Options.DataRetries = NETWORK_TCP_CONTROL_OPTION_DATA_RETRIES;
-    Client->Options.FinTimeout = NETWORK_TCP_CONTROL_OPTION_FIN_TIMEOUT;
-    Client->Options.TimeWaitTimeout = NETWORK_TCP_CONTROL_OPTION_TIME_WAIT_TIMEOUT;
-    Client->Options.KeepAliveProbes = NETWORK_TCP_CONTROL_OPTION_KEEP_ALIVE_PROBES;
-    Client->Options.KeepAliveTime = NETWORK_TCP_CONTROL_OPTION_KEEP_ALIVE_TIME;
-    Client->Options.KeepAliveInterval = NETWORK_TCP_CONTROL_OPTION_KEEP_ALIVE_INTERVAL;
-    Client->Options.EnableNagle = NETWORK_TCP_CONTROL_OPTION_ENABLE_NAGLE;
-    Client->Options.EnableTimeStamp = NETWORK_TCP_CONTROL_OPTION_ENABLE_TIME_STAMP;
-    Client->Options.EnableWindowScaling = NETWORK_TCP_CONTROL_OPTION_ENABLE_WINDOW_SCALING;
-    Client->Options.EnableSelectiveAck = NETWORK_TCP_CONTROL_OPTION_ENABLE_SELECTIVE_ACK;
-    Client->Options.EnablePathMtuDiscovery = NETWORK_TCP_CONTROL_OPTION_ENABLE_PATH_MTU_DISCOVERY;
-    Client->ConfigData.ControlOption = &Client->Options;
+    Client->Socket.Options.ReceiveBufferSize = NETWORK_TCP_CONTROL_OPTION_RECEIVE_BUFFER_SIZE;
+    Client->Socket.Options.SendBufferSize = NETWORK_TCP_CONTROL_OPTION_SEND_BUFFER_SIZE;
+    Client->Socket.Options.MaxSynBackLog = NETWORK_TCP_CONTROL_OPTION_MAX_SYN_BACK_LOG;
+    Client->Socket.Options.ConnectionTimeout = NETWORK_TCP_CONTROL_OPTION_CONNECTION_TIMEOUT;
+    Client->Socket.Options.DataRetries = NETWORK_TCP_CONTROL_OPTION_DATA_RETRIES;
+    Client->Socket.Options.FinTimeout = NETWORK_TCP_CONTROL_OPTION_FIN_TIMEOUT;
+    Client->Socket.Options.TimeWaitTimeout = NETWORK_TCP_CONTROL_OPTION_TIME_WAIT_TIMEOUT;
+    Client->Socket.Options.KeepAliveProbes = NETWORK_TCP_CONTROL_OPTION_KEEP_ALIVE_PROBES;
+    Client->Socket.Options.KeepAliveTime = NETWORK_TCP_CONTROL_OPTION_KEEP_ALIVE_TIME;
+    Client->Socket.Options.KeepAliveInterval = NETWORK_TCP_CONTROL_OPTION_KEEP_ALIVE_INTERVAL;
+    Client->Socket.Options.EnableNagle = NETWORK_TCP_CONTROL_OPTION_ENABLE_NAGLE;
+    Client->Socket.Options.EnableTimeStamp = NETWORK_TCP_CONTROL_OPTION_ENABLE_TIME_STAMP;
+    Client->Socket.Options.EnableWindowScaling = NETWORK_TCP_CONTROL_OPTION_ENABLE_WINDOW_SCALING;
+    Client->Socket.Options.EnableSelectiveAck = NETWORK_TCP_CONTROL_OPTION_ENABLE_SELECTIVE_ACK;
+    Client->Socket.Options.EnablePathMtuDiscovery = NETWORK_TCP_CONTROL_OPTION_ENABLE_PATH_MTU_DISCOVERY;
+    Client->Socket.ConfigData.ControlOption = &Client->Socket.Options;
 
-    Status = Client->Protocol->Configure(Client->Protocol, &Client->ConfigData);
+    Status = Client->Socket.Protocol->Configure(Client->Socket.Protocol, &Client->Socket.ConfigData);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Configure() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
@@ -603,10 +603,10 @@ static VOID Tcp4FreeContext(IN PUEFIINFO_TCP4_CONTEXT Context)
     gBS->CloseEvent(Context->WaitForServerTransmitClientReceive);
 
     gBS->CloseEvent(Client->ConnectToken.CompletionToken.Event);
-    gBS->CloseEvent(Client->TransmitToken.CompletionToken.Event);
-    gBS->CloseEvent(Client->ReceiveToken.CompletionToken.Event);
-    FreePool(Client->ReceiveData.FragmentTable[0].FragmentBuffer);
-    FreePool(Client->TransmitData.FragmentTable[0].FragmentBuffer);
+    gBS->CloseEvent(Client->Socket.TransmitToken.CompletionToken.Event);
+    gBS->CloseEvent(Client->Socket.ReceiveToken.CompletionToken.Event);
+    FreePool(Client->Socket.ReceiveData.FragmentTable[0].FragmentBuffer);
+    FreePool(Client->Socket.TransmitData.FragmentTable[0].FragmentBuffer);
 }
 
 //
@@ -633,7 +633,7 @@ Tcp4DirectDutHostSendReceiveTest(IN PUEFIINFO_SESSION Session)
         goto Exit;
     }
 
-    Context.Client.Protocol = ProtocolArray[EFI_TCP4_PROTOCOL_INDEX].Protocol;
+    Client->Socket.Protocol = ProtocolArray[EFI_TCP4_PROTOCOL_INDEX].Protocol;
 
     //
     // WaitForAcceptConnection event is used to stall main thread to wait until
@@ -681,16 +681,16 @@ Tcp4DirectDutHostSendReceiveTest(IN PUEFIINFO_SESSION Session)
         goto Exit;
     }
 
-    Status = Client->Protocol
-                 ->GetModeData(Client->Protocol, &Client->State, NULL, NULL, NULL, NULL);
+    Status = Client->Socket.Protocol
+                 ->GetModeData(Client->Socket.Protocol, &Client->Socket.State, NULL, NULL, NULL, NULL);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("GetModeData() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     DBG_INFO("Client TCP instance is in %a(0x%x) state",
-             Tcp4StateMap[Client->State].String,
-             Tcp4StateMap[Client->State].Value);
+             Tcp4StateMap[Client->Socket.State].String,
+             Tcp4StateMap[Client->Socket.State].Value);
 
     //
     // Send data to Server

@@ -142,7 +142,7 @@ static EFI_STATUS Dhcp4Probe(IN PUEFIINFO_SESSION Session)
     // Dump Options
     //
 
-    // DumpDhcpPacket(Mode.ReplyPacket);
+    DumpDhcpPacket(Mode.ReplyPacket);
     Status = Dhcp4->Parse(Dhcp4, Mode.ReplyPacket, &OptionCount, NULL);
     if (Status != EFI_BUFFER_TOO_SMALL && EFI_ERROR(Status)) {
         DBG_ERROR("Parse() failed : %a(0x%x)", E(Status), Status);

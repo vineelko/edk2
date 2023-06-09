@@ -142,7 +142,7 @@ static EFI_STATUS SmbiosDumpType0Table(IN PUEFIINFO_SESSION Session)
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SMBIOS_PROTOCOL* SmbiosProtocol = NULL;
     EFI_SMBIOS_TABLE_HEADER* SmbiosTableHeader = NULL;
-    UINTN SmbiosTableLength = 0;
+    // UINTN SmbiosTableLength = 0;
     EFI_SMBIOS_TYPE TypeZero = EFI_SMBIOS_TYPE_BIOS_INFORMATION; // 0
 
     //
@@ -210,7 +210,7 @@ static EFI_STATUS SmbiosDumpType0Table(IN PUEFIINFO_SESSION Session)
     // clang-format on
     //
 
-    SmbiosTableLength = SmbiosStructureLength(SmbiosTableHeader);
+    // SmbiosTableLength = SmbiosStructureLength(SmbiosTableHeader);
     SMBIOS_TABLE_TYPE0* Type0 = (SMBIOS_TABLE_TYPE0*)SmbiosTableHeader;
     VOID* StringSection = ((CHAR8*)SmbiosTableHeader) + SmbiosTableHeader->Length;
 
@@ -232,28 +232,28 @@ Exit:
     return Status;
 }
 
-static EFI_STATUS EfiDumpSystemTable(IN PUEFIINFO_SESSION Session)
-{
-    EFI_STATUS Status = EFI_SUCCESS;
-    EFI_SYSTEM_TABLE* SystemTable = gSystemTable;
+// static EFI_STATUS EfiDumpSystemTable(IN PUEFIINFO_SESSION Session)
+// {
+//     EFI_STATUS Status = EFI_SUCCESS;
+//     EFI_SYSTEM_TABLE* SystemTable = gSystemTable;
 
-    UNREFERENCED_PARAMETER(Session);
+//     UNREFERENCED_PARAMETER(Session);
 
-    DBG_INFO_U(L"FirmwareVendor = %s", SystemTable->FirmwareVendor);
-    DBG_INFO("FirmwareRevision = %d", SystemTable->FirmwareRevision);
+//     DBG_INFO_U(L"FirmwareVendor = %s", SystemTable->FirmwareVendor);
+//     DBG_INFO("FirmwareRevision = %d", SystemTable->FirmwareRevision);
 
-    for (UINTN i = 0; i < SystemTable->NumberOfTableEntries; i++) {
-        EFI_CONFIGURATION_TABLE* ConfigTable = &SystemTable->ConfigurationTable[i];
-        if (CompareGuid(&ConfigTable->VendorGuid, &gUefiInfoEfiSmbiosTableGuid) == TRUE) {
-            UINTN SmbiosTableLength = 0;
-            EFI_SMBIOS_TABLE_HEADER* SmbiosTableHeader = ConfigTable->VendorTable;
-            SmbiosTableLength = SmbiosStructureLength(SmbiosTableHeader);
-            HexDump(ConfigTable->VendorTable, SmbiosTableLength);
-        }
-    }
+//     for (UINTN i = 0; i < SystemTable->NumberOfTableEntries; i++) {
+//         EFI_CONFIGURATION_TABLE* ConfigTable = &SystemTable->ConfigurationTable[i];
+//         if (CompareGuid(&ConfigTable->VendorGuid, &gUefiInfoEfiSmbiosTableGuid) == TRUE) {
+//             UINTN SmbiosTableLength = 0;
+//             EFI_SMBIOS_TABLE_HEADER* SmbiosTableHeader = ConfigTable->VendorTable;
+//             SmbiosTableLength = SmbiosStructureLength(SmbiosTableHeader);
+//             HexDump(ConfigTable->VendorTable, SmbiosTableLength);
+//         }
+//     }
 
-    return Status;
-}
+//     return Status;
+// }
 
 static UEFIINFO_TEST DutTests[] = {
     {

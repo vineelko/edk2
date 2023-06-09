@@ -4,7 +4,7 @@
 #include "testsuites.h"
 
 #include "utils.h"
-#include "strsafe.h"
+// #include "strsafe.h"
 
 #include "tshttp.dcat.certs.h"
 #include "tshttp.httpbin.certs.h"
@@ -265,7 +265,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
     }
 #endif
 
-    Status = gBS->LocateProtocol(&gEfiHttpServiceBindingProtocolGuid, NULL, &ServiceBinding);
+    Status = gBS->LocateProtocol(&gEfiHttpServiceBindingProtocolGuid, NULL, (VOID**)&ServiceBinding);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Error 0x%x", Status);
         goto Exit;
@@ -279,7 +279,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
 
     Status = gBS->OpenProtocol(Handle,
                                &gEfiHttpProtocolGuid,
-                               &HttpProtocol,
+                               (VOID**)&HttpProtocol,
                                gImageHandle,
                                NULL,
                                EFI_OPEN_PROTOCOL_GET_PROTOCOL);
@@ -511,9 +511,9 @@ static EFI_STATUS EFIAPI HttpGetResponse(IN OUT PHTTP_CONTEXT Context,
         goto Exit;
     }
 
-    // DBG_INFO("HTTP status: %a(%d)",
-    //              HttpStatusMap[Response->Data.StatusCode].String,
-    //              HttpStatusMap[Response->Data.StatusCode].Value);
+    DBG_INFO("HTTP status: %a(%d)",
+                 HttpStatusMap[Response->Data.StatusCode].String,
+                 HttpStatusMap[Response->Data.StatusCode].Value);
 
     Response->ContentDownloaded += Response->Message.BodyLength;
 
@@ -901,19 +901,12 @@ static EFI_STATUS BuildRequestHeaders(IN CHAR8* Url,
         }
     }
 
-    UINTN Result = 0;
     CHAR8 AsciiHostHeaderValue[1024];
-
-    Result = AsciiSPrint(AsciiHostHeaderValue,
-                         sizeof(AsciiHostHeaderValue),
-                         FormatString,
-                         Hostname,
-                         Port);
-    if (FAILED(Result)) {
-        DBG_ERROR("AsciiSPrint failed 0x%x", Result);
-        Status = EFI_INVALID_PARAMETER;
-        goto Exit;
-    }
+    AsciiSPrint(AsciiHostHeaderValue,
+                sizeof(AsciiHostHeaderValue),
+                FormatString,
+                Hostname,
+                Port);
 
     RequestHeaders[0].FieldName = AllocateCopyPool(AsciiStrLen(HTTP_HEADER_HOST) + 1,
                                                    HTTP_HEADER_HOST);
@@ -954,7 +947,6 @@ static EFI_STATUS EFIAPI DcatBuildRequestHeaders(IN CHAR8* Url,
                                                  OUT UINTN* Count)
 {
     EFI_STATUS Status = EFI_SUCCESS;
-    UINTN Result = 0;
     VOID* UrlParser = NULL;
     EFI_HTTP_HEADER* RequestHeaders = NULL;
     UINTN HeaderCount = 0;
@@ -1033,13 +1025,7 @@ static EFI_STATUS EFIAPI DcatBuildRequestHeaders(IN CHAR8* Url,
             goto Exit;
         }
 
-        Result = AsciiSPrint(ContentLengthString, sizeof(ContentLengthString), "%u", BodyLength);
-        if (FAILED(Result)) {
-            DBG_ERROR("AsciiSPrint failed 0x%x", Result);
-            Status = EFI_INVALID_PARAMETER;
-            goto Exit;
-        }
-
+        AsciiSPrint(ContentLengthString, sizeof(ContentLengthString), "%u", BodyLength);
         RequestHeaders[3].FieldValue = AllocateCopyPool(AsciiStrLen(ContentLengthString) + 1,
                                                         ContentLengthString);
         if (RequestHeaders[3].FieldValue == NULL) {

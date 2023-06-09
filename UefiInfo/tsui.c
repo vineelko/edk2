@@ -143,24 +143,19 @@ static VOID SetGraphicsMode()
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_GRAPHICS_OUTPUT_PROTOCOL* GraphicsProtocol = gsGraphicsProtocol;
     UINT32 i = 0;
-    EFI_GRAPHICS_OUTPUT_MODE_INFORMATION BestMode = {.HorizontalResolution = MAX_UINTN,
-                                                     .VerticalResolution = MAX_UINTN};
+    EFI_GRAPHICS_OUTPUT_MODE_INFORMATION BestMode = {.HorizontalResolution = MAX_UINT32,
+                                                     .VerticalResolution = MAX_UINT32};
     UINT32 BestModeIndex = 0;
 
     for (i = 0; i < GraphicsProtocol->Mode->MaxMode; i++) {
         UINTN SizeOfInfo = 0;
         EFI_GRAPHICS_OUTPUT_MODE_INFORMATION* Mode = NULL;
-        UINTN HorizontalResolution = 0;
-        UINTN VerticalResolution = 0;
 
         Status = GraphicsProtocol->QueryMode(GraphicsProtocol, i, &SizeOfInfo, &Mode);
         if (EFI_ERROR(Status)) {
             Status = EFI_SUCCESS;
             continue;
         }
-
-        HorizontalResolution = Mode->HorizontalResolution;
-        VerticalResolution = Mode->VerticalResolution;
 
         // Find the lowest resolution closest to HORIZONTAL_RESOLUTION x
         // VERTICAL_RESOLUTION
@@ -174,7 +169,7 @@ static VOID SetGraphicsMode()
         FreePool(Mode);
     }
 
-    if (BestMode.HorizontalResolution == MAX_UINTN) {
+    if (BestMode.HorizontalResolution == MAX_UINT32) {
         DBG_ERROR("Unable to find any suitable resolution");
         goto Exit;
     }
@@ -234,6 +229,7 @@ static VOID PutString(IN UINTN Row, IN UINTN Column, IN CHAR8* String)
     }
 }
 
+#if 0
 static VOID DrawBorder()
 {
     for (UINTN x = 1; x < MAX_COLUMNS - 1; x++) {
@@ -257,6 +253,7 @@ static VOID DrawBorder()
     PutChar(MAX_ROWS - 1, 0, FONT_BOTTOM_LEFT_CORNER);
     PutChar(MAX_ROWS - 1, MAX_COLUMNS - 1, FONT_BOTTOM_RIGHT_CORNER);
 }
+#endif
 
 static VOID ClearScreen(UINTN Row, UINTN Column, UINTN NumRows, UINTN NumColumns)
 {
@@ -434,6 +431,7 @@ static VOID DrawCbmrUi()
     DrawApplicationFooter();
 }
 
+#if 0
 static VOID PrintBoxCharacters()
 {
     ENUM_TO_STRING BoxCharMap[] = {
@@ -488,6 +486,7 @@ static VOID PrintBoxCharacters()
 
     DBG_INFO(" ");
 }
+#endif
 
 EFI_STATUS UI(IN PUEFIINFO_SESSION Session)
 {
@@ -496,7 +495,7 @@ EFI_STATUS UI(IN PUEFIINFO_SESSION Session)
     EFI_GRAPHICS_OUTPUT_MODE_INFORMATION* ModeInfo = NULL;
     EFI_GRAPHICS_OUTPUT_MODE_INFORMATION** AllGraphicModes = NULL;
     EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE* GraphicsMode = NULL;
-    UINT32 CurrentMode = 0;
+    // UINT32 CurrentMode = 0;
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -521,7 +520,7 @@ EFI_STATUS UI(IN PUEFIINFO_SESSION Session)
     GraphicsMode = GraphicsProtocol->Mode;
     ModeInfo = GraphicsMode->Info;
 
-    CurrentMode = GraphicsMode->Mode;
+    // CurrentMode = GraphicsMode->Mode;
     DBG_INFO("Graphics Mode(Current):");
     DBG_INFO("         Current Mode: %d", GraphicsMode->Mode);
     DBG_INFO("         Max Mode: %d", GraphicsMode->MaxMode);

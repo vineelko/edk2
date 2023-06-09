@@ -76,7 +76,6 @@ static EFI_STATUS HashProbe(IN PUEFIINFO_SESSION Session)
     UINT8* Input = NULL;
     EFI_HASH_OUTPUT Output;
     EFI_HASH2_OUTPUT Output2;
-    BOOLEAN HashAlgorithmsSupported = FALSE;
     UINT8 HashBuffer[128];
 
     UNREFERENCED_PARAMETER(Session);
@@ -148,8 +147,6 @@ static EFI_STATUS HashProbe(IN PUEFIINFO_SESSION Session)
         } else {
             DBG_INFO("[+] %a is supported", HashAlgorithmsMap[i].Name);
         }
-
-        HashAlgorithmsSupported = TRUE;
     }
 
     //
@@ -212,8 +209,6 @@ static EFI_STATUS HashProbe(IN PUEFIINFO_SESSION Session)
         } else {
             DBG_INFO("[+] %a is supported", HashAlgorithmsMap[i].Name);
         }
-
-        HashAlgorithmsSupported = TRUE;
     }
 
 Exit:
@@ -223,6 +218,7 @@ Exit:
     return Status;
 }
 
+#if 0
 static EFI_STATUS Hash2Twice(IN PUEFIINFO_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
@@ -309,6 +305,7 @@ Exit:
 
     return Status;
 }
+#endif
 
 static BOOLEAN TimerTriggered = FALSE;
 
