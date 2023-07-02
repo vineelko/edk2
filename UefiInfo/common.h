@@ -43,6 +43,7 @@
 #include <Protocol/Dns4.h>
 #include <Protocol/Hash.h>
 #include <Protocol/Hash2.h>
+#include <Protocol/SerialIo.h>
 
 #define UNREFERENCED_PARAMETER(x)
 

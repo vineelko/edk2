@@ -58,6 +58,7 @@ IsRunningInVM(VOID);
 //
 
 VOID HexDump(IN VOID* Buffer, IN UINTN Length);
+VOID DumpGuid(IN const EFI_GUID* Guid);
 
 //
 // Miscellaneous Utils

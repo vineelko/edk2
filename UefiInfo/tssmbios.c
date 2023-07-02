@@ -59,9 +59,6 @@ static EFI_STATUS SmbiosDumpTables(IN PUEFIINFO_SESSION Session)
             break;
         }
 
-        if (SmbiosTableHeader->Type != 0)
-            continue;
-
         DBG_INFO("    Type %u present", SmbiosTableHeader->Type);
 
         //

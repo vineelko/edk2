@@ -48,7 +48,11 @@ micro Conf/target.txt
     TARGET_ARCH           = IA32 X64 AARCH64
     TOOL_CHAIN_TAG        = GCC5
 
+For x64:
 build -a X64 -p UefiInfo/UefiInfo.dsc
+For AARCH64
+export GCC5_AARCH64_PREFIX=~/repos/toolchain/gcc-arm64/bin/aarch64-none-elf-
+build -a AARCH64 -p UefiInfo/UefiInfo.dsc
 
 AARCH64 - https://developer.arm.com/tools-and-software/open-source-software/firmware/edkii-uefi-firmware/building-edkii-uefi-firmware-for-arm-platforms/single-page
 cd ~/repos/toolchain

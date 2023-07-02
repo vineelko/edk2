@@ -45,6 +45,7 @@ extern UEFIINFO_TEST_SUITE WifiTestSuite;
 extern UEFIINFO_TEST_SUITE HttpTestSuite;
 extern UEFIINFO_TEST_SUITE Dns4TestSuite;
 extern UEFIINFO_TEST_SUITE SystemTableTestSuite;
+extern UEFIINFO_TEST_SUITE SerialPortTestSuite;
 
 PUEFIINFO_TEST_SUITE TestSuites[] = {
     &ReadinessTestSuite,
@@ -82,6 +83,7 @@ PUEFIINFO_TEST_SUITE TestSuites[] = {
     &HttpTestSuite,
     &Dns4TestSuite,
     &SystemTableTestSuite,
+    &SerialPortTestSuite,
 };
 
 VOID TestSuitePopulateAppInfoNode(IN PUEFIINFO_SESSION Session);

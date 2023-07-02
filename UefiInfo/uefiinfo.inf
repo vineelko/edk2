@@ -54,6 +54,7 @@
   tsreadiness.c
   tsrng.c
   tsfilesystem.c
+  tsserial.c
   tssmbios.c
   tssystemtable.c
   tstcp4.c

@@ -63,6 +63,86 @@ static EFI_STATUS GfxDrawRectangle(IN EFI_GRAPHICS_OUTPUT_BLT_PIXEL* FrameBuffer
     return EFI_SUCCESS;
 }
 
+static BOOLEAN GfxPixelsDisplayed(IN EFI_GRAPHICS_OUTPUT_PROTOCOL* GraphicsProtocol)
+{
+
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Buffer1[10] = {0};
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Buffer2[10] = {0};
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Buffer3[10] = {0};
+
+    //
+    // Save pixel from video first before modifying it
+    //
+
+    GraphicsProtocol->Blt(GraphicsProtocol,
+                        (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)Buffer1,
+                        EfiBltVideoToBltBuffer,
+                        0,
+                        0,
+                        0,
+                        0,
+                        10,
+                        1,
+                        GraphicsProtocol->Mode->Info->PixelsPerScanLine *
+                                        sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+
+    //
+    // Prep the sample pixels(White)
+    //
+
+    for (UINTN i = 0; i < 10; i++) {
+        Buffer2[i].Red = 0xFF;
+        Buffer2[i].Green = 0xFF;
+        Buffer2[i].Blue = 0xFF;
+    }
+
+    //
+    // Write the pixels to video
+    //
+
+    GraphicsProtocol->Blt(GraphicsProtocol,
+                        (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)Buffer2,
+                        EfiBltBufferToVideo,
+                        0,
+                        0,
+                        0,
+                        0,
+                        10,
+                        1,
+                        GraphicsProtocol->Mode->Info->PixelsPerScanLine *
+                                        sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+
+    //
+    // Read the pixels from video
+    //
+
+    GraphicsProtocol->Blt(GraphicsProtocol,
+                        (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)Buffer3,
+                        EfiBltVideoToBltBuffer,
+                        0,
+                        0,
+                        0,
+                        0,
+                        10,
+                        1,
+                        GraphicsProtocol->Mode->Info->PixelsPerScanLine *
+                                        sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+
+    //
+    // Compare Buffer2 and Buffer3
+    //
+    for (UINTN i = 0; i < 10; i++) {
+        if (Buffer2[i].Red != Buffer3[i].Red ||
+            Buffer2[i].Green != Buffer3[i].Green ||
+            Buffer2[i].Blue != Buffer3[i].Blue) {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+
 // EFI_STATUS
 // GraphicsClear (
 //     IN EFI_GRAPHICS_OUTPUT_BLT_PIXEL *FrameBufferContent,
@@ -129,7 +209,7 @@ GraphicsOutputRGB(IN PUEFIINFO_SESSION Session)
         DBG_INFO("                Pixels Per Scan Line: %d", GraphicsModeInfo->PixelsPerScanLine);
     }
 
-    Status = GraphicsProtocol->SetMode(GraphicsProtocol, 2);
+    Status = GraphicsProtocol->SetMode(GraphicsProtocol, 3);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Unable to restore default graphics mode. Failed : %a(0x%x)", E(Status), Status);
         goto Exit;
@@ -145,7 +225,7 @@ GraphicsOutputRGB(IN PUEFIINFO_SESSION Session)
 
     GraphicsModeInfo = GraphicsMode->Info;
     // CurrentMode = GraphicsMode->Mode;
-    DBG_INFO("Graphics Mode(Current):");
+    DBG_INFO("Graphics Mode(Updated):");
     DBG_INFO("         Current Mode: %d", GraphicsMode->Mode);
     DBG_INFO("         Max Mode: %d", GraphicsMode->MaxMode);
     DBG_INFO("         Frame Buffer Base: 0x%llx", GraphicsMode->FrameBufferBase);
@@ -182,16 +262,23 @@ GraphicsOutputRGB(IN PUEFIINFO_SESSION Session)
 
     GfxDrawCircle(FrameBufferContent, HRes / 2, VRes / 2, 100, HRes, VRes, 0xFFFFFF);
 
-    // GraphicsProtocol->Blt(GraphicsProtocol,
-    //                     (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)FrameBufferContent,
-    //                     EfiBltBufferToVideo,
-    //                     0,
-    //                     0,
-    //                     0,
-    //                     0,
-    //                     GraphicsModeInfo->HorizontalResolution,
-    //                     GraphicsModeInfo->VerticalResolution,
-    //                     0);
+    GraphicsProtocol->Blt(GraphicsProtocol,
+                        (EFI_GRAPHICS_OUTPUT_BLT_PIXEL*)FrameBufferContent,
+                        EfiBltBufferToVideo,
+                        0,
+                        0,
+                        0,
+                        0,
+                        GraphicsModeInfo->HorizontalResolution,
+                        GraphicsModeInfo->VerticalResolution,
+                        GraphicsModeInfo->PixelsPerScanLine *
+                                        sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+
+    if (GfxPixelsDisplayed(GraphicsProtocol)) {
+        DBG_INFO("Resolution can be displayed");
+    } else {
+        DBG_INFO("Resolution cannot be displayed");
+    }
 
 Exit:
 
