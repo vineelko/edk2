@@ -236,7 +236,7 @@ static EFI_STATUS WifiConnect(IN PUEFIINFO_SESSION Session)
     EFI_80211_CONNECT_NETWORK_DATA ConnectData;
     EFI_80211_GET_NETWORKS_RESULT* NetworkList = NULL;
     EFI_80211_NETWORK Network;
-    EFI_SUPPLICANT_PROTOCOL* Suplicant = NULL;
+    EFI_SUPPLICANT_PROTOCOL* Supplicant = NULL;
     CHAR8 NetworkName[EFI_MAX_SSID_LEN] = {0};
     CHAR8* TempSsid = NULL;
     CHAR8 *Password = NULL;
@@ -282,197 +282,239 @@ static EFI_STATUS WifiConnect(IN PUEFIINFO_SESSION Session)
         goto Exit;
     }
 
-    Suplicant = ProtocolArray[EFI_SUPPLICANT_PROTOCOL_INDEX].Protocol;
+    Supplicant = ProtocolArray[EFI_SUPPLICANT_PROTOCOL_INDEX].Protocol;
 
-    Status = gBS->CreateEvent(EVT_NOTIFY_WAIT,
-                              TPL_CALLBACK,
-                              WifiNetworkOperationWaitCallback,
-                              NULL,
-                              &WaitForNetworkOperation);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
+    while (TRUE) {
+        ZeroMem(&GetNetworksToken, sizeof(GetNetworksToken));
+        ZeroMem(&NetworkConnectToken, sizeof(NetworkConnectToken));
+        ZeroMem(&GetData, sizeof(GetData));
+        ZeroMem(&ConnectData, sizeof(ConnectData));
+        ZeroMem(&Network, sizeof(Network));
+        WaitForNetworkOperation = NULL;
 
-    Status = gBS->CreateEvent(EVT_NOTIFY_SIGNAL,
-                              TPL_CALLBACK,
-                              WifiGetNetworksCallback,
-                              &GetNetworksToken,
-                              &GetNetworksToken.Event);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to create get network token's event. CreateEvent() failed : %a(0x%x)",
-                  E(Status),
-                  Status);
-        goto Exit;
-    }
+        DBG_INFO("WaitForNetworkOperation CreateEvent");
+        Status = gBS->CreateEvent(EVT_NOTIFY_WAIT,
+                                TPL_CALLBACK,
+                                WifiNetworkOperationWaitCallback,
+                                NULL,
+                                &WaitForNetworkOperation);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("CreateEvent() failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
 
-    GetNetworksToken.Data = &GetData;
+        DBG_INFO("GetNetworksToken.Event CreateEvent");
+        Status = gBS->CreateEvent(EVT_NOTIFY_SIGNAL,
+                                TPL_CALLBACK,
+                                WifiGetNetworksCallback,
+                                &GetNetworksToken,
+                                &GetNetworksToken.Event);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("Unable to create get network token's event. CreateEvent() failed : %a(0x%x)",
+                    E(Status),
+                    Status);
+            goto Exit;
+        }
 
-    Status = ConMgr2Protocol->GetNetworks(ConMgr2Protocol, &GetNetworksToken);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
+        GetNetworksToken.Data = &GetData;
+        DBG_INFO("GetNetworks");
+        Status = ConMgr2Protocol->GetNetworks(ConMgr2Protocol, &GetNetworksToken);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("Unable to get network list. GetNetworks() failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
 
-    //
-    // Wait until get networks operations are done
-    //
+        //
+        // Wait until get networks operations are done
+        //
+        DBG_INFO("WaitForEvent");
+        Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
 
-    Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
+        NetworkList = GetNetworksToken.Result;
+        if (NetworkList->NumOfNetworkDesc == 0) {
+            Status = EFI_NOT_FOUND;
+            DBG_ERROR("No wireless networks found!");
+            goto Exit;
+        }
 
-    NetworkList = GetNetworksToken.Result;
-    if (NetworkList->NumOfNetworkDesc == 0) {
-        Status = EFI_NOT_FOUND;
-        DBG_ERROR("No wireless networks found!");
-        goto Exit;
-    }
+        DBG_INFO("PerformQuickSort");
+        PerformQuickSort(NetworkList->NetworkDesc,
+                        NetworkList->NumOfNetworkDesc,
+                        sizeof(EFI_80211_NETWORK_DESCRIPTION),
+                        NetworkDescriptionCompareFunc);
 
-    PerformQuickSort(NetworkList->NetworkDesc,
-                     NetworkList->NumOfNetworkDesc,
-                     sizeof(EFI_80211_NETWORK_DESCRIPTION),
-                     NetworkDescriptionCompareFunc);
+        //
+        // Find the network with the SSidName
+        //
 
-    //
-    // Find the network with the SSidName
-    //
+        UINTN SsidNameLength = AsciiStrLen(NetworkName);
+        for (UINTN i = 0; i < NetworkList->NumOfNetworkDesc; i++) {
+            EFI_80211_NETWORK_DESCRIPTION* NetworkDesc = &NetworkList->NetworkDesc[i];
 
-    UINTN SsidNameLength = AsciiStrLen(NetworkName);
-    for (UINTN i = 0; i < NetworkList->NumOfNetworkDesc; i++) {
-        EFI_80211_NETWORK_DESCRIPTION* NetworkDesc = &NetworkList->NetworkDesc[i];
+            if (NetworkDesc->Network.SSId.SSIdLen == 0)
+                continue;
 
-        if (NetworkDesc->Network.SSId.SSIdLen == 0)
-            continue;
+            if (NetworkDesc->Network.SSId.SSIdLen != SsidNameLength)
+                continue;
 
-        if (NetworkDesc->Network.SSId.SSIdLen != SsidNameLength)
-            continue;
+            if (CompareMem(NetworkDesc->Network.SSId.SSId,
+                        NetworkName,
+                        NetworkDesc->Network.SSId.SSIdLen) == 0) {
+                CopyMem(&Network, &NetworkDesc->Network, sizeof(EFI_80211_NETWORK));
+                Found = TRUE;
+                break;
+            }
+        }
 
-        if (CompareMem(NetworkDesc->Network.SSId.SSId,
-                       NetworkName,
-                       NetworkDesc->Network.SSId.SSIdLen) == 0) {
-            CopyMem(&Network, &NetworkDesc->Network, sizeof(EFI_80211_NETWORK));
-            Found = TRUE;
-            break;
+        //
+        // Bailout if we could not find the network object with NetworkName
+        //
+        if (Found == FALSE) {
+            Status = EFI_NOT_FOUND;
+            DBG_ERROR("Wireless network with %a not found", NetworkName);
+            goto Exit;
+        }
+
+        //
+        // Prepare the Supplicant with SSid and Password
+        //
+
+        Ssid.SSIdLen = (UINT8)AsciiStrLen(NetworkName);
+        CopyMem(Ssid.SSId, NetworkName, sizeof(Ssid.SSId));
+        Status = Supplicant->SetData(Supplicant,
+                                    EfiSupplicant80211TargetSSIDName,
+                                    &Ssid,
+                                    sizeof(EFI_80211_SSID));
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("Supplicant SetData for Ssid failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
+
+        Status = Supplicant->SetData(Supplicant,
+                                    EfiSupplicant80211PskPassword,
+                                    Password,
+                                    AsciiStrLen(Password) + 1);
+        ZeroMem(Password, AsciiStrLen(Password));
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("Supplicant SetData for Password failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
+
+        //
+        // Dump Network object fields
+        //
+
+        DBG_INFO("SSID: %-30a BSS: %d", Network.SSId.SSId,
+                Network.BSSType); // Basic service sets
+
+        // Dump Authentication and Key Management(AKM) suites
+        for (UINTN j = 0; j < Network.AKMSuite->AKMSuiteCount; j++) {
+            EFI_80211_SUITE_SELECTOR* Selector = &Network.AKMSuite->AKMSuiteList[j];
+            DBG_INFO("    [AKM] OUI: %02X-%02X-%02X Subtype: %02X",
+                    Selector->Oui[0],
+                    Selector->Oui[1],
+                    Selector->Oui[2],
+                    Selector->SuiteType);
+            if (((*(UINT32*)Selector->Oui) | Selector->SuiteType << 24) == IEEE_80211_AKM_SUITE_PSK) {
+                DBG_INFO("        [AKM] IEEE_80211_AKM_SUITE_PSK");
+            }
+        }
+
+        // Dump Cipher suites
+        for (UINTN j = 0; j < Network.CipherSuite->CipherSuiteCount; j++) {
+            EFI_80211_SUITE_SELECTOR* Selector = &Network.CipherSuite->CipherSuiteList[j];
+            DBG_INFO("    [Cipher] OUI: %02X-%02X-%02X Subtype: %02X",
+                    Selector->Oui[0],
+                    Selector->Oui[1],
+                    Selector->Oui[2],
+                    Selector->SuiteType);
+            if (((*(UINT32*)Selector->Oui) | Selector->SuiteType << 24) ==
+                IEEE_80211_PAIRWISE_CIPHER_SUITE_CCMP) {
+                DBG_INFO("        [Cipher] IEEE_80211_PAIRWISE_CIPHER_SUITE_CCMP");
+            }
+        }
+
+        //
+        // Assign Network object to Connect Token
+        //
+        ConnectData.Network = &Network;
+        ConnectData.FailureTimeout = 20; // 20 Sec
+        NetworkConnectToken.Data = &ConnectData;
+        DBG_INFO("Network name: %a", Network.SSId.SSId);
+
+        DBG_INFO("NetworkConnectToken.Event");
+        Status = gBS->CreateEvent(EVT_NOTIFY_SIGNAL,
+                                TPL_CALLBACK,
+                                WifiNetworkConnectCallback,
+                                &NetworkConnectToken,
+                                &NetworkConnectToken.Event);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("Unable to create network connect token's event. CreateEvent() failed : %a(0x%x)",
+                    E(Status),
+                    Status);
+            goto Exit;
+        }
+
+        //
+        // Connect to the Network
+        //
+        DBG_INFO("ConnectNetwork");
+        Status = ConMgr2Protocol->ConnectNetwork(ConMgr2Protocol, &NetworkConnectToken);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("ConnectNetwork() failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
+
+        //
+        // Wait until ConnectNetwork operations are done
+        //
+        DBG_INFO("WaitForEvent WaitForNetworkOperation");
+        Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
+            goto Exit;
+        }
+
+        DBG_INFO("NetworkConnectToken.Status = %a(0x%x)",
+                E(NetworkConnectToken.Status),
+                NetworkConnectToken.Status);
+
+        DBG_INFO("Connection Status : %a(0x%x)",
+                ConnectionStateMap[NetworkConnectToken.ResultCode].String,
+                ConnectionStateMap[NetworkConnectToken.ResultCode].Value);
+
+        if (NetworkConnectToken.Status == EFI_ACCESS_DENIED &&
+            NetworkConnectToken.ResultCode == ConnectFailed) {
+            DBG_INFO("Connection failed with an known bug. Retrying after 1 sec");
+            EfiSleep(SEC_TO_100_NS(1));
+        } else {
+            goto Exit;
+        }
+
+        if (GetNetworksToken.Event != NULL) {
+            gBS->CloseEvent(GetNetworksToken.Event);
+            GetNetworksToken.Event = NULL;
+        }
+
+        if (NetworkConnectToken.Event != NULL) {
+            gBS->CloseEvent(NetworkConnectToken.Event);
+            NetworkConnectToken.Event = NULL;
+        }
+
+        if (WaitForNetworkOperation != NULL) {
+            gBS->CloseEvent(WaitForNetworkOperation);
+            WaitForNetworkOperation = NULL;
+        }
+
+        if (NetworkList != NULL) {
+            FreePool(NetworkList);
+            NetworkList = NULL;
         }
     }
-
-    //
-    // Bailout if we could not find the network object with NetworkName
-    //
-    if (Found == FALSE) {
-        Status = EFI_NOT_FOUND;
-        DBG_ERROR("Wireless network with %a not found", NetworkName);
-        goto Exit;
-    }
-
-    //
-    // Prepare the Suplicant with SSid and Password
-    //
-
-    Ssid.SSIdLen = (UINT8)AsciiStrLen(NetworkName);
-    CopyMem(Ssid.SSId, NetworkName, sizeof(Ssid.SSId));
-    Status = Suplicant->SetData(Suplicant,
-                                EfiSupplicant80211TargetSSIDName,
-                                &Ssid,
-                                sizeof(EFI_80211_SSID));
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("Suplicant SetData for Ssid failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
-
-    Status = Suplicant->SetData(Suplicant,
-                                EfiSupplicant80211PskPassword,
-                                Password,
-                                AsciiStrLen(Password) + 1);
-    ZeroMem(Password, AsciiStrLen(Password));
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("Suplicant SetData for Password failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
-
-    Status = gBS->CreateEvent(EVT_NOTIFY_SIGNAL,
-                              TPL_CALLBACK,
-                              WifiNetworkConnectCallback,
-                              &NetworkConnectToken,
-                              &NetworkConnectToken.Event);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("Unable to create network connect token's event. CreateEvent() failed : %a(0x%x)",
-                  E(Status),
-                  Status);
-        goto Exit;
-    }
-
-    //
-    // Dump Network object fields
-    //
-
-    DBG_INFO("SSID: %-30a BSS: %d", Network.SSId.SSId,
-             Network.BSSType); // Basic service sets
-
-    // Dump Authentication and Key Management(AKM) suites
-    for (UINTN j = 0; j < Network.AKMSuite->AKMSuiteCount; j++) {
-        EFI_80211_SUITE_SELECTOR* Selector = &Network.AKMSuite->AKMSuiteList[j];
-        DBG_INFO("    [AKM] OUI: %02X-%02X-%02X Subtype: %02X",
-                 Selector->Oui[0],
-                 Selector->Oui[1],
-                 Selector->Oui[2],
-                 Selector->SuiteType);
-        if (((*(UINT32*)Selector->Oui) | Selector->SuiteType << 24) == IEEE_80211_AKM_SUITE_PSK) {
-            DBG_INFO("        [AKM] IEEE_80211_AKM_SUITE_PSK");
-        }
-    }
-
-    // Dump Cipher suites
-    for (UINTN j = 0; j < Network.CipherSuite->CipherSuiteCount; j++) {
-        EFI_80211_SUITE_SELECTOR* Selector = &Network.CipherSuite->CipherSuiteList[j];
-        DBG_INFO("    [Cipher] OUI: %02X-%02X-%02X Subtype: %02X",
-                 Selector->Oui[0],
-                 Selector->Oui[1],
-                 Selector->Oui[2],
-                 Selector->SuiteType);
-        if (((*(UINT32*)Selector->Oui) | Selector->SuiteType << 24) ==
-            IEEE_80211_PAIRWISE_CIPHER_SUITE_CCMP) {
-            DBG_INFO("        [Cipher] IEEE_80211_PAIRWISE_CIPHER_SUITE_CCMP");
-        }
-    }
-
-    //
-    // Assign Network object to Connect Token
-    //
-    ConnectData.Network = &Network;
-    ConnectData.FailureTimeout = 20; // 20 Sec
-    NetworkConnectToken.Data = &ConnectData;
-    DBG_INFO("Network name: %a", Network.SSId.SSId);
-
-    //
-    // Connect to the Network
-    //
-    Status = ConMgr2Protocol->ConnectNetwork(ConMgr2Protocol, &NetworkConnectToken);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("ConnectNetwork() failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
-
-    //
-    // Wait until ConnectNetwork operations are done
-    //
-
-    Status = gBS->WaitForEvent(1, &WaitForNetworkOperation, &Index);
-    if (EFI_ERROR(Status)) {
-        DBG_ERROR("WaitForEvent() failed : %a(0x%x)", E(Status), Status);
-        goto Exit;
-    }
-
-    DBG_INFO("NetworkConnectToken.Status = %a(0x%x)",
-             E(NetworkConnectToken.Status),
-             NetworkConnectToken.Status);
-
-    DBG_INFO("Connection Status : %a(0x%x)",
-             ConnectionStateMap[NetworkConnectToken.ResultCode].String,
-             ConnectionStateMap[NetworkConnectToken.ResultCode].Value);
 
 Exit:
 
@@ -529,27 +571,40 @@ static EFI_STATUS WifiIpInfoDump(IN PUEFIINFO_SESSION Session)
             continue;
         }
 
-        Size = 0;
-        Status = Ip4Config2->GetData(Ip4Config2, Ip4Config2DataTypeInterfaceInfo, &Size, NULL);
-        if (Status == EFI_BUFFER_TOO_SMALL) {
-            InterfaceInfo = AllocateZeroPool(Size);
-        } else if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %a(0x%x)",
-                      E(Status),
-                      Status);
-            goto Exit;
-        }
+        while (TRUE) {
+            Size = 0;
+            Status = Ip4Config2->GetData(Ip4Config2, Ip4Config2DataTypeInterfaceInfo, &Size, NULL);
+            if (Status == EFI_BUFFER_TOO_SMALL) {
+                InterfaceInfo = AllocateZeroPool(Size);
+            } else if (EFI_ERROR(Status)) {
+                DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %a(0x%x)",
+                        E(Status),
+                        Status);
+                goto Exit;
+            }
 
-        Status = Ip4Config2->GetData(Ip4Config2,
-                                     Ip4Config2DataTypeInterfaceInfo,
-                                     &Size,
-                                     InterfaceInfo);
+            Status = Ip4Config2->GetData(Ip4Config2,
+                                        Ip4Config2DataTypeInterfaceInfo,
+                                        &Size,
+                                        InterfaceInfo);
 
-        if (EFI_ERROR(Status)) {
-            DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %a(0x%x)",
-                      E(Status),
-                      Status);
-            goto Exit;
+            if (EFI_ERROR(Status)) {
+                DBG_ERROR("GetData() Ip4Config2DataTypeInterfaceInfo failed : %a(0x%x)",
+                        E(Status),
+                        Status);
+                goto Exit;
+            }
+
+            if (InterfaceInfo->StationAddress.Addr[0] == 0 &&
+                InterfaceInfo->StationAddress.Addr[0] == 0 &&
+                InterfaceInfo->StationAddress.Addr[0] == 0 &&
+                InterfaceInfo->StationAddress.Addr[0] == 0) {
+                    DBG_INFO("Sleeping for a sec to get the network info refreshed");
+                    EfiSleep(SEC_TO_100_NS(1));
+                    FreePool(InterfaceInfo);
+            } else {
+                break;
+            }
         }
 
         Size = sizeof(EFI_IP4_CONFIG2_POLICY);
@@ -559,7 +614,7 @@ static EFI_STATUS WifiIpInfoDump(IN PUEFIINFO_SESSION Session)
             goto Exit;
         }
 
-        DBG_INFO_U(L"Interface Name: %a", InterfaceInfo->Name);
+        DBG_INFO_U(L"Interface Name: %s", InterfaceInfo->Name);
         DBG_INFO("Interface Type: %u(%a)",
                  InterfaceInfo->IfType,
                  InterfaceInfo->IfType == 1 ? "NET_IFTYPE_ETHERNET" : "UNKNOWN");
@@ -641,12 +696,15 @@ static EFI_STATUS WifiIpInfoDump(IN PUEFIINFO_SESSION Session)
                      DnsServer->Addr[2],
                      DnsServer->Addr[3]);
         }
+
+        FreePool(DnsInfo);
+        DnsInfo = NULL;
     }
 
 Exit:
-
     FreePool(Handles);
     FreePool(InterfaceInfo);
+    FreePool(DnsInfo);
     return Status;
 }
 

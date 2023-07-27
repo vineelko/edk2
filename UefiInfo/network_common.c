@@ -69,19 +69,19 @@ EFI_STATUS EFIAPI NetworkCommonInitStack()
         goto Exit;
     }
 
-    // Connect all UEFI devices
-    Status = gBS->LocateProtocol(&gEfiBootManagerPolicyProtocolGuid,
-                                 NULL,
-                                 (VOID**)&gsBootMgrPolicy);
-    if (EFI_ERROR(Status)) {
-        Status = EFI_SUCCESS;
-    } else {
-        Status = gsBootMgrPolicy->ConnectDeviceClass(gsBootMgrPolicy,
-                                                     &gEfiBootManagerPolicyConnectAllGuid);
-        if (EFI_ERROR(Status)) {
-            Status = EFI_SUCCESS;
-        }
-    }
+    // // Connect all UEFI devices
+    // Status = gBS->LocateProtocol(&gEfiBootManagerPolicyProtocolGuid,
+    //                              NULL,
+    //                              (VOID**)&gsBootMgrPolicy);
+    // if (EFI_ERROR(Status)) {
+    //     Status = EFI_SUCCESS;
+    // } else {
+    //     Status = gsBootMgrPolicy->ConnectDeviceClass(gsBootMgrPolicy,
+    //                                                  &gEfiBootManagerPolicyConnectAllGuid);
+    //     if (EFI_ERROR(Status)) {
+    //         Status = EFI_SUCCESS;
+    //     }
+    // }
 
 Exit:
     return Status;
