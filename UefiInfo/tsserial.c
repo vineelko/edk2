@@ -9,7 +9,7 @@ static EFI_STATUS SerialProbe(IN PUEFIINFO_SESSION Session)
     EFI_STATUS Status = EFI_SUCCESS;
     EFI_SERIAL_IO_PROTOCOL* SerialIoProtocol = NULL; 
     UINTN BufferSize = 10;
-    CHAR8 Buffer[100] = "VineelKovvuriasdfasdfasdfasd";
+    CHAR8 Buffer[100]; // = "VineelKovvuriasdfasdfasdfasd";
 
     UNREFERENCED_PARAMETER(Session);
 
