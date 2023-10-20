@@ -41,11 +41,20 @@ static VOID ReadinessPrintProtocolInfo(IN PPROTOCOL_INFO ProtocolInfo)
     }
 }
 
+static VOID ProtocolProbeAll(VOID)
+{
+    for (UINTN Index = 0; Index < EFI_MAX_PROTOCOL_INDEX; Index++) {
+        ProtocolGetInfo(&ProtocolArray[Index]);
+    }
+}
+
 static EFI_STATUS CbmrReadiness(IN PUEFIINFO_SESSION Session)
 {
     EFI_STATUS Status = EFI_SUCCESS;
 
     UNREFERENCED_PARAMETER(Session);
+
+    ProtocolProbeAll();
 
     ReadinessPrintProtocolInfo(&ProtocolArray[EFI_DEVICE_PATH_FROM_TEXT_PROTOCOL_INDEX]);
     ReadinessPrintProtocolInfo(&ProtocolArray[EFI_DEVICE_PATH_PROTOCOL_INDEX]);
