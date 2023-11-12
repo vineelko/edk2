@@ -192,8 +192,6 @@ EFI_STATUS EFIAPI FileRead(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
         return EFI_INVALID_PARAMETER;
     }
 
-    DBG_VERBOSE("Read size: %u", *ReadSize);
-
     Status = EfiFileProtocol->Read(EfiFileProtocol, ReadSize, OutBuf);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Read() failed with status 0x%x", Status);
@@ -220,7 +218,6 @@ EFI_STATUS EFIAPI FileReadLine(IN EFI_FILE_PROTOCOL* EfiFileProtocol,
     }
 
     *EndOfFile = FALSE;
-    DBG_VERBOSE("Read size: %u", *ReadSize);
 
     while (!EFI_ERROR((Status = FileReadByte(EfiFileProtocol, &Char, EndOfFile)))) {
         if (*EndOfFile == TRUE)
@@ -1207,6 +1204,105 @@ Exit:
 
     FreePool(Handles);
     BufferFree(SimpleFileSystemBuffer);
+
+    return Status;
+}
+
+EFI_STATUS EFIAPI FileOpenExternalUsbDataVolume(OUT EFI_FILE_PROTOCOL** VolumeRoot)
+{
+    EFI_STATUS Status = EFI_SUCCESS;
+    UINTN HandleCount = 0;
+    EFI_HANDLE* Handles = NULL;
+    UINTN Index = 0;
+    EFI_FILE_PROTOCOL* Root = NULL;
+#define CONFIG_FILENAME             L"config.txt"
+
+    //
+    // Get all Simple File System Volumes (aka FAT32 partitions)
+    //
+
+    Status = gBS->LocateHandleBuffer(ByProtocol,
+                                     &gEfiSimpleFileSystemProtocolGuid,
+                                     NULL,
+                                     &HandleCount,
+                                     &Handles);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("Unable to get handles to simple filesystems: %a(0x%x)",  E(Status), Status);
+        goto Exit;
+    }
+
+    //
+    // Find first external USB stick
+    //
+
+    for (Index = 0; Index < HandleCount; Index++) {
+        EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* SimpleFileSystem = NULL;
+        EFI_BLOCK_IO_PROTOCOL* BlockIoIf = NULL;
+
+        Status = gBS->HandleProtocol(Handles[Index], &gEfiBlockIoProtocolGuid, (VOID**)&BlockIoIf);
+        if (EFI_ERROR(Status)) {
+            continue;
+        }
+
+        //
+        // In case of Hyper-V, All VHDs attached(including uefishell.vhdx) are
+        // non removable. So we do additional filtering later.
+        //
+
+        if (IsRunningInVM() == TRUE || BlockIoIf->Media->RemovableMedia == TRUE) {
+            //
+            // Get the SFS protocol on the volume
+            //
+
+            Status = gBS->HandleProtocol(Handles[Index],
+                                         &gEfiSimpleFileSystemProtocolGuid,
+                                         (void**)&SimpleFileSystem);
+            if (EFI_ERROR(Status)) {
+                continue;
+            }
+
+            //
+            // Open the volume
+            //
+
+            Status = SimpleFileSystem->OpenVolume(SimpleFileSystem, &Root);
+            if (EFI_ERROR(Status)) {
+                continue;
+            }
+
+            if (IsRunningInVM() == TRUE) {
+                EFI_FILE_PROTOCOL* File = NULL;
+
+                //
+                // For Hyper-V, we explicitly check for the presence of config file.
+                // Because we do not honor RemovableMedia property.
+                //
+
+                Status = FileOpenEx(Root, CONFIG_FILENAME, EFI_FILE_MODE_READ, 0, &File);
+                if (!EFI_ERROR(Status)) {
+                    FileClose(File);
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    if (Index >= HandleCount) {
+        Status = EFI_NOT_FOUND;
+        goto Exit;
+    }
+
+    *VolumeRoot = Root;
+
+Exit:
+    FreePool(Handles);
+
+    //
+    // Volumes are not closed manually. As per UEFI spec, "The volume is closed
+    // by closing all the open file handles"
+    //
 
     return Status;
 }

@@ -124,5 +124,5 @@ EFI_STATUS EFIAPI FileFindNext(IN EFI_FILE_PROTOCOL* Directory, OUT EFI_FILE_INF
 EFI_STATUS EFIAPI FileCreateDirectory(IN EFI_FILE_PROTOCOL* DestDirectory,
                                       IN CHAR16* DirectoryName);
 EFI_STATUS EFIAPI FileCopy(IN EFI_FILE_PROTOCOL* Source, IN EFI_FILE_PROTOCOL* Destination);
-
+EFI_STATUS EFIAPI FileOpenExternalUsbDataVolume(OUT EFI_FILE_PROTOCOL** VolumeRoot);
 #endif // _FILE_H_

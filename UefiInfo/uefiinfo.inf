@@ -48,7 +48,7 @@
   tshttp.c
   tsip4config2.c
   tsip6config.c
-  tsloadedimage.c
+  tsloadimage.c
   tsmemory.c
   tsramdisk.c
   tsreadiness.c

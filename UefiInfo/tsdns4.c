@@ -28,7 +28,7 @@ static EFI_STATUS Dns4Configure(IN PUEFIINFO_SESSION Session)
     ProtocolGetInfo(&ProtocolArray[EFI_DNS4_PROTOCOL_INDEX]);
     Status = ProtocolArray[EFI_DNS4_PROTOCOL_INDEX].ProtocolStatus;
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("EFI_DNS4_PROTOCOL_INDEX Protocol not available : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("EFI_DNS4_PROTOCOL_INDEX Protocol not available : %s(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -48,13 +48,13 @@ static EFI_STATUS Dns4Configure(IN PUEFIINFO_SESSION Session)
 
     Status = Protocol->Configure(Protocol, &ConfigData);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("Configure() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("Configure() call failed : %s(0x%x)", E(Status), Status);
         goto Exit;
     }
 
     Status = Protocol->GetModeData(Protocol, &Mode);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetModeData() call failed : %s(0x%zx)", E(Status), Status);
+        DBG_ERROR("GetModeData() call failed : %s(0x%x)", E(Status), Status);
         goto Exit;
     }
 
@@ -108,7 +108,7 @@ static EFI_STATUS Dns4Configure(IN PUEFIINFO_SESSION Session)
 
     Status = gBS->LocateProtocol(&gEfiIp4Config2ProtocolGuid, NULL, (VOID**)&Ip4Config2);
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("LocateProtocol() failed to locate EFI_RNG_PROTOCOL with status 0x%zx", Status);
+        DBG_ERROR("LocateProtocol() failed to locate EFI_RNG_PROTOCOL with status 0x%x", Status);
         goto Exit;
     }
 
@@ -122,14 +122,14 @@ static EFI_STATUS Dns4Configure(IN PUEFIINFO_SESSION Session)
     if (Status == EFI_BUFFER_TOO_SMALL) {
         DnsInfo = AllocateZeroPool(Size);
     } else if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : 0x%zx", Status);
+        DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : 0x%x", Status);
         goto Exit;
     }
 
     Status = Ip4Config2->GetData(Ip4Config2, Ip4Config2DataTypeDnsServer, &Size, DnsInfo);
 
     if (EFI_ERROR(Status)) {
-        DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : 0x%zx", Status);
+        DBG_ERROR("GetData() Ip4Config2DataTypeDnsServer failed : 0x%x", Status);
         goto Exit;
     }
 
