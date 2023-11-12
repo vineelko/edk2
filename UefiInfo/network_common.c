@@ -20,7 +20,7 @@
 // Variables
 //
 
-static EFI_BOOT_MANAGER_POLICY_PROTOCOL* gsBootMgrPolicy = NULL;
+// static EFI_BOOT_MANAGER_POLICY_PROTOCOL* gsBootMgrPolicy = NULL;
 EFI_GUID gEfiMsNetworkDelayProtocolGuid = {0xff7d36aa,
                                            0x96a5,
                                            0x46c4,
