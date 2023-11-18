@@ -258,12 +258,13 @@ static EFI_STATUS CbmrWriteSI(IN PUEFIINFO_SESSION Session)
         goto Exit;
     }
 
-    DBG_INFO_U(L"Getting %s file size", SiWimFileName);
     Status = FileGetSize(SiWimFile, &SiWimFileSize);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("FileGetSize() failed : 0x%x", Status);
         goto Exit;
     }
+
+    DBG_INFO_U(L"Getting %s file size: %llu", SiWimFileName, SiWimFileSize);
 
     SiWimFileBuffer = AllocateZeroPool((UINTN)SiWimFileSize);
     if (SiWimFileBuffer == NULL) {
@@ -277,6 +278,8 @@ static EFI_STATUS CbmrWriteSI(IN PUEFIINFO_SESSION Session)
         DBG_ERROR("FileRead() failed : 0x%x", Status);
         goto Exit;
     }
+
+    DBG_INFO_U(L"file read: %llu", SiWimFileSize);
 
     DBG_INFO_U(L"Storing %s in to SoftwareInventory UEFI variable", SiWimFileName);
     Status = gRT->SetVariable(SiVariableName,
