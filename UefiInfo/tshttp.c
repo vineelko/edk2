@@ -4,6 +4,7 @@
 #include "testsuites.h"
 
 #include "utils.h"
+#include "guids.h"
 // #include "strsafe.h"
 
 #include "tshttp.dcat.certs.h"
@@ -222,6 +223,98 @@ static EFI_STATUS EFIAPI HttpReadHeaders(IN PHTTP_RESPONSE Response)
     return Status;
 }
 
+static BOOLEAN CbmrGetPluggedInNetworkHandle(OUT EFI_HANDLE* NetworkHandle)
+{
+    EFI_STATUS Status = EFI_SUCCESS;
+    EFI_HANDLE* Handles = NULL;
+    UINTN HandleCount = 0;
+    BOOLEAN Result = FALSE;
+    EFI_HANDLE WiFiHandle = NULL;
+
+    Status = gBS->LocateHandleBuffer(ByProtocol,
+                                     &gEfiIp4Config2ProtocolGuid,
+                                     NULL,
+                                     &HandleCount,
+                                     &Handles);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("LocateHandleBuffer() failed : 0x%zx", Status);
+        goto Exit;
+    }
+
+    for (UINTN i = 0; i < HandleCount; i++) {
+        EFI_GUID** ProtocolBuffer = NULL;
+        UINTN ProtocolBufferCount = 0;
+        EFI_SIMPLE_NETWORK* Snp = NULL;
+        UINT32 InterruptStatus = 0;
+
+        //
+        // Query all protocols supported on the handle
+        //
+
+        Status = gBS->ProtocolsPerHandle(Handles[i], &ProtocolBuffer, &ProtocolBufferCount);
+        if (EFI_ERROR(Status)) {
+            DBG_ERROR("ProtocolsPerHandle failed, 0x%zx", Status);
+            goto Exit;
+        }
+
+        //
+        // Filter out this device handle if it has Wi-Fi protocols on it.
+        //
+
+        BOOLEAN FoundEthernetNicHandle = TRUE;
+        for (UINTN j = 0; j < ProtocolBufferCount; j++) {
+            if (CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gUefiInfoEfiEapProtocolGuid) == TRUE ||
+                CompareGuid((EFI_GUID*)ProtocolBuffer[j], &gUefiInfoEfiWiFiProtocolGuid) ==
+                    TRUE ||
+                CompareGuid((EFI_GUID*)ProtocolBuffer[j],
+                            &gUefiInfoEfiWiFi2ProtocolGuid) == TRUE) {
+                FoundEthernetNicHandle = FALSE;
+                WiFiHandle = Handles[i];
+                break;
+            }
+        }
+
+        FreePool(ProtocolBuffer);
+
+        if (FoundEthernetNicHandle == FALSE) {
+            continue;
+        }
+
+        //
+        // Try to open SNP from ServiceHandle
+        //
+
+        Status = gBS->HandleProtocol(Handles[i], &gUefiInfoEfiSimpleNetworkProtocolGuid, (VOID**)&Snp);
+        if (EFI_ERROR(Status)) {
+            continue;
+        }
+
+        //
+        // Invoke Snp->GetStatus() to refresh MediaPresent field in SNP mode data
+        //
+
+        Status = Snp->GetStatus(Snp, &InterruptStatus, NULL);
+        if (EFI_ERROR(Status)) {
+            continue;
+        }
+        if (Snp->Mode->MediaPresentSupported == TRUE &&
+            Snp->Mode->MediaPresent == TRUE) {
+            *NetworkHandle = Handles[i];
+            Result = TRUE;
+            break;
+        }
+    }
+
+Exit:
+    // Cloud not locate ethernet handle but found WiFi handle
+    if (*NetworkHandle == NULL && WiFiHandle != NULL) {
+        *NetworkHandle = WiFiHandle;
+    }
+
+    FreePool(Handles);
+    return Result;
+}
+
 static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
 {
     EFI_STATUS Status = EFI_SUCCESS;
@@ -229,6 +322,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
     // UINTN HandleCount = 0;
 
     EFI_SERVICE_BINDING_PROTOCOL* ServiceBinding = NULL;
+    EFI_HANDLE NetworkHandle = NULL;
     EFI_HANDLE Handle = NULL;
     EFI_HTTP_PROTOCOL* HttpProtocol = NULL;
 
@@ -265,7 +359,13 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
     }
 #endif
 
-    Status = gBS->LocateProtocol(&gEfiHttpServiceBindingProtocolGuid, NULL, (VOID**)&ServiceBinding);
+    Status = CbmrGetPluggedInNetworkHandle(&NetworkHandle);
+    if (EFI_ERROR(Status)) {
+        DBG_ERROR("Error 0x%x", Status);
+        goto Exit;
+    }
+
+    Status = gBS->HandleProtocol(NetworkHandle, &gEfiHttpServiceBindingProtocolGuid, (VOID**)&ServiceBinding);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("Error 0x%x", Status);
         goto Exit;
@@ -293,7 +393,7 @@ static EFI_STATUS EFIAPI HttpInit(IN PHTTP_CONTEXT Context)
     Context->Http = HttpProtocol;
 
 Exit:
-    // gBS->FreePool(DeviceHandles);
+    // FreePool(DeviceHandles);
     return Status;
 }
 
@@ -1160,7 +1260,6 @@ static EFI_STATUS TlsSetCACertList()
     }
 
     LocalCert = Cert;
-
     for (UINT8 i = 0; i < CertCount; i++) {
         if (!TlsCaCertArray[i].Revoked) {
             Cert->SignatureListSize = sizeof(EFI_SIGNATURE_LIST) +
@@ -1194,12 +1293,13 @@ static EFI_STATUS TlsSetCACertList()
         DBG_ERROR("Unable to set TLS certificate(s). 0x%x", Status);
     }
 
-    FreePool(Cert);
-    Cert = NULL;
+    FreePool(LocalCert);
+    LocalCert = NULL;
 
 Exit:
-
-    FreePool(Cert);
+    if (LocalCert != NULL) {
+        FreePool(LocalCert);
+    }
 
     return Status;
 }
@@ -1298,7 +1398,7 @@ static EFI_STATUS HttpsGetRequest(IN PUEFIINFO_SESSION Session)
         DBG_ERROR("TlsSetCACertList() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
-
+    
     Status = HttpCreate(&HttpContext);
     if (EFI_ERROR(Status)) {
         DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
@@ -1339,6 +1439,7 @@ static EFI_STATUS HttpsGetRequest(IN PUEFIINFO_SESSION Session)
             DBG_ERROR("HttpGetNext() failed : %a(0x%x)", E(Status), Status);
             goto Exit;
         }
+
     } while (Status != EFI_END_OF_FILE);
 
     Status = EFI_SUCCESS;
