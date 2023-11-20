@@ -1788,11 +1788,28 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
     EFI_HTTP_HEADER* HttpHeaders = NULL;
     UINTN HeaderCount = 0;
     UINTN BodyLength = 0;
+    CHAR8 RequestJson[256];
+    CHAR8* Build = NULL;
+    CHAR8* Branch = NULL;
 
-#define REQUEST_JSON \
-    t("{ \"Products\" : \"PN=Client.OS.RS2.amd64&V=10.0.25997.1000\", \"DeviceAttributes\" : \"MediaVersion=10.0.25997.1000;MediaBranch=rs_prerelease;OSSkuId=101;App=Setup360;AppVer=10.0;CBMRScan=1;DUInternal=0\" }")
+#define DCAT_WINRE_REQUEST_JSON_FORMAT_STRING \
+    "{ \"Products\" : \"PN=Client.OS.RS2.amd64&V=%a\", \"DeviceAttributes\" : \"MediaVersion=%a;MediaBranch=%a;OSSkuId=101;App=Setup360;AppVer=10.0;CBMRScan=1;DUInternal=0\" }"
 
-    UNREFERENCED_PARAMETER(Session);
+    if (Session->ShowHelp == TRUE) {
+        DBG_INFO("USAGE:");
+        DBG_INFO(" uefiinfo.efi -t httpsposttlseccrequest,build=10.0.25997.1000,branch=rs_prerelease");
+        goto Exit;
+    }
+
+    Build = GetCmdArgValue(Session->CommandLine, t("build"));
+    Branch = GetCmdArgValue(Session->CommandLine, t("branch"));
+
+    if (Build == NULL || Branch == NULL) {
+        DBG_INFO("Build or Branch is empty");
+        DBG_INFO("USAGE:");
+        DBG_INFO(" uefiinfo.efi -t httpsposttlseccrequest,build=10.0.25997.1000,branch=rs_prerelease");
+        goto Exit;
+    }
 
     Status = TlsSetCACertList();
     if (EFI_ERROR(Status)) {
@@ -1805,6 +1822,13 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
         DBG_ERROR("HttpCreate() failed : %a(0x%x)", E(Status), Status);
         goto Exit;
     }
+
+    AsciiSPrint(RequestJson,
+                sizeof(RequestJson),
+                DCAT_WINRE_REQUEST_JSON_FORMAT_STRING,
+                Build,
+                Build,
+                Branch);
 
     BodyLength = AsciiStrLen(REQUEST_JSON);
 
@@ -1865,6 +1889,9 @@ Exit:
     if (HttpContext != NULL) {
         HttpFree(HttpContext);
     }
+
+    FreePool(Build);
+    FreePool(Branch);
 
     return Status;
 }

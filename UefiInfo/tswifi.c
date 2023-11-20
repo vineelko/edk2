@@ -755,8 +755,6 @@ static EFI_STATUS WifiConnect(IN PUEFIINFO_SESSION Session)
     CHAR8 *Password = NULL;
     EFI_80211_NETWORK Network;
 
-    UNREFERENCED_PARAMETER(Session);
-
     if (Session->ShowHelp == TRUE) {
         DBG_INFO("USAGE:");
         DBG_INFO(" uefiinfo.efi -t wificonnect,ssid=abc,pwd=xxxxx");
