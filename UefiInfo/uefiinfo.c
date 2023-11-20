@@ -12,7 +12,7 @@ EFI_SYSTEM_TABLE* gSystemTable;
 VOID ShowAppInfo(IN PUEFIINFO_SESSION Session)
 {
     DBG_INFO("UEFI Info v1.0 - Useful UEFI tools");
-    DBG_INFO("Copyright (C) 2021-2022 Vineel Kovvuri");
+    DBG_INFO("Authored By Vineel Kovvuri");
     DBG_INFO("UEFI version: %x.%x.%x",
              gSystemTable->Hdr.Revision >> 16,                // Major
              (gSystemTable->Hdr.Revision & 0xFFFF) / 10 % 10, // Minor Upper
