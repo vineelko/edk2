@@ -1797,7 +1797,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
 
     if (Session->ShowHelp == TRUE) {
         DBG_INFO("USAGE:");
-        DBG_INFO(" uefiinfo.efi -t httpsposttlseccrequest,build=10.0.25997.1000,branch=rs_prerelease");
+        DBG_INFO(" uefiinfo.efi -t HttpsPostTlsEccRequest,build=10.0.25997.1000,branch=rs_prerelease");
         goto Exit;
     }
 
@@ -1807,7 +1807,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
     if (Build == NULL || Branch == NULL) {
         DBG_INFO("Build or Branch is empty");
         DBG_INFO("USAGE:");
-        DBG_INFO(" uefiinfo.efi -t httpsposttlseccrequest,build=10.0.25997.1000,branch=rs_prerelease");
+        DBG_INFO(" uefiinfo.efi -t HttpsPostTlsEccRequest,build=10.0.25997.1000,branch=rs_prerelease");
         goto Exit;
     }
 
@@ -1830,7 +1830,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
                 Build,
                 Branch);
 
-    BodyLength = AsciiStrLen(REQUEST_JSON);
+    BodyLength = AsciiStrLen(RequestJson);
 
     Status = DcatBuildRequestHeaders(AsciiUrl,
                                      BodyLength,
@@ -1847,7 +1847,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
                               HttpMethodPost,
                               HttpHeaders,
                               HeaderCount,
-                              REQUEST_JSON,
+                              RequestJson,
                               BodyLength,
                               &Response);
     if (EFI_ERROR(Status)) {
