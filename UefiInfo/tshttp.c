@@ -1213,10 +1213,21 @@ typedef struct _CERT {
 //
 
 static CERT TlsCaCertArray[] = {
-    {.Size = _countof(microsoft_update_secure_server_ca_2_1),
-     .Buffer = microsoft_update_secure_server_ca_2_1,
-     .Revoked = FALSE},
-    {.Size = _countof(httpbin_cert), .Buffer = httpbin_cert, .Revoked = FALSE},
+    {
+        .Size = _countof(MicrosoftUpdateSecureServerCA),
+        .Buffer = MicrosoftUpdateSecureServerCA,
+        .Revoked = FALSE
+    },
+    {
+        .Size = _countof(MicrosoftUpdateSecureServerCAExtOriginInt),
+        .Buffer = MicrosoftUpdateSecureServerCAExtOriginInt,
+        .Revoked = FALSE
+    },
+    {
+        .Size = _countof(httpbin_cert),
+        .Buffer = httpbin_cert,
+        .Revoked = FALSE
+    },
 };
 
 //
@@ -1779,7 +1790,7 @@ static EFI_STATUS HttpsPostTLSECCRequest(IN PUEFIINFO_SESSION Session)
     UINTN BodyLength = 0;
 
 #define REQUEST_JSON \
-    t("{ \"Products\" : \"PN=Client.OS.RS2.amd64&V=10.0.22518.1000\", \"DeviceAttributes\" : \"MediaVersion=10.0.22518.1000;MediaBranch=rs_prerelease;OSSkuId=4;App=Setup360;AppVer=10.0;DUScan=1;DUInternal=0\" }")
+    t("{ \"Products\" : \"PN=Client.OS.RS2.amd64&V=10.0.25997.1000\", \"DeviceAttributes\" : \"MediaVersion=10.0.25997.1000;MediaBranch=rs_prerelease;OSSkuId=101;App=Setup360;AppVer=10.0;CBMRScan=1;DUInternal=0\" }")
 
     UNREFERENCED_PARAMETER(Session);
 
@@ -1891,7 +1902,7 @@ static UEFIINFO_TEST DutTests[] = {
     },
     {
         .Name = t("httpsposttlseccrequest"),
-        .Description = t("Make https post request to TLS ECC enforce resource(MS DCAT)"),
+        .Description = t("Make https post request to TLS ECC enforced resource(MS DCAT)"),
         .DutTestFn = HttpsPostTLSECCRequest,
     },
 };
