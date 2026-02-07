@@ -446,6 +446,13 @@
   #
   gUefiOvmfPkgTokenSpaceGuid.PcdForceNoAcpi|0x0|BOOLEAN|0x69
 
+[PcdsDynamic]
+  gUefiOvmfPkgTokenSpaceGuid.PcdSerialIoI2cDevId|{0}|TEST_SPCD|0x50000032 {
+  <HeaderFiles>
+    Pcd/CpuHotEjectData.h
+  <Packages>
+    OvmfPkg/OvmfPkg.dec
+  }
 [PcdsFixedAtBuild, PcdsPatchableInModule]
   #
   # This is the physical address where the device tree is expected to be stored

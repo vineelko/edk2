@@ -110,7 +110,7 @@ $(APPFILE): $(APPLICATION)
 
 PcdGccMakefile = '''
 MAKEROOT ?= $(EDK_TOOLS_PATH)%sSource%sC
-LIBS = -lCommon
+# LIBS = -lCommon
 '''%(os.sep, os.sep)
 
 variablePattern = re.compile(r'[\t\s]*0[xX][a-fA-F0-9]+$')
@@ -1585,6 +1585,7 @@ class DscBuildData(PlatformBuildClassObject):
                         if defaultstoreid not in stru_pcd.SkuOverrideValues[skuid]:
                             stru_pcd.SkuOverrideValues[skuid][defaultstoreid] = CopyDict(stru_pcd.SkuOverrideValues[nextskuid][mindefaultstorename])
                             stru_pcd.ValueChain.add((skuid, defaultstoreid))
+        print("######## structure PCDs' values after override by DSC and COMM. Total structure PCD count: %s" % len(S_pcd_set))
         S_pcd_set = DscBuildData.OverrideByFdf(S_pcd_set,self.WorkspaceDir)
         S_pcd_set = DscBuildData.OverrideByComm(S_pcd_set)
 
@@ -3239,6 +3240,7 @@ class DscBuildData(PlatformBuildClassObject):
 
         list(map(self.FilterSkuSettings, Pcds.values()))
 
+        # print("##### Dynamic PCDs: ##### %s" % dict(Pcds))
         return Pcds
 
     def FilterSkuSettings(self, PcdObj):

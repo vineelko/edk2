@@ -295,6 +295,7 @@ QemuVideoBochsEdid (
   EFI_STATUS  Status;
   UINT32      X;
   UINT32      Y;
+  TEST_SPCD *SerialIoI2cDevid = NULL;
 
   if (Private->Variant != QEMU_VIDEO_BOCHS_MMIO) {
     return;
@@ -363,6 +364,18 @@ QemuVideoBochsEdid (
 
   *XRes = X;
   *YRes = Y;
+
+
+  if (!(TEST_SPCD *) PcdGetPtr (PcdSerialIoI2cDevId)) {
+    //
+    // Expose the I2C device IDs otherwise.
+    //
+    SerialIoI2cDevid = (TEST_SPCD *) PcdGetPtr (PcdSerialIoI2cDevId);
+    SerialIoI2cDevid->Count = 3;
+    SerialIoI2cDevid->DevId[0] = 0x00;
+    SerialIoI2cDevid->DevId[1] = 0x01;
+    SerialIoI2cDevid->DevId[2] = 0x02;
+  }
 
   if (PcdGet8 (PcdVideoResolutionSource) == 0) {
     Status = PcdSet32S (PcdVideoHorizontalResolution, *XRes);

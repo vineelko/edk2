@@ -57,4 +57,9 @@ typedef struct {
   UINT32                            ArrayLength;
 } CPU_HOT_EJECT_DATA;
 
+
+typedef struct  _TEST_SPCD {
+  UINT16     Count;
+  UINT16     DevId[3];
+} TEST_SPCD;
 #endif // CPU_HOT_EJECT_DATA_H_

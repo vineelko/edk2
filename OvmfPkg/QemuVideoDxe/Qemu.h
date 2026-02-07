@@ -33,6 +33,11 @@
 #include <IndustryStandard/Pci.h>
 #include <IndustryStandard/Acpi.h>
 
+typedef struct  _TEST_SPCD {
+  UINT16     Count;
+  UINT16     DevId[3];
+} TEST_SPCD;
+
 //
 // QEMU Video PCI Configuration Header values
 //
